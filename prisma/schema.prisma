@@ -12,3 +12,113 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  username      String        @unique
+  email         String        @unique
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  logs          Log[]
+  playlists     Playlist[]
+  achievements  Achievement[]
+  stats         Stats?
+}
+
+model Log {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String        @db.ObjectId  
+  user          User          @relation(fields: [userId], references: [id])
+  date          DateTime      
+  exercises     ExerciseLog[]
+  waterIntake   Float
+  steps         Int           @default(0)
+  totalCalories Int           @default(0)
+  weight        Float
+  sleep         Float         @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  @@unique([date, userId])  // to ensure that one log per user per day 
+  @@index([userId])
+  @@index([date])
+}
+// could use this syntax for fetching data
+// date_userId: {
+//       date: new Date('2024-08-15'),
+//       userId: 'userId123',
+//     },
+
+type ExerciseLog {
+  name     String
+  sets     Set[]
+  duration Float
+  calories Int
+}
+
+type Set {
+  reps       Int
+  weight     Float? // weight lifted in that set
+  avgRepTime Float
+}
+
+model Playlist {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  name        String
+  description String?
+  exercises   String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([userId])
+}
+
+enum AchievementType {
+  FIRST_WORKOUT
+  MILESTONE_REACHED
+  PERSONAL_BEST
+  STREAK
+  GOAL_ACHIEVED
+}
+
+model Achievement {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  type        AchievementType 
+  userId      String          @db.ObjectId
+  user        User            @relation(fields: [userId], references: [id])
+  createdAt   DateTime        @default(now())
+  @@index([userId])
+}
+
+model Stats {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String          @unique @db.ObjectId
+  user          User            @relation(fields: [userId], references: [id])
+  age           Int
+  height        Float
+  weight        Float
+  gender        Gender
+  firstWorkout  Boolean       @default(true)
+  currentStreak Int           @default(0)
+  goalWeight    Float
+  totalCalories Int //total till now
+  bestStreak    Int
+  exercises     ExerciseStats[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+type ExerciseStats {
+  name       String //name of the exercise
+  reps       Int // best reps performance
+  avgRepTime Float // best avg rep time performance
+  weight     Float? // most weight lifted on that exercise
+}
+
+enum Gender {
+  M
+  F
+  OTHER
+}
