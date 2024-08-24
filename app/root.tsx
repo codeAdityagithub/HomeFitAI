@@ -9,10 +9,7 @@ import "./tailwind.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className="dark"
-    >
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta

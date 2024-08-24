@@ -1,11 +1,12 @@
+import Navbar from "@/components/landing/Navbar";
 import { Outlet } from "@remix-run/react";
 
 const HomeLayout = () => {
   return (
-    <div>
-      HomeLayout
+    <main className="min-h-screen h-full">
+      <Navbar />
       <Outlet />
-    </div>
+    </main>
   );
 };
 export default HomeLayout;

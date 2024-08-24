@@ -1,4 +1,6 @@
-const cache = new Map();
+import { singleton } from "./singleton.server";
+
+const cache = singleton("Cache", ()=>new Map());
 
 type Options<TArgs extends any[]> = {
   revalidateAfter?: number;
