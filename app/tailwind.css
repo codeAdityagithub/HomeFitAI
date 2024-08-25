@@ -69,3 +69,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* @screen  */
+  @media (max-width: 1024px) {
+    .mask-left-fade {
+      mask-image: linear-gradient(
+        to left,
+        rgba(0, 0, 0, 0.95) 90%,
+        rgba(0, 0, 0, 0) 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to left,
+        rgba(0, 0, 0, 0.95) 90%,
+        rgba(0, 0, 0, 0) 100%
+      );
+    }
+  }
+  .outline-text {
+    text-shadow: 1px 1px 0 white; /* Outline color and offset */
+  }
+}

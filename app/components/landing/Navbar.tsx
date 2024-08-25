@@ -113,9 +113,7 @@ const NavbarSm = ({ hash }: { hash: string }) => {
                 key={to}
                 className="w-full h-10"
               >
-                <Link
-                  to={to}
-                >
+                <Link to={to}>
                   <Button
                     className={cn(
                       "hover:text-primary transition-colors text-lg w-full font-semibold tracking-widest",
