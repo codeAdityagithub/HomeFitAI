@@ -92,6 +92,11 @@ model Achievement {
   @@index([userId])
 }
 
+enum Unit {
+  kgcm
+  lbsft
+}
+
 model Stats {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   userId        String          @unique @db.ObjectId
@@ -100,6 +105,7 @@ model Stats {
   height        Float
   weight        Float
   gender        Gender
+  unit          Unit
   firstWorkout  Boolean       @default(true)
   currentStreak Int           @default(0)
   goalWeight    Float
