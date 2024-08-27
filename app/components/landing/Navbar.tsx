@@ -60,12 +60,17 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <Button
-          className="px-8 ml-auto"
-          variant="primary"
+        <Link
+          className="ml-auto"
+          to="/login"
         >
-          Sign Up
-        </Button>
+          <Button
+            className="px-8"
+            variant="primary"
+          >
+            Sign Up
+          </Button>
+        </Link>
       </nav>
       <NavbarSm hash={hash} />
     </>
@@ -89,13 +94,17 @@ const NavbarSm = ({ hash }: { hash: string }) => {
           }}
         ></img>
       </span>
-
-      <Button
-        className="px-8 ml-auto"
-        variant="primary"
+      <Link
+        className="ml-auto"
+        to="/login"
       >
-        Sign Up
-      </Button>
+        <Button
+          className="px-8"
+          variant="primary"
+        >
+          Sign Up
+        </Button>
+      </Link>
       <Sheet onOpenChange={(o) => setOpen(o)}>
         <SheetTrigger>
           <Menu />

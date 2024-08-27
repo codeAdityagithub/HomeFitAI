@@ -1,3 +1,5 @@
+import { authenticator } from "@/services/auth.server";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useRemixForm, getValidatedFormData } from "remix-hook-form";
 import { Form } from "@remix-run/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { FaGoogle } from "react-icons/fa";
 
 const HeightUnit = z.enum(["cm", "ft"]);
 const WeightUnit = z.enum(["kg", "lbs"]);
@@ -33,6 +36,14 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const resolver = zodResolver(schema);
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await authenticator.isAuthenticated(request, {
+    successRedirect: "/dashboard",
+  });
+
+  return null;
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const {
@@ -67,75 +78,18 @@ export default function LoginForm() {
 
   return (
     <div className="flex-1 flex items-center justify-center">
-      <Card>
-        <CardHeader>
-          <CardTitle>Tell Us About Yourself</CardTitle>
-          {/* <CardDescription>
-            Deploy your new project in one-click.
-          </CardDescription> */}
-        </CardHeader>
-        <CardContent>
+      <Card className="bg-white/60 backdrop-blur-sm">
+        <CardContent className="w-[300px] mt-6">
           <Form
-            onSubmit={handleSubmit}
-            method="POST"
-            className="flex flex-col gap-8"
+            action="/auth/google"
+            method="post"
           >
-            <div className="space-y-1">
-              <Label htmlFor="age">
-                Your Age:
-                {errors.age && (
-                  <p className="text-xs text-destructive">
-                    {errors.age.message}
-                  </p>
-                )}
-              </Label>
-              <Input
-                type="number"
-                id="age"
-                onBlur={(e) => {
-                  setValue("age", Number(e.target.value));
-                }}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="height">
-                Height:
-                {errors.height?.value && (
-                  <p className="text-xs text-destructive">
-                    {errors.height?.value.message}
-                  </p>
-                )}
-              </Label>
-              <Input
-                type="number"
-                id="height"
-                onBlur={(e) => {
-                  setValue("height.value", Number(e.target.value));
-                }}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="weight">
-                Weight:
-                {errors.weight?.value && (
-                  <p className="text-xs text-destructive">
-                    {errors.weight?.value.message}
-                  </p>
-                )}
-              </Label>
-              <Input
-                type="number"
-                id="weight"
-                onBlur={(e) => {
-                  setValue("weight.value", Number(e.target.value));
-                }}
-              />
-            </div>
             <Button
+              type="submit"
               className="w-full"
-              variant="primary"
             >
-              Submit
+              Login with <FaGoogle className="text-xl ml-2" />
+              oogle
             </Button>
           </Form>
         </CardContent>

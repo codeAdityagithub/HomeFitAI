@@ -16,4 +16,4 @@ if(process.env.NODE_ENV === 'production') {
   prisma.$connect();
 }
 
-export { prisma };
+export { prisma as db };
