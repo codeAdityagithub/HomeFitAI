@@ -90,3 +90,18 @@
     text-shadow: 1px 1px 0 white; /* Outline color and offset */
   }
 }
+
+@property --goal-weight {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes counter {
+  from {
+    --goal-weight: 0;
+  }
+  to {
+    --goal-weight: 100;
+  }
+}

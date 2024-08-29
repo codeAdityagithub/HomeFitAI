@@ -26,7 +26,9 @@ import {
 import { FormEvent, useEffect, useState } from "react";
 import { Gender, Unit } from "@prisma/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { convertToCm, convertToFeetInches } from "@/lib/utils";
+import { cn, convertToCm, convertToFeetInches } from "@/lib/utils";
+import Selector from "@/components/details/Selector";
+import { Minus, Plus } from "lucide-react";
 
 // Define the schema for the form
 const schema = z
@@ -42,14 +44,22 @@ const schema = z
       .min(5, "Age must be greater than 5.")
       .max(100, "Age must be less than 100 years."), // Positive integer for age
     gender: z.enum(["M", "F", "OTHER"]),
+    goalWeight: z.number().positive("Goal weight must be greater than 0."), // Positive integer for goal
   })
   // @ts-expect-error
   .refine(
     (data) => {
       let height = data.height;
       let weight = data.weight;
-
-      return height >= 50 && height <= 250 && weight >= 30 && weight <= 200;
+      let goal = data.goalWeight;
+      return (
+        height >= 50 &&
+        height <= 250 &&
+        weight >= 30 &&
+        weight <= 200 &&
+        goal >= 30 &&
+        goal <= 200
+      );
     },
     (data) => {
       return {
@@ -64,6 +74,10 @@ const schema = z
                   data.weight < 30 || data.weight > 200
                     ? "Weight must be between 30 and 200 kg."
                     : null,
+                goalWeight:
+                  data.goalWeight < 30 || data.goalWeight > 200
+                    ? "Goal weight must be between 30 and 200 kg."
+                    : null,
               }
             : {
                 height:
@@ -72,7 +86,11 @@ const schema = z
                     : null,
                 weight:
                   data.weight < 30 || data.weight > 200
-                    ? "Weight must be between 66 and 441 lbs."
+                    ? "Weight must be between 65 and 441 lbs."
+                    : null,
+                goalWeight:
+                  data.goalWeight < 30 || data.goalWeight > 200
+                    ? "Goal Weight must be between 65 and 441 lbs."
                     : null,
               },
         path: ["custom"],
@@ -119,6 +137,7 @@ export default function LoginForm() {
   const {
     handleSubmit,
     setValue: setHookValue,
+    trigger,
     setError,
     formState: { errors },
   } = useRemixForm<FormData>({
@@ -138,7 +157,9 @@ export default function LoginForm() {
     weight: 68,
     gender: "M",
     unit: "kgcm",
+    goalWeight: 68,
   });
+  const [currentStep, setCurrentStep] = useState(0);
   const setValue = <K extends keyof FormData>(name: K, value: FormData[K]) => {
     setForm((prev) => ({ ...prev, [name]: value }));
 
@@ -152,6 +173,7 @@ export default function LoginForm() {
   // us units
   const [height, setHeight] = useState({ feet: 5, inch: 10 });
   const [weight, setWeight] = useState(150);
+  const [goalWeight, setGoalWeight] = useState(150);
 
   const navigation = useNavigation();
   // remove error after 3s
@@ -161,6 +183,13 @@ export default function LoginForm() {
   useEffect(() => {
     setValue("weight", Math.min(Math.round(weight * 0.453592 * 2) / 2, 200));
   }, [weight]);
+  useEffect(() => {
+    setValue(
+      "goalWeight",
+      Math.min(Math.round(goalWeight * 0.453592 * 2) / 2, 200)
+    );
+  }, [goalWeight]);
+
   useEffect(() => {
     if (error && error !== "") {
       setTimeout(
@@ -174,12 +203,28 @@ export default function LoginForm() {
     }
   }, [error]);
 
+  const handleNext = async () => {
+    const parsed = await trigger();
+    console.log(parsed);
+    if (!parsed) return;
+    // if (form.unit === "kgcm") {
+    //   setValue("goalWeight", form.weight);
+    // } else if (unit === "lbsft") {
+    //   setGoalWeight(weight);
+    // }
+    setCurrentStep(1);
+  };
   const unit = form.unit;
+  console.log(form.goalWeight);
   return (
     <div className="flex-1 flex items-center justify-center p-6">
       <Card className="min-w-[300px] sm:w-[400px] md:w-[320px] lg:w-[450px] bg-white/60 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>Tell Us About Yourself</CardTitle>
+          <CardTitle className="text-center">
+            {currentStep === 0
+              ? "Tell Us About Yourself"
+              : "What's your target weight?"}
+          </CardTitle>
           {error && error !== "" && (
             <CardDescription className="text-destructive">
               {error}
@@ -208,7 +253,12 @@ export default function LoginForm() {
             value={unit}
             className="w-full"
           >
-            <TabsList className="w-full grid grid-cols-2">
+            <TabsList
+              className={cn(
+                "w-full grid grid-cols-2",
+                currentStep === 1 ? "hidden" : ""
+              )}
+            >
               <TabsTrigger value="kgcm">Metric Units</TabsTrigger>
               <TabsTrigger value="lbsft">US Units</TabsTrigger>
             </TabsList>
@@ -218,191 +268,228 @@ export default function LoginForm() {
               method="POST"
               className="flex flex-col gap-4 p-2"
             >
-              <div className="space-y-1">
-                <Label htmlFor="age">
-                  Your Age:{" "}
-                  <span className="text-sm md:text-muted-foreground">
-                    (5-100)
-                  </span>
-                  {errors.age && (
-                    <p className="text-xs text-destructive">
-                      {errors.age.message}
-                    </p>
-                  )}
-                </Label>
-                <div className="relative">
-                  <Input
-                    type="number"
-                    placeholder="Your age in years"
-                    id="age"
-                    // min={5}
-                    onChange={(e) => {
-                      setValue("age", Number(e.target.value));
-                    }}
-                    value={form.age || ""}
-                  />
-                  <InputDec text="years" />
-                </div>
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="height">
-                  Height:
-                  {/* <span className="text-sm text-muted-foreground">(5-100)</span> */}
-                  {
-                    // @ts-expect-error
-                    errors.custom && (
-                      <p className="text-xs text-destructive">
-                        {
-                          // @ts-expect-error
-                          errors.custom.message?.height
-                        }
-                      </p>
-                    )
-                  }
-                </Label>
-                {unit === "kgcm" ? (
-                  <div className="relative">
-                    <Input
-                      type="number"
-                      placeholder="Your Height in cm"
-                      id="height"
-                      min={50}
-                      max={272}
-                      step={0.5}
-                      value={form.height || ""}
-                      onChange={(e) => {
-                        setValue("height", Number(e.target.value));
-                      }}
-                    />
-                    <InputDec text="cm" />
-                  </div>
-                ) : (
-                  <div className="flex gap-2 *:flex-1">
+              {currentStep === 0 ? (
+                <>
+                  <div className="space-y-1">
+                    <Label htmlFor="age">
+                      Your Age:{" "}
+                      <span className="text-sm md:text-muted-foreground">
+                        (5-100)
+                      </span>
+                      {errors.age && (
+                        <p className="text-xs text-red-500">
+                          {errors.age.message}
+                        </p>
+                      )}
+                    </Label>
                     <div className="relative">
                       <Input
                         type="number"
-                        min={0}
-                        placeholder="Height in feet"
-                        max={8}
-                        value={height.feet || ""}
+                        placeholder="Your age in years"
+                        id="age"
+                        // min={5}
                         onChange={(e) => {
-                          setHeight((prev) => ({
-                            ...prev,
-                            feet: Number(e.target.value),
-                          }));
+                          setValue("age", Number(e.target.value));
                         }}
+                        value={form.age || ""}
                       />
-                      <InputDec text="feet" />
+                      <InputDec text="years" />
                     </div>
-                    <div className="relative">
-                      <Input
-                        type="number"
-                        value={height.inch}
-                        onChange={(e) => {
-                          const val = Number(e.target.value);
-                          if (height.feet >= 8 && val >= 12) return;
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="height">
+                      Height:
+                      {/* <span className="text-sm text-muted-foreground">(5-100)</span> */}
+                      {
+                        // @ts-expect-error
+                        errors.custom && (
+                          <p className="text-xs text-red-500">
+                            {
+                              // @ts-expect-error
+                              errors.custom.message?.height
+                            }
+                          </p>
+                        )
+                      }
+                    </Label>
+                    {unit === "kgcm" ? (
+                      <div className="relative">
+                        <Input
+                          type="number"
+                          placeholder="Your Height in cm"
+                          id="height"
+                          min={50}
+                          max={272}
+                          step={0.5}
+                          value={form.height || ""}
+                          onChange={(e) => {
+                            setValue("height", Number(e.target.value));
+                          }}
+                        />
+                        <InputDec text="cm" />
+                      </div>
+                    ) : (
+                      <div className="flex gap-2 *:flex-1">
+                        <div className="relative">
+                          <Input
+                            type="number"
+                            min={0}
+                            placeholder="Height in feet"
+                            max={8}
+                            value={height.feet || ""}
+                            onChange={(e) => {
+                              setHeight((prev) => ({
+                                ...prev,
+                                feet: Number(e.target.value),
+                              }));
+                            }}
+                          />
+                          <InputDec text="feet" />
+                        </div>
+                        <div className="relative">
+                          <Input
+                            type="number"
+                            value={height.inch}
+                            onChange={(e) => {
+                              const val = Number(e.target.value);
+                              if (height.feet >= 8 && val >= 12) return;
 
-                          if (val === 12) {
-                            setHeight((prev) => ({
-                              inch: 0,
-                              feet: prev.feet + 1,
-                            }));
-                          } else if (val === -1) {
-                            setHeight((prev) => ({
-                              inch: 11,
-                              feet: Math.max(prev.feet - 1, 0),
-                            }));
-                          } else {
-                            setHeight((prev) => ({
-                              ...prev,
-                              inch: val,
-                            }));
-                          }
-                        }}
-                      />
-                      <InputDec text="inches" />
+                              if (val === 12) {
+                                setHeight((prev) => ({
+                                  inch: 0,
+                                  feet: prev.feet + 1,
+                                }));
+                              } else if (val === -1) {
+                                setHeight((prev) => ({
+                                  inch: 11,
+                                  feet: Math.max(prev.feet - 1, 0),
+                                }));
+                              } else {
+                                setHeight((prev) => ({
+                                  ...prev,
+                                  inch: val,
+                                }));
+                              }
+                            }}
+                          />
+                          <InputDec text="inches" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="weight">
+                      Weight:
+                      {
+                        // @ts-expect-error
+                        errors.custom && (
+                          <p className="text-xs text-red-500">
+                            {
+                              // @ts-expect-error
+                              errors.custom.message?.weight
+                            }
+                          </p>
+                        )
+                      }
+                    </Label>
+                    <div className="relative">
+                      {unit === "kgcm" ? (
+                        <Input
+                          type="number"
+                          id="weight"
+                          min={0}
+                          step={0.5}
+                          placeholder="Weight in Kg"
+                          value={form.weight || ""}
+                          onChange={(e) => {
+                            setValue("weight", Number(e.target.value));
+                          }}
+                        />
+                      ) : (
+                        <Input
+                          type="number"
+                          id="weight"
+                          min={0}
+                          step={0.5}
+                          placeholder="Weight in pounds"
+                          value={weight || ""}
+                          onChange={(e) => {
+                            setWeight(Number(e.target.value));
+                          }}
+                        />
+                      )}
+                      <InputDec text={unit === "kgcm" ? "kg" : "pounds"} />
                     </div>
                   </div>
-                )}
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="weight">
-                  Weight:
-                  {
-                    // @ts-expect-error
-                    errors.custom && (
-                      <p className="text-xs text-destructive">
-                        {
-                          // @ts-expect-error
-                          errors.custom.message?.weight
-                        }
-                      </p>
-                    )
-                  }
-                </Label>
-                <div className="relative">
-                  {unit === "kgcm" ? (
-                    <Input
-                      type="number"
-                      id="weight"
-                      min={0}
-                      step={0.5}
-                      placeholder="Weight in Kg"
-                      value={form.weight || ""}
-                      onChange={(e) => {
-                        setValue("weight", Number(e.target.value));
-                      }}
-                    />
-                  ) : (
-                    <Input
-                      type="number"
-                      id="weight"
-                      min={0}
-                      step={0.5}
-                      placeholder="Weight in pounds"
-                      value={weight || ""}
-                      onChange={(e) => {
-                        setWeight(Number(e.target.value));
-                      }}
-                    />
-                  )}
-                  <InputDec text={unit === "kgcm" ? "kg" : "pounds"} />
-                </div>
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="gender">
-                  Gender:
-                  {errors.gender && (
-                    <p className="text-xs text-destructive">
-                      {errors.gender.message}
-                    </p>
-                  )}
-                </Label>
-                <Select
-                  onValueChange={(v) => setValue("gender", v as Gender)}
-                  value={form.gender}
-                >
-                  <SelectTrigger
-                    id="gender"
-                    className="min-w-[180px]"
+                  <div className="space-y-1">
+                    <Label htmlFor="gender">
+                      Gender:
+                      {errors.gender && (
+                        <p className="text-xs text-red-500">
+                          {errors.gender.message}
+                        </p>
+                      )}
+                    </Label>
+                    <Select
+                      onValueChange={(v) => setValue("gender", v as Gender)}
+                      value={form.gender}
+                    >
+                      <SelectTrigger
+                        id="gender"
+                        className="min-w-[180px]"
+                      >
+                        <SelectValue placeholder="Your Gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="M">Male</SelectItem>
+                        <SelectItem value="F">Female</SelectItem>
+                        <SelectItem value="OTHER">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </>
+              ) : (
+                <Selector
+                  unit={unit}
+                  form={form}
+                  weight={weight}
+                  setValue={setValue}
+                  goalWeight={goalWeight}
+                  setGoalWeight={setGoalWeight}
+                  // @ts-expect-error
+                  error={errors.custom?.message?.goalWeight}
+                />
+              )}
+              {currentStep === 1 && (
+                <div className="flex w-full justify-between gap-4">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    className="w-full"
+                    onClick={() => setCurrentStep(0)}
                   >
-                    <SelectValue placeholder="Your Gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="M">Male</SelectItem>
-                    <SelectItem value="F">Female</SelectItem>
-                    <SelectItem value="OTHER">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button
-                type="submit"
-                disabled={navigation.state === "submitting"}
-                className="w-full"
-              >
-                Submit
-              </Button>
+                    back
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={navigation.state === "submitting"}
+                    className="w-full"
+                  >
+                    Submit
+                  </Button>
+                </div>
+              )}
             </Form>
+            {currentStep === 0 && (
+              <div className="w-full p-2 flex justify-end">
+                <Button
+                  onClick={handleNext}
+                  size="sm"
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </Tabs>
         </CardContent>
       </Card>
