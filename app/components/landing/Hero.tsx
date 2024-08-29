@@ -1,6 +1,7 @@
 import { features } from "@/routes/_landing+/index";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { Link } from "@remix-run/react";
 
 const Hero = () => {
   return (
@@ -32,12 +33,14 @@ const Hero = () => {
           </span>
           Improve Faster.
         </p>
-        <Button
-          variant="primary"
-          className="tracking-widest py-6 px-16 xs:px-20"
-        >
-          Get Started
-        </Button>
+        <Link to="/login">
+          <Button
+            variant="primary"
+            className="tracking-widest py-6 px-16 xs:px-20"
+          >
+            Get Started
+          </Button>
+        </Link>
       </div>
       <div className="hidden lg:flex flex-1 min-w-[200px] *:max-w-[250px] flex-col gap-2 items-end justify-center">
         {features.map((feat, ind) => (

@@ -39,7 +39,7 @@ const resolver = zodResolver(schema);
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await authenticator.isAuthenticated(request, {
-    successRedirect: "/dashboard",
+    successRedirect: "/details",
   });
 
   return null;

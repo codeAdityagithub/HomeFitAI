@@ -109,9 +109,9 @@ model Stats {
   unit          Unit
   firstWorkout  Boolean       @default(true)
   currentStreak Int           @default(0)
-  goalWeight    Float
-  totalCalories Int //total till now
-  bestStreak    Int
+  goalWeight    Float 
+  totalCalories Int           @default(0)//total till now
+  bestStreak    Int           @default(0)
   exercises     ExerciseStats[]
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
