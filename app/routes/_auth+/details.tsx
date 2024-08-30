@@ -1,7 +1,12 @@
 import { authenticator } from "@/services/auth.server";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useRemixForm, getValidatedFormData } from "remix-hook-form";
-import { Form, useNavigation, useSearchParams } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useNavigation,
+  useSearchParams,
+} from "@remix-run/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node"; // or cloudflare/deno
@@ -23,7 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Gender, Unit } from "@prisma/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, convertToCm, convertToFeetInches } from "@/lib/utils";
@@ -106,12 +111,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await authenticator.isAuthenticated(request, {
     failureRedirect: "/login",
   });
-  const stats = await db.stats.findUnique({ where: { id: user.id } });
-  if (stats) return redirect("/dasboard");
+  const stats = await db.stats.findUnique({ where: { userId: user.id } });
+  if (stats) return redirect("/dashboard");
   return null;
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: "/login",
+  });
+
   const {
     errors,
     data,
@@ -121,9 +130,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // The keys "errors" and "defaultValues" are picked up automatically by useRemixForm
     return json({ errors, defaultValues });
   }
-  // await db.stats.create({ data: { age: data.age } });
-  // Do something with the data
-  return json(data);
+  try {
+    await db.stats.create({
+      data: { ...data, user: { connect: { id: user.id } } },
+    });
+    return redirect("/dashboard");
+  } catch (error: any) {
+    console.log(error.message ?? error);
+    return { error: "Cannot create Stats for this user." };
+  }
 };
 
 const InputDec = ({ text }: { text: string }) => {
@@ -151,6 +166,7 @@ export default function LoginForm() {
       unit: "kgcm",
     },
   });
+  const actionData = useActionData<typeof action>();
   const [form, setForm] = useState<FormData>({
     age: 20,
     height: 178,
@@ -160,15 +176,19 @@ export default function LoginForm() {
     goalWeight: 68,
   });
   const [currentStep, setCurrentStep] = useState(0);
+  const goalWeightChanged = useRef(false);
   const setValue = <K extends keyof FormData>(name: K, value: FormData[K]) => {
     setForm((prev) => ({ ...prev, [name]: value }));
 
+    if (name === "weight" && goalWeightChanged.current)
+      goalWeightChanged.current = false;
     // @ts-expect-error
     setHookValue(name, value);
   };
 
   const [search, setSearch] = useSearchParams();
-  const error = search.get("error");
+  // @ts-expect-error
+  const error = search.get("error") || actionData?.error;
 
   // us units
   const [height, setHeight] = useState({ feet: 5, inch: 10 });
@@ -182,6 +202,7 @@ export default function LoginForm() {
   }, [height]);
   useEffect(() => {
     setValue("weight", Math.min(Math.round(weight * 0.453592 * 2) / 2, 200));
+    if (goalWeightChanged.current) goalWeightChanged.current = false;
   }, [weight]);
   useEffect(() => {
     setValue(
@@ -205,17 +226,16 @@ export default function LoginForm() {
 
   const handleNext = async () => {
     const parsed = await trigger();
-    console.log(parsed);
     if (!parsed) return;
-    // if (form.unit === "kgcm") {
-    //   setValue("goalWeight", form.weight);
-    // } else if (unit === "lbsft") {
-    //   setGoalWeight(weight);
-    // }
+    if (form.unit === "kgcm" && !goalWeightChanged.current) {
+      setValue("goalWeight", form.weight);
+    } else if (unit === "lbsft" && !goalWeightChanged.current) {
+      setGoalWeight(weight);
+    }
+    if (!goalWeightChanged.current) goalWeightChanged.current = true;
     setCurrentStep(1);
   };
   const unit = form.unit;
-  console.log(form.goalWeight);
   return (
     <div className="flex-1 flex items-center justify-center p-6">
       <Card className="min-w-[300px] sm:w-[400px] md:w-[320px] lg:w-[450px] bg-white/60 backdrop-blur-sm">
@@ -226,7 +246,7 @@ export default function LoginForm() {
               : "What's your target weight?"}
           </CardTitle>
           {error && error !== "" && (
-            <CardDescription className="text-destructive">
+            <CardDescription className="text-destructive text-center">
               {error}
             </CardDescription>
           )}
@@ -456,6 +476,7 @@ export default function LoginForm() {
                   setValue={setValue}
                   goalWeight={goalWeight}
                   setGoalWeight={setGoalWeight}
+                  disabled={navigation.state === "submitting"}
                   // @ts-expect-error
                   error={errors.custom?.message?.goalWeight}
                 />

@@ -12,6 +12,7 @@ function WeightInput({
   setGoalWeight,
   weight,
   error,
+  disabled,
 }: any) {
   const decrementIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const incrementIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -23,7 +24,7 @@ function WeightInput({
     if (decrementIntervalRef.current !== null) return;
     decrementIntervalRef.current = setInterval(() => {
       setCurrentValue((prev: any) => prev - 0.5);
-    }, 100); // Decrease every 100ms
+    }, 150); // Decrease every 100ms
   };
 
   const startIncrement = () => {
@@ -31,15 +32,15 @@ function WeightInput({
 
     incrementIntervalRef.current = setInterval(() => {
       setCurrentValue((prev: any) => prev + 0.5);
-    }, 100); // Increase every 100ms
+    }, 150); // Increase every 100ms
   };
 
   const stopDecrement = () => {
     if (decrementIntervalRef.current !== null) {
       clearInterval(decrementIntervalRef.current);
       if (unit === "kgcm") {
-        setValue("goalWeight", currentValue);
-      } else setGoalWeight(currentValue);
+        setValue("goalWeight", currentValue - 0.5);
+      } else setGoalWeight(currentValue - 0.5);
       decrementIntervalRef.current = null;
     }
   };
@@ -48,8 +49,8 @@ function WeightInput({
     if (incrementIntervalRef.current !== null) {
       clearInterval(incrementIntervalRef.current);
       if (unit === "kgcm") {
-        setValue("goalWeight", currentValue);
-      } else setGoalWeight(currentValue);
+        setValue("goalWeight", currentValue + 0.5);
+      } else setGoalWeight(currentValue + 0.5);
       incrementIntervalRef.current = null;
     }
   };
@@ -75,6 +76,7 @@ function WeightInput({
           onMouseLeave={stopDecrement}
           onTouchStart={startDecrement} // For touch devices
           onTouchEnd={stopDecrement}
+          disabled={disabled}
         >
           <Minus className="h-5 w-5" />
         </Button>
@@ -100,6 +102,7 @@ function WeightInput({
           onMouseLeave={stopIncrement}
           onTouchStart={startIncrement} // For touch devices
           onTouchEnd={stopIncrement}
+          disabled={disabled}
         >
           <Plus className="h-5 w-5" />
         </Button>

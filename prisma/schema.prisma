@@ -54,6 +54,7 @@ type ExerciseLog {
   sets     Set[]
   duration Float
   calories Int
+  time     DateTime
 }
 
 type Set {
