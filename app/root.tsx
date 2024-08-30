@@ -1,3 +1,5 @@
+import { authenticator } from "@/services/auth.server";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { LinksFunction } from "@remix-run/node";
 import {
   isRouteErrorResponse,
@@ -22,6 +24,12 @@ import { Button } from "./components/ui/button";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const user = await authenticator.isAuthenticated(request);
+
+  return { user };
+};
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -54,7 +62,9 @@ export function ErrorBoundary() {
       <div className="flex items-center justify-center h-svh">
         <Card className="max-w-sm">
           <CardHeader>
-            <CardTitle>{error.status} {error.statusText}</CardTitle>
+            <CardTitle>
+              {error.status} {error.statusText}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p>{error.data}</p>

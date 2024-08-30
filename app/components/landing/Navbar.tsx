@@ -8,9 +8,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { useUser } from "@/utils/userContext";
 
 const Links = [
   { to: "", name: "Home" },
@@ -21,13 +23,13 @@ const Links = [
 const Navbar = () => {
   const location = useLocation();
   const [hash, setHash] = useState("");
-
+  const user = useUser();
   useEffect(() => {
     setHash(location.hash);
   }, [location.hash]);
   return (
     <>
-      <nav className="hidden md:flex pt-10 gap-8 lg:gap-12 z-50 sticky bg-transparent xs:px-10 md:px-12 lg:px-16 xl:px-20 ">
+      <nav className="hidden md:flex pt-10 pb-2 gap-8 lg:gap-12 z-50 sticky -top-8 bg-white xs:px-10 md:px-12 lg:px-16 xl:px-20 ">
         <span className="min-w-8 min-h-8 w-8 h-8 aspect-square">
           <img
             src="/logo.png"
@@ -60,17 +62,41 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        <Link
-          className="ml-auto"
-          to="/login"
-        >
-          <Button
-            className="px-8"
-            variant="primary"
+        {user ? (
+          <Link
+            className="ml-auto"
+            to="/dashboard"
+            prefetch="intent"
           >
-            Sign Up
-          </Button>
-        </Link>
+            <Button
+              className="px-8"
+              variant="primary"
+            >
+              {/* {user.image && (
+                <Avatar className="w-6 h-6 mr-2">
+                  <AvatarImage
+                    src={user.image}
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>{user.username[0]}</AvatarFallback>
+                </Avatar>
+              )} */}
+              Dashboard
+            </Button>
+          </Link>
+        ) : (
+          <Link
+            className="ml-auto"
+            to="/login"
+          >
+            <Button
+              className="px-8"
+              variant="primary"
+            >
+              Sign Up
+            </Button>
+          </Link>
+        )}
       </nav>
       <NavbarSm hash={hash} />
     </>
@@ -79,9 +105,9 @@ const Navbar = () => {
 
 const NavbarSm = ({ hash }: { hash: string }) => {
   const [open, setOpen] = useState(false);
-
+  const user = useUser();
   return (
-    <nav className="md:hidden flex pt-10 gap-8 lg:gap-12 z-50 sticky bg-transparent px-6 xs:px-10">
+    <nav className="md:hidden flex pt-10 pb-2 gap-4 z-50 sticky -top-8 bg-white px-6 xs:px-10">
       <span className="min-w-8 min-h-8 w-8 h-8 aspect-square">
         <img
           src="/logo.png"
@@ -94,18 +120,36 @@ const NavbarSm = ({ hash }: { hash: string }) => {
           }}
         ></img>
       </span>
-      <Link
-        className="ml-auto"
-        to="/login"
-      >
-        <Button
-          className="px-8"
-          variant="primary"
+      {user ? (
+        <Link
+          className="ml-auto"
+          to="/dashboard"
+          prefetch="intent"
         >
-          Sign Up
-        </Button>
-      </Link>
-      <Sheet onOpenChange={(o) => setOpen(o)}>
+          <Button
+            className="px-8"
+            variant="primary"
+          >
+            Dashboard
+          </Button>
+        </Link>
+      ) : (
+        <Link
+          className="ml-auto"
+          to="/login"
+        >
+          <Button
+            className="px-8"
+            variant="primary"
+          >
+            Sign Up
+          </Button>
+        </Link>
+      )}
+      <Sheet
+        open={open}
+        onOpenChange={(o) => setOpen(o)}
+      >
         <SheetTrigger>
           <Menu />
         </SheetTrigger>
@@ -128,6 +172,7 @@ const NavbarSm = ({ hash }: { hash: string }) => {
                       "hover:text-primary transition-colors text-lg w-full font-semibold tracking-widest",
                       hash === to ? "text-primary" : "text-foreground"
                     )}
+                    onClick={() => setOpen(false)}
                     variant="link"
                   >
                     {name}

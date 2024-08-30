@@ -20,6 +20,7 @@ const config = {
     extend: {
       screens: {
         xs: "380px",
+        llg: "1180px",
       },
       dropShadow: {
         custom: "0 10px 10px rgba(250, 89, 57, 0.5)", // 0.5 is the alpha value

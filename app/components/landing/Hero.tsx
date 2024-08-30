@@ -5,8 +5,11 @@ import { Link } from "@remix-run/react";
 
 const Hero = () => {
   return (
-    <section className="h-[calc(100vh-80px)] relative flex justify-between gap-4">
-      <div className="absolute inset-0 -z-10 flex items-center overflow-hidden justify-center lg:justify-start dark:justify-center">
+    <section
+      id="home"
+      className="h-[calc(100vh-88px)] relative flex justify-between gap-4"
+    >
+      <div className="absolute inset-0 -z-10 flex items-center overflow-hidden justify-center lg:justify-start xl:pr-14 xl:justify-center">
         <picture>
           <source
             srcSet="HeroImage.png"
@@ -15,7 +18,7 @@ const Hero = () => {
           <img
             src="HeroImageMd.png"
             loading="lazy"
-            className="w-full max-w-[600px] lg:max-w-[1000px] h-full object-cover mask-left-fade"
+            className="w-full max-w-[600px] lg:max-w-[1000px] max-h-screen lg:max-h-[90vh] llg:max-h-screen h-full object-cover mask-left-fade"
             alt="Hero Image"
           />
         </picture>
