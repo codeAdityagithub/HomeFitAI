@@ -3,9 +3,9 @@ import { Outlet } from "@remix-run/react";
 
 const DashboardLayout = () => {
   return (
-    <div className="h-svh flex gap-4">
+    <div className="h-svh flex flex-col-reverse md:flex-row">
       <Sidebar />
-      <main className="flex-1 w-full bg-secondary p-6">
+      <main className="flex-1 w-full md:bg-secondary md:p-6">
         <Outlet />
       </main>
     </div>
