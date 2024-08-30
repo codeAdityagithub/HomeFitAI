@@ -19,5 +19,5 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Dashboard() {
   const data = useLoaderData<typeof loader>();
-  return <div>Dashboard</div>;
+  return <div className="h-full">Dashboard</div>;
 }
