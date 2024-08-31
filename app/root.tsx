@@ -20,13 +20,14 @@ import {
   CardTitle,
 } from "./components/ui/card";
 import { Button } from "./components/ui/button";
+import { getAuthUser } from "./utils/auth/auth.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await authenticator.isAuthenticated(request);
+  const user = await getAuthUser(request)
 
   return { user };
 };

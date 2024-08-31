@@ -11,9 +11,15 @@ export const sessionStorage = createCookieSessionStorage({
     httpOnly: true, // for security reasons, make this cookie http only
     secrets: [process.env.SESSION_SECRET], // replace this with an actual secret
     secure: process.env.NODE_ENV === "production", // enable this in prod only
-    maxAge: 3600 * 24 * 7,
+    maxAge: 3600 * 24 * 2,
   },
 });
 
+// export const getSession: typeof sessionStorage.getSession = async (...opts) => {
+//   const session = await sessionStorage.getSession(...opts);
+//   console.log(session);
+//   return session;
+// };
 // you can also export the methods individually for your own usage
-export const { getSession, commitSession, destroySession } = sessionStorage;
+
+export const { commitSession, destroySession, getSession } = sessionStorage;

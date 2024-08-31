@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FaGoogle } from "react-icons/fa";
+import { redirectIfAuth } from "@/utils/auth/auth.server";
 
 const HeightUnit = z.enum(["cm", "ft"]);
 const WeightUnit = z.enum(["kg", "lbs"]);
@@ -38,7 +39,7 @@ type FormData = z.infer<typeof schema>;
 const resolver = zodResolver(schema);
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticator.isAuthenticated(request, {
+  await redirectIfAuth(request, {
     successRedirect: "/details",
   });
 

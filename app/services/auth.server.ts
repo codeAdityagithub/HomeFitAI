@@ -8,9 +8,11 @@ export type AuthUser = Pick<User, "id" | "email" | "username"|"image">;
 
 export type AuthStrategy = (typeof AuthStrategies)[keyof typeof AuthStrategies];
 
+export type CookieData = {token:string}
+
 // Create an instance of the authenticator, pass a generic with what
 // strategies will return and will store in the session
-export const authenticator = new Authenticator<AuthUser>(sessionStorage);
+export const authenticator = new Authenticator<CookieData>(sessionStorage);
 
 // Register your strategies below
 authenticator.use(googleStrategy, AuthStrategies.GOOGLE);

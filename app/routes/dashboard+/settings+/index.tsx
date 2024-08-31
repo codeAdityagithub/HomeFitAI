@@ -13,9 +13,10 @@ import { AlignVerticalJustifyStartIcon } from "lucide-react";
 import { db } from "@/utils/db.server";
 import { useLoaderData } from "@remix-run/react";
 import { IoPersonOutline } from "react-icons/io5";
+import { requireUser } from "@/utils/auth/auth.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await authenticator.isAuthenticated(request, {
+  const user = await requireUser(request, {
     failureRedirect: "/login",
   });
   const dbuser = await db.user.findUnique({ where: { id: user.id } });

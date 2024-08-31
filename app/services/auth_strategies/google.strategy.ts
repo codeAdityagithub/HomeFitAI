@@ -1,7 +1,8 @@
 import { AuthStrategies } from "@/services/auth_strategies";
-import type { AuthUser } from "@/services/auth.server";
+import type { AuthUser, CookieData } from "@/services/auth.server";
 import { GoogleStrategy } from "remix-auth-google";
 import { db } from "@/utils/db.server";
+import { createJWT } from "@/utils/jwt/jwt.server";
 
 const clientID = process.env.GOOGLE_CLIENT_ID;
 const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
@@ -10,7 +11,7 @@ if (!clientID || !clientSecret) {
   throw new Error("Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET");
 }
 
-export const googleStrategy = new GoogleStrategy<AuthUser>(
+export const googleStrategy = new GoogleStrategy<CookieData>(
   {
     clientID,
     clientSecret,
@@ -23,13 +24,14 @@ export const googleStrategy = new GoogleStrategy<AuthUser>(
       where: { email },
       select: { id: true, email: true, username: true, image: true },
     });
-    if (dbuser) return dbuser;
+
+    if (dbuser) return { token: createJWT(dbuser, "2d") };
 
     const newUser = await db.user.create({
       data: { username: name, email, image: picture },
       select: { id: true, email: true, username: true, image: true },
     });
 
-    return newUser;
+    return { token: createJWT(newUser, "2d") };
   }
 );

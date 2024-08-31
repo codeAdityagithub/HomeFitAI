@@ -50,6 +50,16 @@ const Links = [
     name: "Social",
     icon: <MessageSquareHeart strokeWidth={1.5} />,
   },
+  {
+    to: "settings",
+    name: "Settings",
+    icon: (
+      <IoPersonOutline
+        className="text-xl"
+        strokeWidth={1.6}
+      />
+    ),
+  },
 ];
 const BottomLinks = [
   {
@@ -84,7 +94,7 @@ export default function Sidebar() {
   return (
     <>
       <BottomNav />
-      <div className="w-[280px] hidden md:flex flex-col items-start justify-start px-6 py-4">
+      <div className="w-[220px] lg:w-[280px] hidden md:flex flex-col items-start justify-start px-6 py-4">
         <div className="font-bold flex items-center w-full p-2">
           <img
             src="/logo.png"

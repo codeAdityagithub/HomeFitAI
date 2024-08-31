@@ -34,6 +34,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, convertToCm, convertToFeetInches } from "@/lib/utils";
 import Selector from "@/components/details/Selector";
 import { Minus, Plus } from "lucide-react";
+import { requireUser } from "@/utils/auth/auth.server";
 
 // Define the schema for the form
 const schema = z
@@ -108,7 +109,7 @@ type FormData = z.infer<typeof schema>;
 const resolver = zodResolver(schema);
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await authenticator.isAuthenticated(request, {
+  const user = await requireUser(request, {
     failureRedirect: "/login",
   });
   const stats = await db.stats.findUnique({ where: { userId: user.id } });
@@ -117,7 +118,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const user = await authenticator.isAuthenticated(request, {
+  const user = await requireUser(request, {
     failureRedirect: "/login",
   });
 
