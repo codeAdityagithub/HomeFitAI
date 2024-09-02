@@ -61,6 +61,25 @@
   }
 }
 
+@layer components {
+  .ver_scroll::-webkit-scrollbar {
+    @apply hidden md:block w-2.5 h-2.5;
+  }
+  /* Track */
+  .ver_scroll::-webkit-scrollbar-track {
+    @apply bg-green-100;
+  }
+
+  /* Handle */
+  .ver_scroll::-webkit-scrollbar-thumb {
+    @apply bg-accent rounded-lg transition-colors shadow-md;
+  }
+  /* Handle on hover */
+  .ver_scroll::-webkit-scrollbar-thumb:hover {
+    @apply bg-green-600;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -88,20 +107,5 @@
   }
   .outline-text {
     text-shadow: 1px 1px 0 white; /* Outline color and offset */
-  }
-}
-
-@property --goal-weight {
-  syntax: "<integer>";
-  initial-value: 0;
-  inherits: false;
-}
-
-@keyframes counter {
-  from {
-    --goal-weight: 0;
-  }
-  to {
-    --goal-weight: 100;
   }
 }

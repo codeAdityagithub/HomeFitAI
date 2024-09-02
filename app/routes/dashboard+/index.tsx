@@ -18,6 +18,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return null;
 };
 
+export { clientLoader } from "@/utils/routeCache.client";
+
 export default function Dashboard() {
   const data = useLoaderData<typeof loader>();
   return <div className="h-full">Dashboard</div>;

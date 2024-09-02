@@ -1,27 +1,16 @@
-import { Form, Link, NavLink } from "@remix-run/react";
+import { Form, NavLink } from "@remix-run/react";
 import {
-  Dumbbell,
   LayoutList,
   LogOut,
   MessageSquareHeart,
   NotepadText,
-  Settings,
 } from "lucide-react";
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { LiaDumbbellSolid } from "react-icons/lia";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import GNavLink from "@/utils/GNavlink";
 import { IoPersonOutline } from "react-icons/io5";
+import { Button } from "../ui/button";
 
 const Links = [
   {
@@ -94,7 +83,7 @@ export default function Sidebar() {
   return (
     <>
       <BottomNav />
-      <div className="w-[220px] lg:w-[280px] hidden md:flex flex-col items-start justify-start px-6 py-4">
+      <div className="w-[220px] lg:w-[280px] h-svh sticky top-0 hidden md:flex flex-col items-start justify-start px-6 py-4">
         <div className="font-bold flex items-center w-full p-2">
           <img
             src="/logo.png"
@@ -113,7 +102,7 @@ export default function Sidebar() {
         </p>
         <div className="w-full space-y-1">
           {Links.map((link) => (
-            <GNavLink
+            <NavLink
               key={link.to}
               end
               to={link.to}
@@ -128,7 +117,7 @@ export default function Sidebar() {
                 {link.icon}
                 <span>{link.name}</span>
               </div>
-            </GNavLink>
+            </NavLink>
           ))}
         </div>
         <p className="text-muted-foreground text-sm px-3 py-2 my-2">Others</p>
@@ -158,7 +147,7 @@ const BottomNav = () => {
     <div className="w-full block md:hidden p-2">
       <div className="grid grid-cols-4 items-stretch">
         {BottomLinks.map((link) => (
-          <GNavLink
+          <NavLink
             key={link.to}
             end
             to={link.to}
@@ -173,7 +162,7 @@ const BottomNav = () => {
               {link.icon}
               {/* <span>{link.name}</span> */}
             </div>
-          </GNavLink>
+          </NavLink>
         ))}
       </div>
     </div>

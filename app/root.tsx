@@ -9,6 +9,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  ShouldRevalidateFunction,
   useRouteError,
 } from "@remix-run/react";
 import stylesheet from "@/tailwind.css?url";
@@ -27,9 +28,13 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await getAuthUser(request)
+  const user = await getAuthUser(request);
 
   return { user };
+};
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({ formAction }) => {
+  return formAction === "/logout";
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -47,7 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="ver_scroll">
         {children}
         <ScrollRestoration />
         <Scripts />
