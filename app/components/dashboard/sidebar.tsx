@@ -83,7 +83,7 @@ export default function Sidebar() {
   return (
     <>
       <BottomNav />
-      <div className="w-[220px] lg:w-[280px] h-svh sticky top-0 hidden md:flex flex-col items-start justify-start px-6 py-4">
+      <div className="w-[220px] lg:w-[280px] h-svh overflow-auto ver_scroll sticky top-0 hidden md:flex flex-col items-start justify-start px-6 py-4">
         <div className="font-bold flex items-center w-full p-2">
           <img
             src="/logo.png"
@@ -108,8 +108,10 @@ export default function Sidebar() {
               to={link.to}
               className={({ isActive }) =>
                 cn(
-                  "block rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground",
-                  isActive ? "bg-accent text-accent-foreground" : ""
+                  "block rounded-lg transition-colors hover:text-accent-foreground",
+                  isActive
+                    ? "bg-accent text-accent-foreground"
+                    : "hover:bg-accent/80"
                 )
               }
             >
@@ -144,8 +146,8 @@ export default function Sidebar() {
 
 const BottomNav = () => {
   return (
-    <div className="w-full block md:hidden p-2">
-      <div className="grid grid-cols-4 items-stretch">
+    <div className="w-full sticky bottom-0 bg-background z-50 block md:hidden p-2">
+      <div className="grid grid-cols-4 gap-1 items-stretch">
         {BottomLinks.map((link) => (
           <NavLink
             key={link.to}
@@ -153,8 +155,10 @@ const BottomNav = () => {
             to={link.to}
             className={({ isActive }) =>
               cn(
-                "block rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground",
-                isActive ? "bg-accent text-accent-foreground" : ""
+                "block rounded-lg transition-colors hover:text-accent-foreground",
+                isActive
+                  ? "bg-accent text-accent-foreground"
+                  : "hover:bg-accent/80"
               )
             }
           >

@@ -52,7 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="ver_scroll">
+      <body className="ver_scroll min-h-[500px]">
         {children}
         <ScrollRestoration />
         <Scripts />

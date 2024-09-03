@@ -113,8 +113,8 @@
     "gifUrl": "https://v2.exercisedb.io/image/mojprrLD1Ekiz6",
     "id": "1757",
     "name": "dumbbell single leg deadlift",
-    "target": "glutes",
-    "secondaryMuscles": ["hamstrings", "lower back"],
+    "target": "hamstrings",
+    "secondaryMuscles": ["glutes", "lower back"],
     "instructions": [
       "Stand with your feet hip-width apart, holding a dumbbell in your right hand.",
       "Shift your weight onto your left leg and lift your right foot slightly off the ground.",
@@ -129,7 +129,7 @@
   },
   {
     "bodyPart": "waist",
-    "equipment": "weighted",
+    "equipment": "body weight",
     "gifUrl": "https://v2.exercisedb.io/image/TtsqZKBz7MhQOr",
     "id": "2135",
     "name": "plank",
@@ -320,8 +320,8 @@
     "gifUrl": "https://v2.exercisedb.io/image/dumbbell_front_squat.gif",
     "id": "0517",
     "name": "dumbbell front squat",
-    "target": "glutes",
-    "secondaryMuscles": ["quadriceps", "hamstrings", "calves"],
+    "target": "quads",
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart, holding a dumbbell in each hand at shoulder height, with your elbows pointing forward.",
       "Lower your body into a squat position by bending your knees and pushing your hips back.",
@@ -348,7 +348,8 @@
       "While in mid-air, clap your hands together before landing back in the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 7.5
+    "met": 7.5,
+    "videoId": "s9PXwtakLA4"
   },
   {
     "bodyPart": "upper arms",
@@ -364,7 +365,8 @@
       "Lower the arm back down to the starting position and repeat with the other arm.",
       "Continue alternating arms for the desired number of repetitions."
     ],
-    "met": 3.5
+    "met": 3.5,
+    "videoId": "IhhFS5OsUAA"
   },
   {
     "bodyPart": "chest",
@@ -381,7 +383,8 @@
       "Slowly lower the bands back down to your chest, keeping your elbows at a 90-degree angle.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 4
+    "met": 4,
+    "videoId": "QVH4oUuTNmU?start=66&end=194"
   },
   {
     "bodyPart": "back",
@@ -399,7 +402,8 @@
       "Pause for a moment at the bottom of the movement, then slowly release the band back to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 4
+    "met": 4,
+    "videoId": "MNgK7M1iQNg"
   },
   {
     "bodyPart": "upper arms",
@@ -417,7 +421,8 @@
       "Pause for a moment at the top, then slowly lower your hand back down to the starting position.",
       "Repeat for the desired number of repetitions, then switch sides."
     ],
-    "met": 3.5
+    "met": 3.5,
+    "videoId": "osTYcC1O5TE"
   },
   {
     "bodyPart": "shoulders",
@@ -433,24 +438,43 @@
       "Pause for a moment at the top, then slowly lower your arms back down to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 3.5
+    "met": 3.8,
+    "videoId": "4tQ740AXShQ"
+  },
+  {
+    "bodyPart": "shoulders",
+    "equipment": "band",
+    "gifUrl": "https://v2.exercisedb.io/image/3XbKrj0eXZ8qZy",
+    "id": "0979",
+    "name": "band lateral raise",
+    "target": "delts",
+    "secondaryMuscles": ["traps", "upper back"],
+    "instructions": [
+      "Stand with your feet shoulder-width apart and hold the band with both hands by your sides.",
+      "Keep your arms straight and slowly raise them out to the sides until they are parallel to the ground.",
+      "Pause for a moment at the top, then slowly lower your arms back down to the starting position.",
+      "Repeat for the desired number of repetitions."
+    ],
+    "met": 4,
+    "videoId": "H7ne-44lT_0"
   },
   {
     "bodyPart": "upper arms",
     "equipment": "band",
-    "gifUrl": "https://v2.exercisedb.io/image/cLUGw1DI21nF0Q",
-    "id": "0986",
-    "name": "band one arm overhead biceps curl",
+    "gifUrl": "https://v2.exercisedb.io/image/x7B0J9tL0aC3ef",
+    "id": "0987",
+    "name": "band biceps curl",
     "target": "biceps",
-    "secondaryMuscles": ["forearms", "shoulders"],
+    "secondaryMuscles": ["forearms"],
     "instructions": [
-      "Stand with your feet shoulder-width apart and place one end of the band under your foot.",
-      "Hold the other end of the band with your arm fully extended overhead, palm facing forward.",
-      "Keeping your upper arm stationary, curl your forearm towards your shoulder, squeezing your biceps.",
-      "Pause for a moment at the top, then slowly lower your forearm back to the starting position.",
-      "Repeat for the desired number of repetitions, then switch arms."
+      "Stand with your feet shoulder-width apart and place both feet on the band.",
+      "Hold the band with your palms facing up and your arms fully extended.",
+      "Keeping your elbows close to your sides, curl your forearms towards your shoulders, squeezing your biceps.",
+      "Pause for a moment at the top, then slowly lower your forearms back to the starting position.",
+      "Repeat for the desired number of repetitions."
     ],
-    "met": 3.3
+    "met": 3.5,
+    "videoId": "AaA7Yj3zHiU"
   },
   {
     "bodyPart": "shoulders",
@@ -468,7 +492,8 @@
       "Slowly lower your arms back to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 3.5
+    "met": 3.5,
+    "videoId": "PtKAtOXVbYU"
   },
   {
     "bodyPart": "shoulders",
@@ -485,24 +510,8 @@
       "Pause for a moment at the top, then slowly lower the band back to shoulder height.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 4
-  },
-  {
-    "bodyPart": "back",
-    "equipment": "band",
-    "gifUrl": "https://v2.exercisedb.io/image/UsNfetLEmRCns6",
-    "id": "1018",
-    "name": "band shrug",
-    "met": 3.5,
-    "target": "traps",
-    "secondaryMuscles": ["shoulders"],
-    "instructions": [
-      "Stand with your feet shoulder-width apart and place the band under your feet, holding the ends with your hands.",
-      "Keep your arms straight and relaxed, and let the band hang in front of your thighs.",
-      "Engage your traps by shrugging your shoulders upward, lifting the band as high as possible.",
-      "Hold the contraction for a moment, then slowly lower your shoulders back down to the starting position.",
-      "Repeat for the desired number of repetitions."
-    ]
+    "met": 4,
+    "videoId": "Zli1UXH9ZeE"
   },
   {
     "bodyPart": "upper legs",
@@ -519,7 +528,8 @@
       "Push through your right heel to return to the starting position.",
       "Repeat on the other side."
     ],
-    "met": 5.5
+    "met": 5.5,
+    "videoId": "ufwinGFqnSo"
   },
   {
     "bodyPart": "upper legs",
@@ -536,7 +546,8 @@
       "Pause for a moment at the bottom, then push through your heels to return to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 5
+    "met": 5,
+    "videoId": "Eaqr79zvqIw?start=3"
   },
   {
     "bodyPart": "upper legs",
@@ -544,8 +555,8 @@
     "gifUrl": "https://v2.exercisedb.io/image/PpcCYv17d5-7GH",
     "id": "1009",
     "name": "band stiff leg deadlift",
-    "target": "glutes",
-    "secondaryMuscles": ["hamstrings", "lower back"],
+    "target": "hamstrings",
+    "secondaryMuscles": ["glutes", "lower back"],
     "instructions": [
       "Stand with your feet shoulder-width apart and place the band around your ankles.",
       "Hold the band with both hands in front of your thighs, palms facing your body.",
@@ -555,7 +566,8 @@
       "Pause for a moment at the bottom, then engage your glutes and hamstrings to lift your upper body back up to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 4.5
+    "met": 4.5,
+    "videoId": "wklohZsolc4?start=10"
   },
   {
     "bodyPart": "chest",
@@ -566,13 +578,14 @@
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
-      "Lie flat on a bench with your feet flat on the ground and your back pressed against the bench.",
+      "Lie flat on a bench or the floor with your feet flat on the ground and your back pressed against the bench or the floor.",
       "Hold a dumbbell in each hand, with your palms facing forward and your arms extended above your chest.",
       "Lower the dumbbells slowly to the sides of your chest, keeping your elbows at a 90-degree angle.",
       "Pause for a moment, then push the dumbbells back up to the starting position, fully extending your arms.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 5
+    "met": 5,
+    "videoId": "lNdi7VEf2Ew?start=6"
   },
   {
     "bodyPart": "chest",
@@ -583,13 +596,14 @@
     "target": "pectorals",
     "secondaryMuscles": ["shoulders"],
     "instructions": [
-      "Lie flat on a bench with a dumbbell in each hand, palms facing each other.",
+      "Lie flat on a bench or the floor with a dumbbell in each hand, palms facing each other.",
       "Extend your arms straight up over your chest, with a slight bend in your elbows.",
       "Keeping a slight bend in your elbows, lower your arms out to the sides in a wide arc until you feel a stretch in your chest.",
       "Pause for a moment, then reverse the movement and bring the dumbbells back up to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 5
+    "met": 5,
+    "videoId": "DNZ6IwviZYE?start=1"
   },
   {
     "bodyPart": "chest",
@@ -605,7 +619,8 @@
       "Push yourself back up to the starting position by straightening your arms.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 7
+    "met": 7,
+    "videoId": "ILIe_KJ_bKk?start=438"
   },
   {
     "bodyPart": "back",
@@ -623,26 +638,8 @@
       "Lower yourself back down with control, straightening the bent arm and repeating the movement on the other side.",
       "Alternate sides with each repetition."
     ],
-    "met": 7
-  },
-  {
-    "bodyPart": "back",
-    "equipment": "leverage machine",
-    "gifUrl": "https://v2.exercisedb.io/image/gcCYtOlSfsf1St",
-    "id": "0017",
-    "name": "assisted pull-up",
-    "target": "lats",
-    "secondaryMuscles": ["biceps", "forearms"],
-    "instructions": [
-      "Adjust the machine to your desired weight and height settings.",
-      "Grasp the handles with an overhand grip, slightly wider than shoulder-width apart.",
-      "Hang with your arms fully extended and your feet off the ground.",
-      "Engage your back muscles and pull your body up towards the handles, keeping your elbows close to your body.",
-      "Continue pulling until your chin is above the handles.",
-      "Pause for a moment at the top, then slowly lower your body back down to the starting position.",
-      "Repeat for the desired number of repetitions."
-    ],
-    "met": 6
+    "met": 7,
+    "videoId": "ziQjz1-DmX8"
   },
   {
     "bodyPart": "back",
@@ -660,7 +657,8 @@
       "Continue pulling until your chin is above the bar, then slowly lower yourself back down to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 6
+    "met": 6,
+    "videoId": "GhKmnEblfJU"
   },
   {
     "bodyPart": "back",
@@ -677,7 +675,8 @@
       "Pause at the top of the movement, then slowly lower your body back down to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 7
+    "met": 7,
+    "videoId": "ZPG8OsHKXLw"
   },
   {
     "bodyPart": "back",
@@ -694,25 +693,8 @@
       "Lower your body back down to the starting position with control.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 7
-  },
-  {
-    "bodyPart": "back",
-    "equipment": "weighted",
-    "gifUrl": "https://v2.exercisedb.io/image/hTWGCInbHFjstI",
-    "id": "0841",
-    "name": "weighted pull-up",
-    "target": "lats",
-    "secondaryMuscles": ["biceps", "forearms"],
-    "instructions": [
-      "Grab the pull-up bar with an overhand grip, slightly wider than shoulder-width apart.",
-      "Hang from the bar with your arms fully extended and your body straight.",
-      "Engage your back muscles and pull your body up towards the bar, keeping your elbows close to your body.",
-      "Continue pulling until your chin is above the bar.",
-      "Pause for a moment at the top, then slowly lower your body back down to the starting position.",
-      "Repeat for the desired number of repetitions."
-    ],
-    "met": 7.5
+    "met": 7,
+    "videoId": "GRgWPT9XSQQ"
   },
   {
     "bodyPart": "back",
@@ -720,7 +702,7 @@
     "gifUrl": "https://v2.exercisedb.io/image/IBCPi-fv2GsHcl",
     "id": "0688",
     "name": "scapular pull-up",
-    "target": "traps",
+    "target": "upper back",
     "secondaryMuscles": ["biceps", "rhomboids", "rear deltoids"],
     "instructions": [
       "Start by hanging from a pull-up bar with your palms facing away from you and your arms fully extended.",
@@ -729,7 +711,8 @@
       "Pause for a moment at the top of the movement, then slowly lower your body back down to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 4
+    "met": 4,
+    "videoId": "K3NHuFdO5Zs"
   },
   {
     "bodyPart": "back",
@@ -747,7 +730,8 @@
       "Pause for a moment at the top, then slowly lower your body back down to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 6
+    "met": 6,
+    "videoId": "wZAxT4tMEWA"
   },
   {
     "bodyPart": "shoulders",
@@ -765,25 +749,8 @@
       "Pause for a moment at the top, then slowly release the tension and return to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 4
-  },
-  {
-    "bodyPart": "back",
-    "equipment": "body weight",
-    "gifUrl": "https://v2.exercisedb.io/image/cZt0pNBjaIbWIG",
-    "id": "3158",
-    "name": "bodyweight standing close-grip row",
-    "target": "upper back",
-    "secondaryMuscles": ["biceps", "forearms"],
-    "instructions": [
-      "Stand with your feet shoulder-width apart and knees slightly bent.",
-      "Bend forward at the waist, keeping your back straight and your core engaged.",
-      "Extend your arms straight in front of you, gripping the bar or handles with a close grip.",
-      "Pull the bar or handles towards your body, squeezing your shoulder blades together.",
-      "Pause for a moment at the top of the movement, then slowly release and return to the starting position.",
-      "Repeat for the desired number of repetitions."
-    ],
-    "met": 4.5
+    "met": 4,
+    "videoId": "AV5tQxVKylo"
   },
   {
     "bodyPart": "back",
@@ -802,7 +769,8 @@
       "Slowly release and extend your arms back to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 4.5
+    "met": 4.5,
+    "videoId": "mI3zwkbL-so"
   },
   {
     "bodyPart": "back",
@@ -819,7 +787,8 @@
       "Pause for a moment at the top, then slowly release the tension and return to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 4.5
+    "met": 4.5,
+    "videoId": "7GZq8z7tCs0"
   },
   {
     "bodyPart": "back",
@@ -837,26 +806,8 @@
       "Pause for a moment at the top, then slowly lower the dumbbells back down to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 5.5
-  },
-  {
-    "bodyPart": "back",
-    "equipment": "body weight",
-    "gifUrl": "https://v2.exercisedb.io/image/g7rQQ5HVICXBUu",
-    "id": "0498",
-    "name": "inverted row with straps",
-    "target": "upper back",
-    "secondaryMuscles": ["biceps", "forearms"],
-    "instructions": [
-      "Set up a suspension trainer or straps at chest height.",
-      "Stand facing the anchor point and grab the handles with an overhand grip.",
-      "Walk your feet forward, leaning back until your body is at an angle.",
-      "Keep your body straight and engage your core.",
-      "Pull your chest towards the handles, squeezing your shoulder blades together.",
-      "Pause for a moment at the top, then slowly lower yourself back to the starting position.",
-      "Repeat for the desired number of repetitions."
-    ],
-    "met": 5.5
+    "met": 5.5,
+    "videoId": "5PoEksoJNaw"
   },
   {
     "bodyPart": "back",
@@ -875,7 +826,8 @@
       "Pause for a moment at the top, then slowly lower yourself back to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 6
+    "met": 6,
+    "videoId": "rNifNDd7khU"
   },
   {
     "bodyPart": "shoulders",
@@ -891,7 +843,8 @@
       "Pause for a moment at the top, then slowly lower the dumbbells back down to shoulder level.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 5
+    "met": 5,
+    "videoId": "Did01dFR3Lk"
   },
   {
     "bodyPart": "shoulders",
@@ -908,7 +861,8 @@
       "Pause for a moment at the top, then slowly lower the dumbbells back to the starting position.",
       "Repeat for the desired number of repetitions."
     ],
-    "met": 5
+    "met": 5,
+    "videoId": "69z2KymlEvQ"
   },
   {
     "bodyPart": "shoulders",
@@ -1067,8 +1021,8 @@
     "gifUrl": "https://v2.exercisedb.io/image/4p8MpZxnAK0O94",
     "id": "0336",
     "name": "dumbbell lunge",
-    "target": "glutes",
-    "secondaryMuscles": ["quadriceps", "hamstrings", "calves"],
+    "target": "quads",
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart, holding a dumbbell in each hand.",
       "Take a step forward with your right foot, lowering your body into a lunge position.",
@@ -1086,8 +1040,8 @@
     "gifUrl": "https://v2.exercisedb.io/image/WBpoJ7geOzPjjr",
     "id": "3470",
     "name": "bodyweight lunge",
-    "target": "glutes",
-    "secondaryMuscles": ["quadriceps", "hamstrings", "calves"],
+    "target": "quads",
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet hip-width apart and hands on your hips.",
       "Take a big step forward with your right foot, lowering your body into a lunge position.",
@@ -1104,8 +1058,8 @@
     "gifUrl": "https://v2.exercisedb.io/image/NJvI3AicgRND2o",
     "id": "0381",
     "name": "dumbbell rear lunge",
-    "target": "glutes",
-    "secondaryMuscles": ["quadriceps", "hamstrings", "calves"],
+    "target": "quads",
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart, holding a dumbbell in each hand.",
       "Take a step backward with your right foot, lowering your body into a lunge position.",
@@ -1484,8 +1438,8 @@
     "gifUrl": "https://v2.exercisedb.io/image/QExcIB2-iw0YDB",
     "id": "1759",
     "name": "single leg squat (pistol)",
-    "target": "glutes",
-    "secondaryMuscles": ["quadriceps", "hamstrings", "calves"],
+    "target": "quads",
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart and arms extended in front of you.",
       "Lift your right foot off the ground and extend it forward.",
