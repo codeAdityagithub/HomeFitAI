@@ -1,4 +1,4 @@
-import { Form, NavLink } from "@remix-run/react";
+import { Form, Link, NavLink } from "@remix-run/react";
 import {
   LayoutList,
   LogOut,
@@ -84,7 +84,10 @@ export default function Sidebar() {
     <>
       <BottomNav />
       <div className="w-[220px] lg:w-[280px] h-svh overflow-auto ver_scroll sticky top-0 hidden md:flex flex-col items-start justify-start px-6 py-4">
-        <div className="font-bold flex items-center w-full p-2">
+        <Link
+          to="/"
+          className="font-bold flex items-center w-full p-2"
+        >
           <img
             src="/logo.png"
             width={50}
@@ -96,7 +99,7 @@ export default function Sidebar() {
             }}
           ></img>
           HomeFit<span className="text-primary">AI</span>
-        </div>
+        </Link>
         <p className="text-muted-foreground text-sm px-3 py-2 mt-4">
           Main Menu
         </p>

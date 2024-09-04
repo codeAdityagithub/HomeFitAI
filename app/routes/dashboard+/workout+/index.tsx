@@ -1,16 +1,32 @@
+import { Button } from "@/components/ui/button";
+import ExerciseCard from "@/components/workout/ExerciseCard";
+import useExercises from "@/hooks/useExercises";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises";
 import { capitalizeFirstLetter, groupBy } from "@/utils/general";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json, useLoaderData } from "@remix-run/react";
+import {
+  json,
+  ShouldRevalidateFunction,
+  useLoaderData,
+} from "@remix-run/react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useMemo } from "react";
 
+export type DashboardExercise = {
+  name: string;
+  imageUrl: string;
+  target: string;
+  equipment: string;
+  secondaryMuscles: string[];
+};
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
-  const filtered = exercises.map((e) => ({
+  const filtered: DashboardExercise[] = exercises.map((e) => ({
     name: e.name,
-    imageUrl: e.videoId
-      ? `https://img.youtube.com/vi/${e.videoId.split("?")[0]}/sddefault.jpg`
-      : undefined,
+    imageUrl: `https://img.youtube.com/vi/${
+      e.videoId.split("?")[0]
+    }/sddefault.jpg`,
     target: e.target,
     equipment: e.equipment,
     secondaryMuscles: e.secondaryMuscles,
@@ -20,71 +36,135 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     // { headers: { "Cache-Control": "public, max-age=600" } }
   );
 };
+
+export const shouldRevalidate: ShouldRevalidateFunction = () => false;
+
 export { clientLoader } from "@/utils/routeCache.client";
 
 const WorkoutPage = () => {
   const { exercises } = useLoaderData<typeof loader>();
-  const exercisesByTarget = groupBy(exercises, "target");
-  // console.log(exercisesByTarget);
+  const {
+    exercisesByTarget,
+    bandGrouped,
+    dumbbellGrouped,
+    bandRows,
+    toggleBands,
+    dumbRows,
+    toggleDumbbell,
+  } = useExercises(exercises);
+
   return (
     <div className="space-y-10">
+      <div>
+        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background md:bg-secondary z-20">
+          <span className="text-[22px] sm:text-[28px] text-accent underline">
+            Resistance Band
+          </span>{" "}
+          Exercises
+        </h1>
+        {Object.keys(bandGrouped)
+          .splice(0, bandRows)
+          .map((key) => (
+            <div
+              className="sm:px-6 mt-4"
+              key={"band" + key}
+            >
+              <h1 className="text-xl my-2 font-bold leading-8">
+                Exercises for{" "}
+                <span className="text-xl text-primary">
+                  {key.split(" ").map((w) => capitalizeFirstLetter(w) + " ")}
+                </span>
+              </h1>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
+                {bandGrouped[key].map((e) => (
+                  <ExerciseCard
+                    key={e.name + "band"}
+                    e={e}
+                  />
+                ))}
+              </ul>
+            </div>
+          ))}
+        <div className="w-full flex justify-center my-6">
+          <Button
+            size="sm"
+            variant="link"
+            onClick={toggleBands}
+          >
+            {bandRows === 2 ? "View More" : "Collapse"}
+            {bandRows === 2 ? (
+              <ChevronDown className="h-4 w-4 translate-y-0.5" />
+            ) : (
+              <ChevronUp className="h-4 w-4 translate-y-0.5" />
+            )}
+          </Button>
+        </div>
+      </div>
+      <div>
+        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background md:bg-secondary z-20">
+          <span className="text-[22px] sm:text-[28px] text-accent underline">
+            Dumbbell
+          </span>{" "}
+          Exercises
+        </h1>
+        {Object.keys(dumbbellGrouped)
+          .splice(0, dumbRows)
+          .map((key) => (
+            <div
+              className="sm:px-6 mt-4"
+              key={"dumb" + key}
+            >
+              <h1 className="text-xl my-2 font-bold leading-8">
+                Exercises for{" "}
+                <span className="text-xl text-primary">
+                  {key.split(" ").map((w) => capitalizeFirstLetter(w) + " ")}
+                </span>
+              </h1>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
+                {dumbbellGrouped[key].map((e) => (
+                  <ExerciseCard
+                    key={e.name + "dumb"}
+                    e={e}
+                  />
+                ))}
+              </ul>
+            </div>
+          ))}
+        <div className="w-full flex justify-center items-center my-6">
+          <Button
+            size="sm"
+            variant="link"
+            onClick={toggleDumbbell}
+          >
+            {dumbRows === 2 ? "View More" : "Collapse"}
+            {dumbRows === 2 ? (
+              <ChevronDown className="h-4 w-4 translate-y-0.5" />
+            ) : (
+              <ChevronUp className="h-4 w-4 translate-y-0.5" />
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Exercises by target */}
       {Object.keys(exercisesByTarget).map((key) => (
         <div key={key}>
-          <h1 className="text-3xl my-2 font-bold leading-8">
+          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background md:bg-secondary z-20">
             Exercises for{" "}
-            <span className="text-[28px] text-accent underline">
+            <span className="text-[22px] sm:text-[28px] text-accent underline">
               {key.split(" ").map((w) => capitalizeFirstLetter(w) + " ")}
             </span>
           </h1>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+          <ul className="grid p-2 sm:p-4 grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
             {exercisesByTarget[key].map((e) => (
-              // <li
-              // className="flex flex-col items-start drop-shadow-md rounded-lg"
-              // key={e.name}
-              // >
-              //   <img
-              //     src={e.imageUrl}
-              //     alt={e.name}
-              //     className="w-full aspect-[17/9] object-cover rounded-lg"
-              //     />
-              //   <div className="flex-1">
-              //     <h2 className="text-lg font-bold">{e.name.toUpperCase()}</h2>
-              //     <p>Target: {e.target}</p>
-              //     <p>Equipment: {e.equipment}</p>
-              //   </div>
-              // </li>
-              <li
-                className="flex flex-col items-start drop-shadow-md rounded-lg overflow-hidden"
+              <ExerciseCard
                 key={e.name}
-              >
-                <img
-                  src={e.imageUrl}
-                  alt={e.name}
-                  className="w-full aspect-[17/9] object-cover rounded-lg"
-                />
-                <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px] p-6 flex flex-col items-start justify-center">
-                  <h2 className="text-lg font-bold text-white">
-                    {e.name.toUpperCase()}
-                  </h2>
-                  <p className="text-gray-100">
-                    Other muscles:{" "}
-                    {e.secondaryMuscles.map(
-                      (m, i) =>
-                        `${capitalizeFirstLetter(m)}${
-                          i === e.secondaryMuscles.length - 1 ? "" : ", "
-                        }`
-                    )}
-                  </p>
-                  <p className="text-gray-100">Equipment: {e.equipment}</p>
-                </div>
-              </li>
+                e={e}
+              />
             ))}
           </ul>
         </div>
       ))}
-
-      {/* Add your workout components here */}
-      {/* ... */}
     </div>
   );
 };

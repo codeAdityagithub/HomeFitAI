@@ -34,7 +34,7 @@ const DashboardSettings = () => {
         <Avatar className="h-24 w-24">
           <AvatarImage
             alt={user.username}
-            src={""}
+            src={user.image ?? ""}
           ></AvatarImage>
           <AvatarFallback>
             <IoPersonOutline className="w-full h-full p-2" />

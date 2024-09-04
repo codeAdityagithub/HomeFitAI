@@ -6,8 +6,8 @@
     "gifUrl": "https://v2.exercisedb.io/image/x1SyoqMg34qjvC",
     "id": "2612",
     "name": "jump rope",
-    "target": "cardiovascular system",
-    "secondaryMuscles": ["calves", "quadriceps", "hamstrings", "glutes"],
+    "target": "cardio",
+    "secondaryMuscles": ["calves", "quads", "hamstrings", "glutes"],
     "instructions": [
       "Hold the handles of the jump rope with your hands, palms facing inward.",
       "Stand with your feet shoulder-width apart and knees slightly bent.",
@@ -26,7 +26,7 @@
     "target": "abs",
     "secondaryMuscles": [
       "glutes",
-      "quadriceps",
+      "quads",
       "hamstrings",
       "shoulders",
       "triceps"
@@ -49,14 +49,8 @@
     "gifUrl": "https://v2.exercisedb.io/image/owtl3ytr1PoVQg",
     "id": "1160",
     "name": "burpee",
-    "target": "cardiovascular system",
-    "secondaryMuscles": [
-      "quadriceps",
-      "hamstrings",
-      "calves",
-      "shoulders",
-      "chest"
-    ],
+    "target": "cardio",
+    "secondaryMuscles": ["quads", "hamstrings", "calves", "shoulders", "chest"],
     "instructions": [
       "Start in a standing position with your feet shoulder-width apart.",
       "Lower your body into a squat position by bending your knees and placing your hands on the floor in front of you.",
@@ -94,7 +88,7 @@
     "gifUrl": "https://v2.exercisedb.io/image/xpFhWTo06RVHm9",
     "id": "1167",
     "name": "dynamic chest stretch",
-    "target": "cardiovascular system",
+    "target": "cardio",
     "secondaryMuscles": ["shoulders", "triceps"],
     "instructions": [
       "Stand tall with your feet shoulder-width apart.",
@@ -283,7 +277,7 @@
     "id": "0514",
     "name": "jump squat",
     "target": "glutes",
-    "secondaryMuscles": ["quadriceps", "hamstrings", "calves"],
+    "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart.",
       "Lower your body into a squat position by bending your knees and pushing your hips back.",
@@ -302,7 +296,7 @@
     "id": "0515",
     "name": "squat",
     "target": "glutes",
-    "secondaryMuscles": ["quadriceps", "hamstrings", "calves"],
+    "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart.",
       "Lower your body into a squat position by bending your knees and pushing your hips back.",
@@ -538,7 +532,7 @@
     "id": "1004",
     "name": "band squat",
     "target": "glutes",
-    "secondaryMuscles": ["quadriceps", "hamstrings", "calves"],
+    "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart, with the band placed just above your knees.",
       "Keeping your chest up and core engaged, push your hips back and bend your knees to lower into a squat position.",
@@ -1459,8 +1453,8 @@
     "id": "3220",
     "name": "jumping jacks",
     "met": 8,
-    "target": "cardiovascular system",
-    "secondaryMuscles": ["quadriceps", "hamstrings", "calves"],
+    "target": "cardio",
+    "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart.",
       "Bend your knees and lower your body into a squat position.",
