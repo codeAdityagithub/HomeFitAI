@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import ExerciseCard from "@/components/workout/ExerciseCard";
 import useExercises from "@/hooks/useExercises";
 import { requireUser } from "@/utils/auth/auth.server";
-import exercises from "@/utils/exercises/exercises";
+import exercises from "@/utils/exercises/exercises.server";
 import { capitalizeFirstLetter, groupBy } from "@/utils/general";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
@@ -15,6 +15,7 @@ import { useMemo } from "react";
 
 export type DashboardExercise = {
   name: string;
+  id: string;
   imageUrl: string;
   target: string;
   equipment: string;
@@ -24,6 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
   const filtered: DashboardExercise[] = exercises.map((e) => ({
     name: e.name,
+    id: e.id,
     imageUrl: `https://img.youtube.com/vi/${
       e.videoId.split("?")[0]
     }/sddefault.jpg`,
@@ -75,7 +77,7 @@ const WorkoutPage = () => {
                   {key.split(" ").map((w) => capitalizeFirstLetter(w) + " ")}
                 </span>
               </h1>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
+              <ul className="transition-opacity duration-300 grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
                 {bandGrouped[key].map((e) => (
                   <ExerciseCard
                     key={e.name + "band"}
