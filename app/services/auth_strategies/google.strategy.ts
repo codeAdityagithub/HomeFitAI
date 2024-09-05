@@ -1,7 +1,7 @@
 import { AuthStrategies } from "@/services/auth_strategies";
 import type { AuthUser, CookieData } from "@/services/auth.server";
 import { GoogleStrategy } from "remix-auth-google";
-import { db } from "@/utils/db.server";
+import db from "@/utils/db.server";
 import { createJWT } from "@/utils/jwt/jwt.server";
 
 const clientID = process.env.GOOGLE_CLIENT_ID;
@@ -22,16 +22,15 @@ export const googleStrategy = new GoogleStrategy<CookieData>(
     const { email, name, picture } = profile._json;
     const dbuser = await db.user.findUnique({
       where: { email },
-      select: { id: true, email: true, username: true, image: true },
+      select: { id: true, username: true, image: true },
     });
-
+    console.log("called");
     if (dbuser) return { token: createJWT(dbuser, "2d") };
 
     const newUser = await db.user.create({
       data: { username: name, email, image: picture },
-      select: { id: true, email: true, username: true, image: true },
+      select: { id: true, username: true, image: true },
     });
-
     return { token: createJWT(newUser, "2d") };
   }
 );

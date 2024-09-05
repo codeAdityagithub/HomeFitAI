@@ -28,7 +28,6 @@ export const links: LinksFunction = () => [
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getAuthUser(request);
-  
   return { user };
 };
 

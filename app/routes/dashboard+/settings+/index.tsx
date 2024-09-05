@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { useUser } from "@/utils/userContext";
 import { AlignVerticalJustifyStartIcon } from "lucide-react";
-import { db } from "@/utils/db.server";
+import db from "@/utils/db.server";
 import { useLoaderData } from "@remix-run/react";
 import { IoPersonOutline } from "react-icons/io5";
 import { requireUser } from "@/utils/auth/auth.server";

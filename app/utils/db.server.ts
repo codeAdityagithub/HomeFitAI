@@ -1,19 +1,34 @@
 import { PrismaClient } from "@prisma/client";
+import { singleton } from "./singleton.server";
+import { decrypt, encrypt, encryptEmail } from "./encrypt.server";
 
-let prisma = new PrismaClient();
+let db = singleton("db", () => {
+  return new PrismaClient().$extends({
+    name: "encrypt",
+    query: {
+      user: {
+        findUnique: async ({ args, query }) => {
+          if (args.where?.email)
+            args.where = {
+              ...args.where,
+              email: encryptEmail(args.where.email),
+            };
+          // console.log({ args });
+          const user = await query(args);
+          if (user && user.username) {
+            user.username = decrypt(user.username);
+          }
+          return user;
+        },
+        create: async ({ args, query }) => {
+          args.data.email = encryptEmail(args.data.email);
+          args.data.username = encrypt(args.data.username);
+          const user = await query(args);
+          return { ...user, username: decrypt(args.data.username) };
+        },
+      },
+    },
+  });
+});
 
-declare global {
-  var __db__: PrismaClient | undefined;
-}
-
-if(process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient();
-} else {
-  if (!global.__db__) {
-    global.__db__ = new PrismaClient();
-  }
-  prisma = global.__db__;
-  prisma.$connect();
-}
-
-export { prisma as db };
+export default db;

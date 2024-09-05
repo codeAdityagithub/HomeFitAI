@@ -4,7 +4,7 @@ import { AuthStrategies } from "@/services/auth_strategies";
 import { googleStrategy } from "./auth_strategies/google.strategy";
 import { User } from "@prisma/client";
 
-export type AuthUser = Pick<User, "id" | "email" | "username"|"image">;
+export type AuthUser = Pick<User, "id" | "username"|"image">;
 
 export type AuthStrategy = (typeof AuthStrategies)[keyof typeof AuthStrategies];
 

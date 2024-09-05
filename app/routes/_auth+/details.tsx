@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { db } from "@/utils/db.server";
+import db from "@/utils/db.server";
 import {
   Select,
   SelectContent,

@@ -1,4 +1,4 @@
-import { db } from "@/utils/db.server";
+import db from "@/utils/db.server";
 import { authenticator } from "@/services/auth.server";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect, useLoaderData } from "@remix-run/react";
@@ -22,6 +22,6 @@ export { clientLoader } from "@/utils/routeCache.client";
 
 export default function Dashboard() {
   const data = useLoaderData<typeof loader>();
-  console.log(data);
+  // console.log(data);
   return <div className="h-full">Dashboard</div>;
 }

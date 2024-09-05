@@ -1,3 +1,4 @@
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   Area,
   AreaChart,
@@ -31,7 +32,21 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Separator } from "@/components/ui/separator";
+import db from "@/utils/db.server";
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  // console.log(
+  //   await db.user.create({ data: { email: "dfasfas", username: "fdasfds" } })
+  // );
+  // console.log(
+  //   await db.user.findUnique({
+  //     where: {
+  //       email: "adityathebest2019@gmail.com",
+  //     },
+  //   })
+  // );
+  return null;
+};
 
 export default function Charts() {
   return (
