@@ -11,6 +11,7 @@ import { LiaDumbbellSolid } from "react-icons/lia";
 import { cn } from "@/lib/utils";
 import { IoPersonOutline } from "react-icons/io5";
 import { Button } from "../ui/button";
+import ThemeToggle from "./themeButton";
 
 const Links = [
   {
@@ -38,16 +39,6 @@ const Links = [
     to: "social",
     name: "Social",
     icon: <MessageSquareHeart strokeWidth={1.5} />,
-  },
-  {
-    to: "settings",
-    name: "Settings",
-    icon: (
-      <IoPersonOutline
-        className="text-xl"
-        strokeWidth={1.6}
-      />
-    ),
   },
 ];
 const BottomLinks = [
@@ -83,7 +74,7 @@ export default function Sidebar() {
   return (
     <>
       <BottomNav />
-      <div className="w-[220px] lg:w-[280px] h-svh overflow-auto ver_scroll sticky top-0 hidden md:flex flex-col items-start justify-start px-6 py-4">
+      <div className="w-[220px] lg:w-[280px] bg-background text-foreground h-svh overflow-auto ver_scroll sticky top-0 hidden md:flex flex-col items-start justify-start px-6 py-4">
         <Link
           to="/"
           className="font-bold flex items-center w-full p-2"
@@ -107,7 +98,7 @@ export default function Sidebar() {
           {Links.map((link) => (
             <NavLink
               key={link.to}
-              end
+              end={link.to === ""}
               to={link.to}
               className={({ isActive }) =>
                 cn(
@@ -118,7 +109,7 @@ export default function Sidebar() {
                 )
               }
             >
-              <div className="w-full flex items-center p-2 gap-2">
+              <div className="w-full flex items-center py-2 px-4 gap-2">
                 {link.icon}
                 <span>{link.name}</span>
               </div>
@@ -126,13 +117,33 @@ export default function Sidebar() {
           ))}
         </div>
         <p className="text-muted-foreground text-sm px-3 py-2 my-2">Others</p>
+        <NavLink
+          to={"settings"}
+          className={({ isActive }) =>
+            cn(
+              "w-full rounded-lg transition-colors hover:text-accent-foreground mb-0.5",
+              isActive
+                ? "bg-accent text-accent-foreground"
+                : "hover:bg-accent/80"
+            )
+          }
+        >
+          <div className="w-full flex items-center py-2 px-4 gap-2">
+            <IoPersonOutline
+              className="text-lg"
+              strokeWidth={1.5}
+            />
+            <span className="text-sm">Settings</span>
+          </div>
+        </NavLink>
+        <ThemeToggle />
         <Form
           method="POST"
           action="/logout"
           className="w-full"
         >
           <Button
-            className="w-full justify-start gap-2 hover:bg-primary"
+            className="w-full justify-start gap-2 font-normal hover:bg-primary mt-0.5"
             variant="ghost"
           >
             <LogOut
@@ -149,7 +160,7 @@ export default function Sidebar() {
 
 const BottomNav = () => {
   return (
-    <div className="w-full sticky bottom-0 bg-background z-50 block md:hidden p-2">
+    <div className="w-full sticky bottom-0 bg-background text-foreground z-50 block md:hidden p-2">
       <div className="grid grid-cols-4 gap-1 items-stretch">
         {BottomLinks.map((link) => (
           <NavLink

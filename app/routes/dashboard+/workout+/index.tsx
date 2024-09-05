@@ -58,7 +58,7 @@ const WorkoutPage = () => {
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background md:bg-secondary z-20">
+        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-secondary z-20">
           <span className="text-[22px] sm:text-[28px] text-accent underline">
             Resistance Band
           </span>{" "}
@@ -103,7 +103,7 @@ const WorkoutPage = () => {
         </div>
       </div>
       <div>
-        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background md:bg-secondary z-20">
+        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-secondary z-20">
           <span className="text-[22px] sm:text-[28px] text-accent underline">
             Dumbbell
           </span>{" "}
@@ -151,7 +151,7 @@ const WorkoutPage = () => {
       {/* Exercises by target */}
       {Object.keys(exercisesByTarget).map((key) => (
         <div key={key}>
-          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background md:bg-secondary z-20">
+          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-secondary z-20">
             Exercises for{" "}
             <span className="text-[22px] sm:text-[28px] text-accent underline">
               {key.split(" ").map((w) => capitalizeFirstLetter(w) + " ")}

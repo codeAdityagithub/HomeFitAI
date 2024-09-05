@@ -15,12 +15,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       `/details?error=${"Fill in the details to access the dasboard."}`
     );
 
-  return null;
+  return { stats };
 };
 
 export { clientLoader } from "@/utils/routeCache.client";
 
 export default function Dashboard() {
   const data = useLoaderData<typeof loader>();
+  console.log(data);
   return <div className="h-full">Dashboard</div>;
 }

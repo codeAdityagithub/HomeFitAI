@@ -1,4 +1,4 @@
-import { authenticator } from "@/services/auth.server";
+import stylesheet from "@/tailwind.css?url";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { LinksFunction } from "@remix-run/node";
 import {
@@ -12,7 +12,7 @@ import {
   ShouldRevalidateFunction,
   useRouteError,
 } from "@remix-run/react";
-import stylesheet from "@/tailwind.css?url";
+import { Button } from "./components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,7 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
-import { Button } from "./components/ui/button";
 import { getAuthUser } from "./utils/auth/auth.server";
 
 export const links: LinksFunction = () => [
@@ -29,7 +28,7 @@ export const links: LinksFunction = () => [
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getAuthUser(request);
-
+  
   return { user };
 };
 
