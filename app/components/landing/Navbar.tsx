@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { useUser } from "@/utils/userContext";
+import { useUser } from "@/hooks/userContext";
 
 const Links = [
   { to: "", name: "Home" },
@@ -66,7 +66,6 @@ const Navbar = () => {
           <Link
             className="ml-auto"
             to="/dashboard"
-            prefetch="intent"
           >
             <Button
               className="px-8"
@@ -124,7 +123,6 @@ const NavbarSm = ({ hash }: { hash: string }) => {
         <Link
           className="ml-auto"
           to="/dashboard"
-          prefetch="intent"
         >
           <Button
             className="px-8"

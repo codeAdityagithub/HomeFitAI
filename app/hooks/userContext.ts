@@ -8,6 +8,7 @@ export function useMatchesData(id: string): Record<string, any> | undefined {
     () => matchingRoutes.find((route) => route.id === id),
     [matchingRoutes, id]
   );
+
   // console.log(route);
   return route?.data as Record<string, any>;
 }

@@ -19,17 +19,17 @@ export const googleStrategy = new GoogleStrategy<CookieData>(
   },
   async ({ accessToken, refreshToken, extraParams, profile }) => {
     // Do something with the tokens and profile
+    // const timezone = String(formData.get("timezone"));
     const { email, name, picture } = profile._json;
     const dbuser = await db.user.findUnique({
       where: { email },
-      select: { id: true, username: true, image: true },
+      select: { id: true, username: true, image: true, timezone: true },
     });
-    console.log("called");
     if (dbuser) return { token: createJWT(dbuser, "2d") };
 
     const newUser = await db.user.create({
       data: { username: name, email, image: picture },
-      select: { id: true, username: true, image: true },
+      select: { id: true, username: true, image: true, timezone: true },
     });
     return { token: createJWT(newUser, "2d") };
   }

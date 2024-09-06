@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useUser } from "@/utils/userContext";
+import { useUser } from "@/hooks/userContext";
 import { AlignVerticalJustifyStartIcon } from "lucide-react";
 import db from "@/utils/db.server";
 import { useLoaderData } from "@remix-run/react";

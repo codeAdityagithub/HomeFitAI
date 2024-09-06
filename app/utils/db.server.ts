@@ -13,7 +13,6 @@ let db = singleton("db", () => {
               ...args.where,
               email: encryptEmail(args.where.email),
             };
-          // console.log({ args });
           const user = await query(args);
           if (user && user.username) {
             user.username = decrypt(user.username);

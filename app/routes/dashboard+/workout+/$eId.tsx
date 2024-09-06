@@ -13,13 +13,12 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       status: 404,
       statusText: `Exercise ${params.eId} not found`,
     });
-
   return { exercise };
 };
 
 const ExercisePage = () => {
   const { exercise } = useLoaderData<typeof loader>();
-  console.log(exercise);
+  // console.log(exercise);
   return <div>{exercise.instructions}</div>;
 };
 export default ExercisePage;

@@ -25,13 +25,12 @@ export function decrypt(encrypted: string) {
   );
   let decrypted =
     decipher.update(cipher, "hex", "utf-8") + decipher.final("utf-8");
-  console.log({ decrypted });
   return decrypted;
 }
 export function encryptEmail(text: string): string {
   let cipher = crypto.createCipheriv(algorithm, key, Buffer.alloc(16, 0));
   const encrypted = cipher.update(text, "utf-8", "hex") + cipher.final("hex");
-  console.log(encrypted);
+  // console.log(encrypted);
   return encrypted;
 }
 

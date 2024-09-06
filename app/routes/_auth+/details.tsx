@@ -1,17 +1,5 @@
-import { authenticator } from "@/services/auth.server";
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { useRemixForm, getValidatedFormData } from "remix-hook-form";
-import {
-  Form,
-  useActionData,
-  useNavigation,
-  useSearchParams,
-} from "@remix-run/react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node"; // or cloudflare/deno
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import Selector from "@/components/details/Selector";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -19,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import db from "@/utils/db.server";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -28,14 +16,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { Gender, Unit } from "@prisma/client";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, convertToCm, convertToFeetInches } from "@/lib/utils";
-import Selector from "@/components/details/Selector";
-import { Minus, Plus } from "lucide-react";
 import { requireUser } from "@/utils/auth/auth.server";
-
+import db from "@/utils/db.server";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Gender, Unit } from "@prisma/client";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, json, redirect } from "@remix-run/node"; // or cloudflare/deno
+import {
+  Form,
+  useActionData,
+  useNavigation,
+  useSearchParams,
+} from "@remix-run/react";
+import { useEffect, useRef, useState } from "react";
+import { getValidatedFormData, useRemixForm } from "remix-hook-form";
+import z from "zod";
+import { DateTime } from "luxon";
+import { commitSession, getSession } from "@/services/session.server";
+import { createJWT } from "@/utils/jwt/jwt.server";
 // Define the schema for the form
 const schema = z
   .object({
@@ -51,6 +51,7 @@ const schema = z
       .max(100, "Age must be less than 100 years."), // Positive integer for age
     gender: z.enum(["M", "F", "OTHER"]),
     goalWeight: z.number().positive("Goal weight must be greater than 0."), // Positive integer for goal
+    timezone: z.string().refine((zone) => DateTime.now().setZone(zone).isValid),
   })
   // @ts-expect-error
   .refine(
@@ -131,11 +132,36 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // The keys "errors" and "defaultValues" are picked up automatically by useRemixForm
     return json({ errors, defaultValues });
   }
+  const session = await getSession(request.headers.get("Cookie"));
+  const { timezone, ...stats } = data;
   try {
-    await db.stats.create({
-      data: { ...data, user: { connect: { id: user.id } } },
+    const [createdStats, updatedUser] = await db.$transaction([
+      db.stats.create({
+        data: { ...stats, user: { connect: { id: user.id } } },
+      }),
+      db.user.update({
+        where: { id: user.id },
+        data: { timezone },
+      }),
+    ]);
+
+    session.set("user", {
+      token: createJWT(
+        {
+          username: user.username,
+          id: updatedUser.id,
+          timezone: timezone,
+          image: updatedUser.image,
+        },
+        "2d"
+      ),
     });
-    return redirect("/dashboard");
+    // session.data
+    return redirect("/dashboard", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   } catch (error: any) {
     console.log(error.message ?? error);
     return { error: "Cannot create Stats for this user." };
@@ -165,10 +191,11 @@ export default function LoginForm() {
       weight: 68,
       gender: "M",
       unit: "kgcm",
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   });
   const actionData = useActionData<typeof action>();
-  const [form, setForm] = useState<FormData>({
+  const [form, setForm] = useState<Omit<FormData, "timezone">>({
     age: 20,
     height: 178,
     weight: 68,
