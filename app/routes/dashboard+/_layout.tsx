@@ -1,50 +1,54 @@
 import { getStatsandLogs } from "@/.server/handlers/getStatsandLogs";
 import Sidebar from "@/components/dashboard/sidebar";
+import { useTheme } from "@/hooks/userContext";
 import { cn } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
-import db from "@/utils/db.server";
-import { themeCookie } from "@/utils/themeCookie.server";
-import type { LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
 import {
+  cacheClientAction,
+  cacheClientLoader,
+} from "@/utils/routeCache.client";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  SerializeFrom,
+} from "@remix-run/node";
+import type {
+  ClientActionFunctionArgs,
   ClientLoaderFunctionArgs,
-  json,
-  Outlet,
-  redirect,
-  ShouldRevalidateFunction,
-  useLoaderData,
 } from "@remix-run/react";
-import axios from "axios";
+import { Outlet, useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
   });
-  const theme: string = await themeCookie.parse(request.headers.get("Cookie"));
-  const { stats } = await getStatsandLogs(user.id);
-  if (!theme) {
-    return json(
-      { theme: "dark", stats },
-      {
-        headers: {
-          "Set-Cookie": await themeCookie.serialize("dark"),
-        },
-      }
-    );
-  }
+  const { stats, log } = await getStatsandLogs(user);
 
-  return { theme, stats };
+  return { stats, log };
+};
+export const action = ({ request }: ActionFunctionArgs) => {
+  console.log("layout");
+  return null;
 };
 
 export type DashboardLayoutData = SerializeFrom<typeof loader>;
 
-export const shouldRevalidate: ShouldRevalidateFunction = ({ formAction }) => {
-  return formAction === "/api/changeTheme";
-};
+export const clientLoader = async ({
+  request,
+  serverLoader,
+}: ClientLoaderFunctionArgs) =>
+  cacheClientLoader("dashboardLayout", serverLoader);
+
+clientLoader.hydrate = true;
+
+export const clientAction = ({ serverAction }: ClientActionFunctionArgs) =>
+  cacheClientAction("dashboardLayout", serverAction);
 
 const DashboardLayout = () => {
-  const data = useLoaderData<typeof loader>();
+  // const data = useLoaderData<typeof loader>();
+  const theme = useTheme();
   return (
-    <div className={cn("flex flex-col-reverse md:flex-row", data.theme)}>
+    <div className={cn("flex flex-col-reverse md:flex-row", theme)}>
       <Sidebar />
       <main className="flex-1 w-full h-full min-h-[calc(100vh-56px)] md:min-h-screen bg-secondary text-secondary-foreground p-6 md:p-4 lg:p-6">
         <Outlet />

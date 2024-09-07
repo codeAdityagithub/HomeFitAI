@@ -1,20 +1,36 @@
+import { AuthUser } from "@/services/auth.server";
 import db from "@/utils/db.server";
 import { redirect } from "@remix-run/node";
+import { DateTime } from "luxon";
+export async function getStatsandLogs(user: AuthUser) {
+  const stats = await db.stats.findUnique({ where: { userId: user.id } });
 
-export async function getStatsandLogs(userId: string) {
-  const stats = await db.stats.findUnique({ where: { userId } });
-
-  if (!stats)
+  if (!stats || !user.timezone)
     throw redirect(
       `/details?error=${"Fill in the details to access the dasboard."}`
     );
-  const onlyDate = new Date(new Date().toISOString().split("T")[0]);
-  console.log(onlyDate);
+  const todaysDate = DateTime.now().setZone(user.timezone);
 
-  //   const logs = await db.log.findUnique({
-  //     where: { date_userId: {} },
-  //     orderBy: { createdAt: "desc" },
-  //     take: 10,
-  //   });
-  return { stats };
+  if (!todaysDate.isValid)
+    throw new Error(
+      "Invalid timezone settings! Please logout and login again."
+    );
+
+  try {
+    const date = new Date(todaysDate.startOf("day").toISODate());
+    const log = await db.log.upsert({
+      where: { date_userId: { date: date, userId: user.id } },
+      create: {
+        date: date,
+        weight: stats.weight,
+        user: { connect: { id: user.id } },
+      },
+      update: {},
+    });
+
+    return { stats, log };
+  } catch (error) {
+    console.log(error);
+    throw new Error("Something went wrong");
+  }
 }

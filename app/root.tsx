@@ -1,6 +1,6 @@
 import stylesheet from "@/tailwind.css?url";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { LinksFunction } from "@remix-run/node";
+import { json, LinksFunction } from "@remix-run/node";
 import {
   isRouteErrorResponse,
   Link,
@@ -21,6 +21,7 @@ import {
   CardTitle,
 } from "./components/ui/card";
 import { getAuthUser } from "./utils/auth/auth.server";
+import { themeCookie } from "./utils/themeCookie.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -28,11 +29,23 @@ export const links: LinksFunction = () => [
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getAuthUser(request);
-  return { user };
+  const theme: string = await themeCookie.parse(request.headers.get("Cookie"));
+  if (!theme) {
+    return json(
+      { theme: "dark", user },
+      {
+        headers: {
+          "Set-Cookie": await themeCookie.serialize("dark"),
+        },
+      }
+    );
+  }
+
+  return { user, theme };
 };
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({ formAction }) => {
-  return formAction === "/logout";
+  return formAction === "/logout" || formAction === "/api/changeTheme";
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {

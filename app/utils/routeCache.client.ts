@@ -2,8 +2,9 @@ import {
   ClientActionFunction,
   ClientLoaderFunctionArgs,
 } from "@remix-run/react";
+import { singleton } from "./singleton.client";
 
-const cache = new Map();
+const cache = singleton("clientCache", () => new Map());
 
 const clientLoader = async ({
   request,
@@ -25,4 +26,15 @@ const clientAction: ClientActionFunction = async ({
   return await serverAction();
 };
 
-export { clientLoader, clientAction };
+const cacheClientLoader = async (key: string, serverLoader: () => any) => {
+  if (cache.has(key)) return cache.get(key);
+  const data = await serverLoader();
+  cache.set(key, data);
+  return data;
+};
+const cacheClientAction = async (key: string, serverAction: () => any) => {
+  cache.delete(key);
+  return await serverAction();
+};
+
+export { clientLoader, clientAction, cacheClientLoader, cacheClientAction };

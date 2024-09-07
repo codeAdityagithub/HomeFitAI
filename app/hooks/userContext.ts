@@ -20,3 +20,10 @@ export function useUser(): AuthUser | undefined {
   }
   return data.user;
 }
+export function useTheme(): "dark" | "light" {
+  const data = useMatchesData("root");
+  if (!data || !data.theme) {
+    return "dark";
+  }
+  return data.theme;
+}
