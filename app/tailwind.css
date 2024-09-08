@@ -40,7 +40,7 @@
     --popover-foreground: 210 40% 98%;
     --primary: 10 95% 60%;
 
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
@@ -67,7 +67,7 @@
   }
   /* Track */
   .ver_scroll::-webkit-scrollbar-track {
-    @apply bg-gray-200;
+    @apply bg-slate-300;
   }
 
   /* Handle */

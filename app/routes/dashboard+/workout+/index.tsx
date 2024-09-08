@@ -1,10 +1,10 @@
+import WorkoutSearch from "@/components/dashboard/workoutSearch";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import ExerciseCard from "@/components/workout/ExerciseCard";
 import useExercises from "@/hooks/useExercises";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
-import { capitalizeFirstLetter, groupBy } from "@/utils/general";
+import { capitalizeFirstLetter } from "@/utils/general";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   json,
@@ -12,7 +12,6 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useMemo } from "react";
 
 export type DashboardExercise = {
   name: string;
@@ -60,9 +59,7 @@ const WorkoutPage = () => {
 
   return (
     <div className="space-y-10">
-      {/* <div className="">
-        <Input  />
-      </div> */}
+      <WorkoutSearch exercises={exercises} />
       <div>
         <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-secondary z-20">
           <span className="text-[22px] sm:text-[28px] text-accent underline">

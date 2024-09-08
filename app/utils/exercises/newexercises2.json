@@ -6,12 +6,7 @@
     "id": "jump_rope",
     "name": "jump rope",
     "target": "cardio",
-    "secondaryMuscles": [
-      "calves",
-      "quads",
-      "hamstrings",
-      "glutes"
-    ],
+    "secondaryMuscles": ["calves", "quads", "hamstrings", "glutes"],
     "instructions": [
       "Hold the handles of the jump rope with your hands, palms facing inward.",
       "Stand with your feet shoulder-width apart and knees slightly bent.",
@@ -52,13 +47,7 @@
     "id": "burpee",
     "name": "burpee",
     "target": "cardio",
-    "secondaryMuscles": [
-      "quads",
-      "hamstrings",
-      "calves",
-      "shoulders",
-      "chest"
-    ],
+    "secondaryMuscles": ["quads", "hamstrings", "calves", "shoulders", "chest"],
     "instructions": [
       "Start in a standing position with your feet shoulder-width apart.",
       "Lower your body into a squat position by bending your knees and placing your hands on the floor in front of you.",
@@ -77,10 +66,7 @@
     "id": "bulgarian_split_squats",
     "name": "bulgarian split squats",
     "target": "quads",
-    "secondaryMuscles": [
-      "hamstrings",
-      "glutes"
-    ],
+    "secondaryMuscles": ["hamstrings", "glutes"],
     "instructions": [
       "Stand with your feet shoulder-width apart.",
       "Lower your body by bending your knees and pushing your hips back as if sitting on a chair.",
@@ -98,10 +84,7 @@
     "id": "dynamic_chest_stretch",
     "name": "dynamic chest stretch",
     "target": "cardio",
-    "secondaryMuscles": [
-      "shoulders",
-      "triceps"
-    ],
+    "secondaryMuscles": ["shoulders", "triceps"],
     "instructions": [
       "Stand tall with your feet shoulder-width apart.",
       "Extend your arms straight out to the sides, parallel to the ground.",
@@ -119,10 +102,7 @@
     "id": "dumbbell_single_leg_deadlift",
     "name": "dumbbell single leg deadlift",
     "target": "hamstrings",
-    "secondaryMuscles": [
-      "glutes",
-      "lower back"
-    ],
+    "secondaryMuscles": ["glutes", "lower back"],
     "instructions": [
       "Stand with your feet hip-width apart, holding a dumbbell in your right hand.",
       "Shift your weight onto your left leg and lift your right foot slightly off the ground.",
@@ -141,10 +121,7 @@
     "id": "plank",
     "name": "plank",
     "target": "abs",
-    "secondaryMuscles": [
-      "shoulders",
-      "lower back"
-    ],
+    "secondaryMuscles": ["shoulders", "lower back"],
     "instructions": [
       "Start by lying face down on the floor.",
       "Place your forearms on the ground, with your elbows directly under your shoulders.",
@@ -164,9 +141,7 @@
     "id": "russian_twist",
     "name": "russian twist",
     "target": "abs",
-    "secondaryMuscles": [
-      "obliques"
-    ],
+    "secondaryMuscles": ["obliques"],
     "instructions": [
       "Sit on the ground with your knees bent and feet flat on the floor.",
       "Lean back slightly while keeping your back straight and your core engaged.",
@@ -185,10 +160,7 @@
     "id": "_situp",
     "name": "3/4 sit-up",
     "target": "abs",
-    "secondaryMuscles": [
-      "hip flexors",
-      "lower back"
-    ],
+    "secondaryMuscles": ["hip flexors", "lower back"],
     "instructions": [
       "Lie flat on your back with your knees bent and feet flat on the ground.",
       "Place your hands behind your head with your elbows pointing outwards.",
@@ -205,9 +177,7 @@
     "id": "hanging_knee_raise",
     "name": "hanging knee raise",
     "target": "abs",
-    "secondaryMuscles": [
-      "hip flexors"
-    ],
+    "secondaryMuscles": ["hip flexors"],
     "instructions": [
       "Hang from a pull-up bar with your arms fully extended and your palms facing away from you.",
       "Engage your core and lift your legs up in front of you, keeping them straight.",
@@ -224,9 +194,7 @@
     "id": "hanging_straight_leg_raise",
     "name": "hanging straight leg raise",
     "target": "abs",
-    "secondaryMuscles": [
-      "hip flexors"
-    ],
+    "secondaryMuscles": ["hip flexors"],
     "instructions": [
       "Hang from a pull-up bar with your arms fully extended and your palms facing away from you.",
       "Engage your core and lift your legs up in front of you, keeping them straight.",
@@ -243,9 +211,7 @@
     "id": "seated_knee_tucks",
     "name": "seated knee tucks",
     "target": "abs",
-    "secondaryMuscles": [
-      "hip flexors"
-    ],
+    "secondaryMuscles": ["hip flexors"],
     "instructions": [
       "Sit on a flat bench with your back straight and your feet flat on the ground.",
       "Place your hands on the sides of the bench for support.",
@@ -262,10 +228,7 @@
     "id": "incline_side_plank",
     "name": "incline side plank",
     "target": "abs",
-    "secondaryMuscles": [
-      "obliques",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["obliques", "shoulders"],
     "instructions": [
       "Start by lying on your side with your legs extended and stacked on top of each other.",
       "Place your forearm an elevated surface directly below your shoulder, with your elbow bent at a 90-degree angle.",
@@ -282,10 +245,7 @@
     "id": "side_plank",
     "name": "side plank",
     "target": "abs",
-    "secondaryMuscles": [
-      "obliques",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["obliques", "shoulders"],
     "instructions": [
       "Start by lying on your side with your legs extended and stacked on top of each other.",
       "Place your forearm on the ground directly below your shoulder, with your elbow bent at a 90-degree angle.",
@@ -302,11 +262,7 @@
     "id": "jump_squat",
     "name": "jump squat",
     "target": "glutes",
-    "secondaryMuscles": [
-      "quads",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart.",
       "Lower your body into a squat position by bending your knees and pushing your hips back.",
@@ -324,11 +280,7 @@
     "id": "squat",
     "name": "squat",
     "target": "glutes",
-    "secondaryMuscles": [
-      "quads",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart.",
       "Lower your body into a squat position by bending your knees and pushing your hips back.",
@@ -346,11 +298,7 @@
     "id": "dumbbell_front_squat",
     "name": "dumbbell front squat",
     "target": "quads",
-    "secondaryMuscles": [
-      "glutes",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart, holding a dumbbell in each hand at shoulder height, with your elbows pointing forward.",
       "Lower your body into a squat position by bending your knees and pushing your hips back.",
@@ -368,10 +316,7 @@
     "id": "clap_push_up",
     "name": "clap push up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Start in a high plank position with your hands slightly wider than shoulder-width apart.",
       "Lower your body towards the ground by bending your elbows, keeping your core engaged.",
@@ -388,9 +333,7 @@
     "id": "band_alternating_biceps_curl",
     "name": "band alternating biceps curl",
     "target": "biceps",
-    "secondaryMuscles": [
-      "forearms"
-    ],
+    "secondaryMuscles": ["forearms"],
     "instructions": [
       "Stand with your feet shoulder-width apart and hold the band with an underhand grip, palms facing up.",
       "Keep your elbows close to your sides and slowly curl one arm up towards your shoulder, squeezing your biceps at the top.",
@@ -406,10 +349,7 @@
     "id": "band_bench_press",
     "name": "band bench press",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Lie flat on a bench with your feet flat on the ground and your back pressed against the bench.",
       "Grasp the band handles with an overhand grip, slightly wider than shoulder-width apart.",
@@ -426,10 +366,7 @@
     "id": "band_closegrip_pulldown",
     "name": "band close-grip pulldown",
     "target": "lats",
-    "secondaryMuscles": [
-      "biceps",
-      "forearms"
-    ],
+    "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
       "Attach the band to a high anchor point, such as a pull-up bar or sturdy beam.",
       "Stand facing the anchor point and grab the band with an underhand grip, hands shoulder-width apart.",
@@ -447,9 +384,7 @@
     "id": "band_concentration_curl",
     "name": "band concentration curl",
     "target": "biceps",
-    "secondaryMuscles": [
-      "forearms"
-    ],
+    "secondaryMuscles": ["forearms"],
     "instructions": [
       "Sit on a bench or chair with your legs spread apart and your feet flat on the ground.",
       "Hold one end of the band in your hand and step on the other end with your foot on the same side.",
@@ -467,10 +402,7 @@
     "id": "band_front_raise",
     "name": "band front raise",
     "target": "delts",
-    "secondaryMuscles": [
-      "triceps",
-      "upper back"
-    ],
+    "secondaryMuscles": ["triceps", "upper back"],
     "instructions": [
       "Stand with your feet shoulder-width apart and hold the band in front of your thighs with your palms facing down.",
       "Keep your arms straight and slowly raise them forward until they are parallel to the ground.",
@@ -486,10 +418,7 @@
     "id": "band_lateral_raise",
     "name": "band lateral raise",
     "target": "delts",
-    "secondaryMuscles": [
-      "traps",
-      "upper back"
-    ],
+    "secondaryMuscles": ["traps", "upper back"],
     "instructions": [
       "Stand with your feet shoulder-width apart and hold the band with both hands by your sides.",
       "Keep your arms straight and slowly raise them out to the sides until they are parallel to the ground.",
@@ -505,9 +434,7 @@
     "id": "band_biceps_curl",
     "name": "band biceps curl",
     "target": "biceps",
-    "secondaryMuscles": [
-      "forearms"
-    ],
+    "secondaryMuscles": ["forearms"],
     "instructions": [
       "Stand with your feet shoulder-width apart and place both feet on the band.",
       "Hold the band with your palms facing up and your arms fully extended.",
@@ -524,10 +451,7 @@
     "id": "band_reverse_fly",
     "name": "band reverse fly",
     "target": "delts",
-    "secondaryMuscles": [
-      "upper back",
-      "trapezius"
-    ],
+    "secondaryMuscles": ["upper back", "trapezius"],
     "instructions": [
       "Attach the band to a stationary object at chest height.",
       "Stand with your feet shoulder-width apart and hold the band with both hands in front of you.",
@@ -545,10 +469,7 @@
     "id": "band_shoulder_press",
     "name": "band shoulder press",
     "target": "delts",
-    "secondaryMuscles": [
-      "triceps",
-      "upper back"
-    ],
+    "secondaryMuscles": ["triceps", "upper back"],
     "instructions": [
       "Stand with your feet shoulder-width apart and place the band under your feet.",
       "Hold the band with your palms facing forward and raise your hands to shoulder height, elbows bent.",
@@ -565,10 +486,7 @@
     "id": "band_single_leg_split_squat",
     "name": "band single leg split squat",
     "target": "quads",
-    "secondaryMuscles": [
-      "glutes",
-      "hamstrings"
-    ],
+    "secondaryMuscles": ["glutes", "hamstrings"],
     "instructions": [
       "Stand with your feet hip-width apart and place a resistance band around your ankles.",
       "Take a big step forward with your right foot and a smaller step back with your left foot.",
@@ -585,11 +503,7 @@
     "id": "band_squat",
     "name": "band squat",
     "target": "glutes",
-    "secondaryMuscles": [
-      "quads",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart, with the band placed just above your knees.",
       "Keeping your chest up and core engaged, push your hips back and bend your knees to lower into a squat position.",
@@ -606,10 +520,7 @@
     "id": "band_stiff_leg_deadlift",
     "name": "band stiff leg deadlift",
     "target": "hamstrings",
-    "secondaryMuscles": [
-      "glutes",
-      "lower back"
-    ],
+    "secondaryMuscles": ["glutes", "lower back"],
     "instructions": [
       "Stand with your feet shoulder-width apart and place the band around your ankles.",
       "Hold the band with both hands in front of your thighs, palms facing your body.",
@@ -628,10 +539,7 @@
     "id": "dumbbell_bench_press",
     "name": "dumbbell bench press",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Lie flat on a bench or the floor with your feet flat on the ground and your back pressed against the bench or the floor.",
       "Hold a dumbbell in each hand, with your palms facing forward and your arms extended above your chest.",
@@ -648,9 +556,7 @@
     "id": "dumbbell_fly",
     "name": "dumbbell fly",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "shoulders"
-    ],
+    "secondaryMuscles": ["shoulders"],
     "instructions": [
       "Lie flat on a bench or the floor with a dumbbell in each hand, palms facing each other.",
       "Extend your arms straight up over your chest, with a slight bend in your elbows.",
@@ -667,10 +573,7 @@
     "id": "chest_dip",
     "name": "chest dip",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Position yourself on parallel bars with your arms fully extended and your body straight.",
       "Lower your body by bending your elbows until your shoulders are below your elbows.",
@@ -686,10 +589,7 @@
     "id": "archer_pull_up",
     "name": "archer pull up",
     "target": "lats",
-    "secondaryMuscles": [
-      "biceps",
-      "forearms"
-    ],
+    "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
       "Start by hanging from a pull-up bar with an overhand grip, slightly wider than shoulder-width apart.",
       "Engage your core and pull your shoulder blades down and back.",
@@ -707,10 +607,7 @@
     "id": "band_assisted_pullup",
     "name": "band assisted pull-up",
     "target": "lats",
-    "secondaryMuscles": [
-      "biceps",
-      "forearms"
-    ],
+    "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
       "Attach the band to a pull-up bar or sturdy anchor point.",
       "Step onto the band and grip the bar with your palms facing away from you, hands slightly wider than shoulder-width apart.",
@@ -728,10 +625,7 @@
     "id": "pullup",
     "name": "pull-up",
     "target": "lats",
-    "secondaryMuscles": [
-      "biceps",
-      "forearms"
-    ],
+    "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
       "Hang from a pull-up bar with your palms facing away from you and your arms fully extended.",
       "Engage your core and squeeze your shoulder blades together.",
@@ -748,10 +642,7 @@
     "id": "wide_grip_pullup",
     "name": "wide grip pull-up",
     "target": "lats",
-    "secondaryMuscles": [
-      "biceps",
-      "forearms"
-    ],
+    "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
       "Hang from a pull-up bar with your palms facing away from you and your hands wider than shoulder-width apart.",
       "Engage your core and squeeze your shoulder blades together.",
@@ -768,11 +659,7 @@
     "id": "scapular_pullup",
     "name": "scapular pull-up",
     "target": "upper back",
-    "secondaryMuscles": [
-      "biceps",
-      "rhomboids",
-      "rear deltoids"
-    ],
+    "secondaryMuscles": ["biceps", "rhomboids", "rear deltoids"],
     "instructions": [
       "Start by hanging from a pull-up bar with your palms facing away from you and your arms fully extended.",
       "Retract your shoulder blades by pulling them down and back.",
@@ -789,10 +676,7 @@
     "id": "close_grip_chinup",
     "name": "close grip chin-up",
     "target": "lats",
-    "secondaryMuscles": [
-      "biceps",
-      "forearms"
-    ],
+    "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
       "Grab the pull-up bar with your palms facing towards you and your hands shoulder-width apart.",
       "Hang from the bar with your arms fully extended and your feet off the ground.",
@@ -810,11 +694,7 @@
     "id": "band_standing_rear_delt_row",
     "name": "band standing rear delt row",
     "target": "delts",
-    "secondaryMuscles": [
-      "trapezius",
-      "rhomboids",
-      "biceps"
-    ],
+    "secondaryMuscles": ["trapezius", "rhomboids", "biceps"],
     "instructions": [
       "Stand with your feet shoulder-width apart and place the band under your feet.",
       "Hold the band handles with your palms facing each other and your arms extended in front of you.",
@@ -832,10 +712,7 @@
     "id": "bodyweight_standing_row",
     "name": "bodyweight standing row",
     "target": "upper back",
-    "secondaryMuscles": [
-      "biceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["biceps", "shoulders"],
     "instructions": [
       "Stand with your feet shoulder-width apart and knees slightly bent.",
       "Grasp a bar or handles with an overhand grip, palms facing down.",
@@ -854,10 +731,7 @@
     "id": "bodyweight_standing_row_with_towel",
     "name": "bodyweight standing row (with towel)",
     "target": "upper back",
-    "secondaryMuscles": [
-      "biceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["biceps", "shoulders"],
     "instructions": [
       "Stand with your feet shoulder-width apart and hold a towel in front of you with both hands.",
       "Bend your knees slightly and hinge forward at the hips, keeping your back straight.",
@@ -874,10 +748,7 @@
     "id": "dumbbell_bent_over_row",
     "name": "dumbbell bent over row",
     "target": "upper back",
-    "secondaryMuscles": [
-      "biceps",
-      "forearms"
-    ],
+    "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
       "Stand with your feet shoulder-width apart, knees slightly bent, and hold a dumbbell in each hand with your palms facing your body.",
       "Bend forward at the hips, keeping your back straight and your core engaged.",
@@ -895,10 +766,7 @@
     "id": "suspended_row",
     "name": "suspended row",
     "target": "upper back",
-    "secondaryMuscles": [
-      "biceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["biceps", "shoulders"],
     "instructions": [
       "Set up a suspension trainer at an appropriate height.",
       "Stand facing the anchor point with your feet shoulder-width apart.",
@@ -917,10 +785,7 @@
     "id": "dumbbell_standing_overhead_press",
     "name": "dumbbell standing overhead press",
     "target": "delts",
-    "secondaryMuscles": [
-      "triceps",
-      "upper back"
-    ],
+    "secondaryMuscles": ["triceps", "upper back"],
     "instructions": [
       "Stand with your feet shoulder-width apart, holding a dumbbell in each hand at shoulder level with your palms facing forward.",
       "Press the dumbbells upward until your arms are fully extended overhead.",
@@ -936,10 +801,7 @@
     "id": "dumbbell_arnold_press",
     "name": "dumbbell arnold press",
     "target": "delts",
-    "secondaryMuscles": [
-      "triceps",
-      "upper chest"
-    ],
+    "secondaryMuscles": ["triceps", "upper chest"],
     "instructions": [
       "Sit on a bench with back support and hold a dumbbell in each hand at shoulder level, palms facing your body and elbows bent.",
       "Press the dumbbells upward until your arms are fully extended and your palms are facing forward.",
@@ -956,9 +818,7 @@
     "id": "dumbbell_lateral_raise",
     "name": "dumbbell lateral raise",
     "target": "delts",
-    "secondaryMuscles": [
-      "traps"
-    ],
+    "secondaryMuscles": ["traps"],
     "instructions": [
       "Stand with your feet shoulder-width apart and hold a dumbbell in each hand, palms facing your body.",
       "Keep your back straight and engage your core.",
@@ -975,10 +835,7 @@
     "id": "dumbbell_one_arm_lateral_raise",
     "name": "dumbbell one arm lateral raise",
     "target": "delts",
-    "secondaryMuscles": [
-      "trapezius",
-      "triceps"
-    ],
+    "secondaryMuscles": ["trapezius", "triceps"],
     "instructions": [
       "Stand with your feet shoulder-width apart, holding a dumbbell in one hand with your palm facing your body.",
       "Keep your back straight and your core engaged throughout the exercise.",
@@ -996,10 +853,7 @@
     "id": "dumbbell_rear_lateral_raise",
     "name": "dumbbell rear lateral raise",
     "target": "delts",
-    "secondaryMuscles": [
-      "traps",
-      "rhomboids"
-    ],
+    "secondaryMuscles": ["traps", "rhomboids"],
     "instructions": [
       "Stand with your feet shoulder-width apart and hold a dumbbell in each hand, palms facing your body.",
       "Bend your knees slightly and hinge forward at the hips, keeping your back straight and core engaged.",
@@ -1016,9 +870,7 @@
     "id": "dumbbell_biceps_curl",
     "name": "dumbbell biceps curl",
     "target": "biceps",
-    "secondaryMuscles": [
-      "forearms"
-    ],
+    "secondaryMuscles": ["forearms"],
     "instructions": [
       "Stand up straight with a dumbbell in each hand, palms facing forward and arms fully extended.",
       "Keeping your upper arms stationary, exhale and curl the weights while contracting your biceps.",
@@ -1036,9 +888,7 @@
     "id": "dumbbell_alternate_biceps_curl",
     "name": "dumbbell alternate biceps curl",
     "target": "biceps",
-    "secondaryMuscles": [
-      "forearms"
-    ],
+    "secondaryMuscles": ["forearms"],
     "instructions": [
       "Stand up straight with a dumbbell in each hand, palms facing forward and arms fully extended.",
       "Keeping your upper arms stationary, exhale and curl the weights while contracting your biceps.",
@@ -1056,9 +906,7 @@
     "id": "band_triceps_extension",
     "name": "band triceps extension",
     "target": "triceps",
-    "secondaryMuscles": [
-      "shoulders"
-    ],
+    "secondaryMuscles": ["shoulders"],
     "instructions": [
       "Stand with your feet shoulder-width apart and hold the band with both hands, palms facing down.",
       "Extend your arms straight out to the sides, keeping them parallel to the ground.",
@@ -1075,10 +923,7 @@
     "id": "bodyweight_kneeling_triceps_extension",
     "name": "bodyweight kneeling triceps extension",
     "target": "triceps",
-    "secondaryMuscles": [
-      "shoulders",
-      "chest"
-    ],
+    "secondaryMuscles": ["shoulders", "chest"],
     "instructions": [
       "Kneel down on the ground with your knees hip-width apart.",
       "Place your hands on the ground in front of you, shoulder-width apart, fingers pointing forward.",
@@ -1096,9 +941,7 @@
     "id": "dumbbell_hammer_curl",
     "name": "dumbbell hammer curl",
     "target": "biceps",
-    "secondaryMuscles": [
-      "forearms"
-    ],
+    "secondaryMuscles": ["forearms"],
     "instructions": [
       "Stand up straight with a dumbbell in each hand, palms facing your torso.",
       "Keep your elbows close to your torso and rotate the palms of your hands until they are facing forward.",
@@ -1118,11 +961,7 @@
     "id": "dumbbell_lunge",
     "name": "dumbbell lunge",
     "target": "quads",
-    "secondaryMuscles": [
-      "glutes",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart, holding a dumbbell in each hand.",
       "Take a step forward with your right foot, lowering your body into a lunge position.",
@@ -1140,11 +979,7 @@
     "id": "bodyweight_lunge",
     "name": "bodyweight lunge",
     "target": "quads",
-    "secondaryMuscles": [
-      "glutes",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet hip-width apart and hands on your hips.",
       "Take a big step forward with your right foot, lowering your body into a lunge position.",
@@ -1161,11 +996,7 @@
     "id": "dumbbell_rear_lunge",
     "name": "dumbbell rear lunge",
     "target": "quads",
-    "secondaryMuscles": [
-      "glutes",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart, holding a dumbbell in each hand.",
       "Take a step backward with your right foot, lowering your body into a lunge position.",
@@ -1182,10 +1013,7 @@
     "id": "bodyweight_standing_calf_raise",
     "name": "bodyweight standing calf raise",
     "target": "calves",
-    "secondaryMuscles": [
-      "ankles",
-      "feet"
-    ],
+    "secondaryMuscles": ["ankles", "feet"],
     "instructions": [
       "Stand with your feet shoulder-width apart, toes pointing forward.",
       "Place your hands on a wall or stable surface for balance.",
@@ -1202,9 +1030,7 @@
     "id": "dumbbell_standing_calf_raise",
     "name": "dumbbell standing calf raise",
     "target": "calves",
-    "secondaryMuscles": [
-      "ankles"
-    ],
+    "secondaryMuscles": ["ankles"],
     "instructions": [
       "Stand with your feet shoulder-width apart, holding a dumbbell in each hand.",
       "Raise your heels off the ground as high as possible, using your calves.",
@@ -1220,11 +1046,7 @@
     "id": "standing_split_squats",
     "name": "standing split squats",
     "target": "quads",
-    "secondaryMuscles": [
-      "glutes",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart.",
       "Take a step forward with one foot and place it about two feet in front of the other foot.",
@@ -1242,10 +1064,7 @@
     "id": "glute_bridge_on_bench",
     "name": "glute bridge on bench",
     "target": "glutes",
-    "secondaryMuscles": [
-      "hamstrings",
-      "core"
-    ],
+    "secondaryMuscles": ["hamstrings", "core"],
     "instructions": [
       "Sit on the edge of a bench with your back against it and your feet flat on the ground.",
       "Place your hands on the bench beside your hips for support.",
@@ -1262,10 +1081,7 @@
     "id": "low_glute_bridge_on_floor",
     "name": "low glute bridge on floor",
     "target": "glutes",
-    "secondaryMuscles": [
-      "hamstrings",
-      "core"
-    ],
+    "secondaryMuscles": ["hamstrings", "core"],
     "instructions": [
       "Lie flat on your back with your knees bent and feet flat on the ground.",
       "Place your arms by your sides, palms facing down.",
@@ -1283,11 +1099,7 @@
     "id": "archer_push_up",
     "name": "archer push up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders",
-      "core"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders", "core"],
     "instructions": [
       "Start in a push-up position with your hands slightly wider than shoulder-width apart.",
       "Extend one arm straight out to the side, parallel to the ground.",
@@ -1305,10 +1117,7 @@
     "id": "band_pushup",
     "name": "band push-up",
     "target": "triceps",
-    "secondaryMuscles": [
-      "chest",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["chest", "shoulders"],
     "instructions": [
       "Place a band around your upper arms, just above the elbows.",
       "Assume a push-up position with your hands directly under your shoulders and your body in a straight line from head to heels.",
@@ -1325,10 +1134,7 @@
     "id": "deep_push_up",
     "name": "deep push up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Start in a high plank position with your hands slightly wider than shoulder-width apart and your body in a straight line.",
       "Lower your chest towards the ground by bending your elbows, keeping them close to your body.",
@@ -1344,10 +1150,7 @@
     "id": "wide_hand_push_up",
     "name": "wide hand push up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Start in a high plank position with your hands wider than shoulder-width apart.",
       "Keep your body in a straight line from head to toe.",
@@ -1364,10 +1167,7 @@
     "id": "decline_pushup",
     "name": "decline push-up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Place your hands on the ground slightly wider than shoulder-width apart, with your feet elevated on a stable surface.",
       "Keep your body in a straight line from head to toe, engaging your core muscles.",
@@ -1384,10 +1184,7 @@
     "id": "diamond_pushup",
     "name": "diamond push-up",
     "target": "triceps",
-    "secondaryMuscles": [
-      "chest",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["chest", "shoulders"],
     "instructions": [
       "Start in a high plank position with your hands close together, forming a diamond shape with your thumbs and index fingers.",
       "Keep your body in a straight line from head to toe, engaging your core and glutes.",
@@ -1404,11 +1201,7 @@
     "id": "handstand_pushup",
     "name": "handstand push-up",
     "target": "triceps",
-    "secondaryMuscles": [
-      "shoulders",
-      "chest",
-      "core"
-    ],
+    "secondaryMuscles": ["shoulders", "chest", "core"],
     "instructions": [
       "Find a wall and face away from it, standing a few feet away.",
       "Place your hands on the ground shoulder-width apart and kick your feet up against the wall, coming into a handstand position.",
@@ -1425,11 +1218,7 @@
     "id": "pike_pushup",
     "name": "pike push-up",
     "target": "delts",
-    "secondaryMuscles": [
-      "triceps",
-      "chest",
-      "core"
-    ],
+    "secondaryMuscles": ["triceps", "chest", "core"],
     "instructions": [
       "Start in a push-up position with your hips lifted high, forming an inverted V shape with your body.",
       "Place your hands shoulder-width apart on the ground and keep your feet close together.",
@@ -1446,10 +1235,7 @@
     "id": "incline_closegrip_pushup",
     "name": "incline close-grip push-up",
     "target": "triceps",
-    "secondaryMuscles": [
-      "chest",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["chest", "shoulders"],
     "instructions": [
       "Place your hands on an elevated surface, such as a bench or step, slightly wider than shoulder-width apart.",
       "Extend your legs behind you, resting on the balls of your feet, with your body forming a straight line from head to heels.",
@@ -1466,10 +1252,7 @@
     "id": "incline_pushup",
     "name": "incline push-up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Place your hands on an elevated surface, such as a bench or step, slightly wider than shoulder-width apart.",
       "Extend your legs behind you, resting on the balls of your feet, creating a straight line from your head to your heels.",
@@ -1486,10 +1269,7 @@
     "id": "kneeling_pushup",
     "name": "kneeling push-up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Start by kneeling on the ground with your hands shoulder-width apart, fingers pointing forward.",
       "Extend your legs behind you, resting on the balls of your feet, so that your body forms a straight line from head to heels.",
@@ -1506,11 +1286,7 @@
     "id": "pushup",
     "name": "push-up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "deltoids",
-      "core"
-    ],
+    "secondaryMuscles": ["triceps", "deltoids", "core"],
     "instructions": [
       "Start in a high plank position with your hands slightly wider than shoulder-width apart and your feet together.",
       "Engage your core and lower your body towards the ground by bending your elbows, keeping your body in a straight line.",
@@ -1526,10 +1302,7 @@
     "id": "pushup_wall",
     "name": "push-up (wall)",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "deltoids"
-    ],
+    "secondaryMuscles": ["triceps", "deltoids"],
     "instructions": [
       "Stand facing a wall, about arm's length away.",
       "Place your hands on the wall at shoulder height, slightly wider than shoulder-width apart.",
@@ -1547,11 +1320,7 @@
     "id": "single_arm_pushup",
     "name": "single arm push-up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders",
-      "core"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders", "core"],
     "instructions": [
       "Start in a push-up position with your hands shoulder-width apart and one hand placed slightly wider than the other.",
       "Engage your core and lower your body towards the ground by bending your elbows, keeping your back straight.",
@@ -1568,11 +1337,7 @@
     "id": "ring_pushup",
     "name": "ring push-up",
     "target": "pectorals",
-    "secondaryMuscles": [
-      "triceps",
-      "shoulders",
-      "core"
-    ],
+    "secondaryMuscles": ["triceps", "shoulders", "core"],
     "instructions": [
       "Find a suspension trainer(rings) and adjust it to an appropriate height.",
       "Stand facing away from the anchor point and hold the handles with an overhand grip.",
@@ -1590,11 +1355,7 @@
     "id": "single_leg_squat_pistol",
     "name": "single leg squat (pistol)",
     "target": "quads",
-    "secondaryMuscles": [
-      "glutes",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart and arms extended in front of you.",
       "Lift your right foot off the ground and extend it forward.",
@@ -1614,11 +1375,7 @@
     "name": "jumping jacks",
     "met": 8,
     "target": "cardio",
-    "secondaryMuscles": [
-      "quads",
-      "hamstrings",
-      "calves"
-    ],
+    "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart.",
       "Bend your knees and lower your body into a squat position.",

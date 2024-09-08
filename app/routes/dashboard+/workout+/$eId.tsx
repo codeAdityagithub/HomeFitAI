@@ -51,7 +51,7 @@ const ExercisePage = () => {
 
       <div className="mb-6">
         <iframe
-          className="w-full h-80 rounded-lg"
+          className="w-full aspect-[2/1] rounded-lg"
           src={exercise.embed}
           title={exercise.name}
           allowFullScreen

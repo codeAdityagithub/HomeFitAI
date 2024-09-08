@@ -15,6 +15,7 @@ const ExerciseCard = ({ e }: { e: DashboardExercise }) => {
         <img
           src={e.imageUrl}
           alt={e.name}
+          loading="lazy"
           className="w-full aspect-[17/9] object-cover rounded-lg"
         />
         <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px] p-4 sm:p-3 lg:p-6 lg:px-4 flex flex-col items-start justify-center">
