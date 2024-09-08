@@ -24,14 +24,15 @@ export { clientLoader } from "@/utils/routeCache.client";
 export default function Dashboard() {
   const { logs } = useLoaderData<typeof loader>();
   const matches = useDashboardLayoutData();
+  // console.log(matches.log);
   return (
     <div className="h-full">
-      <Form
+      {/* <Form
         method="post"
         action="/dashboard"
       >
         <Button> Submit</Button>
-      </Form>
+      </Form> */}
     </div>
   );
 }

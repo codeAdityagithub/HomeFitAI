@@ -19,7 +19,6 @@ export type Exercise = {
   bodyPart: string;
   met: number;
   equipment: string;
-  gifUrl: string;
   id: string;
   name: string;
   target: string;

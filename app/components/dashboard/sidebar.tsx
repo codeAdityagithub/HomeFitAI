@@ -47,7 +47,7 @@ const BottomLinks = [
     name: "Overview",
     icon: (
       <HiOutlineSquares2X2
-        className="text-2xl"
+        className="text-2xl min-w-6 min-h-6"
         strokeWidth={1.5}
       />
     ),
@@ -55,15 +55,24 @@ const BottomLinks = [
   {
     to: "workout",
     name: "Workout",
-    icon: <LiaDumbbellSolid className="text-2xl" />,
+    icon: <LiaDumbbellSolid className="text-2xl min-w-6 min-h-6" />,
   },
-  { to: "stats", name: "Stats", icon: <NotepadText strokeWidth={1.5} /> },
+  {
+    to: "stats",
+    name: "Stats",
+    icon: (
+      <NotepadText
+        className=" min-w-6 min-h-6"
+        strokeWidth={1.5}
+      />
+    ),
+  },
   {
     to: "settings",
     name: "Settings",
     icon: (
       <IoPersonOutline
-        className="text-2xl"
+        className="text-2xl min-w-6 min-h-6"
         strokeWidth={1.5}
       />
     ),
@@ -165,20 +174,20 @@ const BottomNav = () => {
         {BottomLinks.map((link) => (
           <NavLink
             key={link.to}
-            end
+            end={link.to === ""}
             to={link.to}
             className={({ isActive }) =>
               cn(
                 "block rounded-lg transition-colors hover:text-accent-foreground",
                 isActive
-                  ? "bg-accent text-accent-foreground"
+                  ? "bg-accent text-accent-foreground active-bottom-link"
                   : "hover:bg-accent/80"
               )
             }
           >
-            <div className="w-full flex flex-col items-center p-2 gap-2">
+            <div className="w-full flex flex-col xs:flex-row justify-center items-center p-1 xs:p-2 gap-1">
               {link.icon}
-              {/* <span>{link.name}</span> */}
+              <span className="link-text">{link.name}</span>
             </div>
           </NavLink>
         ))}

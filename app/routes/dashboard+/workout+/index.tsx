@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import ExerciseCard from "@/components/workout/ExerciseCard";
 import useExercises from "@/hooks/useExercises";
 import { requireUser } from "@/utils/auth/auth.server";
@@ -33,6 +34,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     equipment: e.equipment,
     secondaryMuscles: e.secondaryMuscles,
   }));
+
+  // sleep for 1 second
   return json(
     { exercises: filtered }
     // { headers: { "Cache-Control": "public, max-age=600" } }
@@ -57,6 +60,9 @@ const WorkoutPage = () => {
 
   return (
     <div className="space-y-10">
+      {/* <div className="">
+        <Input  />
+      </div> */}
       <div>
         <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-secondary z-20">
           <span className="text-[22px] sm:text-[28px] text-accent underline">

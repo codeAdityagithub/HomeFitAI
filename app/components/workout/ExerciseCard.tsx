@@ -8,7 +8,10 @@ const ExerciseCard = ({ e }: { e: DashboardExercise }) => {
       className="flex flex-col items-start drop-shadow-md hover:shadow-lg hover:opacity-100 hover:-translate-y-1 transition-all rounded-lg overflow-hidden max-w-[500px]"
       key={e.name}
     >
-      <Link to={e.id}>
+      <Link
+        to={e.id}
+        prefetch="intent"
+      >
         <img
           src={e.imageUrl}
           alt={e.name}
