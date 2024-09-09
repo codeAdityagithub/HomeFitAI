@@ -25,3 +25,7 @@ export function capitalizeEachWord(str: string) {
 
   return words.join(" "); // Join the words back together with a space in between
 }
+
+export function caloriePerMin(met: number, weight: number) {
+  return ((met * 3.5 * weight) / 200).toFixed(1);
+}

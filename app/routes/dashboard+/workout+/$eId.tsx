@@ -1,7 +1,9 @@
+import GoBack from "@/components/GoBack";
 import { Button } from "@/components/ui/button";
+import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
-import { capitalizeEachWord } from "@/utils/general";
+import { caloriePerMin, capitalizeEachWord } from "@/utils/general";
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { ArrowLeft } from "lucide-react";
@@ -29,21 +31,12 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 const ExercisePage = () => {
   const { exercise } = useLoaderData<typeof loader>();
   // console.log(exercise);
+  const data = useDashboardLayoutData();
   const navigate = useNavigate();
   return (
     <div className="max-w-4xl mx-auto md:p-4">
       <div className="sm:flex sm:gap-2">
-        <Button
-          size="icon"
-          variant="outline"
-          onClick={() => {
-            if (window.history.state.idx === 0) navigate("/dashboard/workout");
-            else navigate(-1);
-          }}
-          className="rounded-full hover:bg-primary"
-        >
-          <ArrowLeft />
-        </Button>
+        <GoBack />
         <h1 className="text-3xl font-bold mb-4">
           {capitalizeEachWord(exercise.name)}
         </h1>
@@ -64,7 +57,8 @@ const ExercisePage = () => {
         <h2 className="text-xl font-semibold">Exercise Information</h2>
         <ul className="list-disc list-inside mt-2">
           <li>
-            <strong>MET:</strong> {exercise.met}
+            <strong>Calories:</strong>{" "}
+            {caloriePerMin(exercise.met, data?.stats.weight ?? 0)} Kcal/min
           </li>
           <li>
             <strong>Equipment:</strong> {exercise.equipment}

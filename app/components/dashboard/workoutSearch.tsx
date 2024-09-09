@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { Search } from "lucide-react";
 import { DashboardExercise } from "@/routes/dashboard+/workout+";
 import { cn } from "@/lib/utils";
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 
 const WorkoutSearch = ({ exercises }: { exercises: DashboardExercise[] }) => {
   const [query, setQuery] = useState("");
@@ -13,10 +13,11 @@ const WorkoutSearch = ({ exercises }: { exercises: DashboardExercise[] }) => {
     () => exercises.filter((ex) => ex.name.includes(query.toLowerCase())),
     [query, exercises]
   );
+  const navigate = useNavigate();
   return (
     <div
       onFocus={() => setHidden(false)}
-      className="max-w-md relative mx-auto flex items-center gap-2"
+      className="max-w-md relative mx-auto"
     >
       <div
         onClick={() => {
@@ -24,20 +25,28 @@ const WorkoutSearch = ({ exercises }: { exercises: DashboardExercise[] }) => {
         }}
         className={cn(hidden && "hidden", "fixed inset-0 z-30")}
       ></div>
-      <Input
-        name="q"
-        className="z-40"
-        placeholder="Search for exercises..."
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <Button
-        type="submit"
-        size="icon"
-        className="h-9 w-9 z-40"
-        onClick={() => setHidden(true)}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setHidden(true);
+          if (query.trim() !== "") navigate("search?query=" + query);
+        }}
+        className=" flex items-center gap-2"
       >
-        <Search className="h-5 w-5" />
-      </Button>
+        <Input
+          name="q"
+          className="z-40"
+          placeholder="Search for exercises..."
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <Button
+          type="submit"
+          size="icon"
+          className="h-9 w-9 z-40"
+        >
+          <Search className="h-5 w-5" />
+        </Button>
+      </form>
       <div
         className={cn(
           "absolute w-full top-12 z-50 rounded left-0 max-h-[400px] overflow-auto ver_scroll bg-background text-foreground p-4",
