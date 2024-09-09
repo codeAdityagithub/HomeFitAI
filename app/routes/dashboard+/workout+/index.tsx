@@ -33,8 +33,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     equipment: e.equipment,
     secondaryMuscles: e.secondaryMuscles,
   }));
-
-  // sleep for 1 second
   return json(
     { exercises: filtered }
     // { headers: { "Cache-Control": "public, max-age=600" } }

@@ -15,7 +15,7 @@ export type PositionFunction = (
 //   return distance;
 // }
 
-function angle(keypoints: Keypoint[], i: number, j: number, k: number) {
+export function angle(keypoints: Keypoint[], i: number, j: number, k: number) {
   const { x: x1, y: y1 } = keypoints[i];
   const { x: x2, y: y2 } = keypoints[j];
   const { x: x3, y: y3 } = keypoints[k];
@@ -40,7 +40,7 @@ function angle(keypoints: Keypoint[], i: number, j: number, k: number) {
   }
 }
 
-export const flexing: PositionFunction = (
+export const band_biceps_curl: PositionFunction = (
   keypoints: Keypoint[],
   sendSuggestions
 ) => {

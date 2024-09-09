@@ -157,7 +157,7 @@
   {
     "bodyPart": "waist",
     "equipment": "body weight",
-    "id": "_situp",
+    "id": "situp",
     "name": "3/4 sit-up",
     "target": "abs",
     "secondaryMuscles": ["hip flexors", "lower back"],

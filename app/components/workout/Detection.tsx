@@ -9,6 +9,7 @@ import { PositionFunction } from "@/utils/tensorflow/functions";
 import { curlsSuggestions } from "@/lib/exerciseSuggestions";
 import useStopwatch from "@/hooks/useStopwatch";
 import { Button } from "../ui/button";
+import GoBack from "../GoBack";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -224,15 +225,18 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
     clearInterval(sendSuggestionIntervalId.current);
     isdrawing.current = false;
     cancelAnimationFrame(animationFrameId.current!);
-    const video = videoRef.current!;
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
-    // Ensure canvas dimensions match video dimensions
-    canvas.width = video.width;
-    canvas.height = video.height;
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (canvas && video) {
+      const ctx = canvas.getContext("2d")!;
+      // Ensure canvas dimensions match video dimensions
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.width = video.width;
+      canvas.height = video.height;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 
     if (totalTime.current)
       console.info(
@@ -245,9 +249,12 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
 
   return (
     <div>
-      <h1>
-        {name} Reps : {reps}
-      </h1>
+      <div className="flex gap-2 items-center">
+        <GoBack />
+        <h1>
+          {name} Reps : {reps}
+        </h1>
+      </div>
       {/* <h1>Time : {time} seconds</h1> */}
       <Button
         disabled={loading}
