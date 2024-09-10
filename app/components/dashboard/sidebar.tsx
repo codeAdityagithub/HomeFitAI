@@ -1,10 +1,5 @@
 import { Form, Link, NavLink } from "@remix-run/react";
-import {
-  LayoutList,
-  LogOut,
-  MessageSquareHeart,
-  NotepadText,
-} from "lucide-react";
+import { LayoutList, LogOut, MessageSquareHeart } from "lucide-react";
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { LiaDumbbellSolid } from "react-icons/lia";
 
@@ -34,7 +29,6 @@ const Links = [
     name: "Playlists",
     icon: <LayoutList strokeWidth={1.5} />,
   },
-  { to: "stats", name: "Stats", icon: <NotepadText strokeWidth={1.5} /> },
   {
     to: "social",
     name: "Social",
@@ -58,18 +52,13 @@ const BottomLinks = [
     icon: <LiaDumbbellSolid className="text-2xl min-w-6 min-h-6" />,
   },
   {
-    to: "stats",
-    name: "Stats",
-    icon: (
-      <NotepadText
-        className=" min-w-6 min-h-6"
-        strokeWidth={1.5}
-      />
-    ),
+    to: "social",
+    name: "Social",
+    icon: <MessageSquareHeart strokeWidth={1.5} />,
   },
   {
-    to: "settings",
-    name: "Settings",
+    to: "profile",
+    name: "Profile",
     icon: (
       <IoPersonOutline
         className="text-2xl min-w-6 min-h-6"
@@ -127,7 +116,7 @@ export default function Sidebar() {
         </div>
         <p className="text-muted-foreground text-sm px-3 py-2 my-2">Others</p>
         <NavLink
-          to={"settings"}
+          to={"profile"}
           className={({ isActive }) =>
             cn(
               "w-full rounded-lg transition-colors hover:text-accent-foreground mb-0.5",
@@ -142,7 +131,7 @@ export default function Sidebar() {
               className="text-lg"
               strokeWidth={1.5}
             />
-            <span className="text-sm">Settings</span>
+            <span className="text-sm">Profile</span>
           </div>
         </NavLink>
         <ThemeToggle />

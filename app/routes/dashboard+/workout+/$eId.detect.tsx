@@ -18,6 +18,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { LoaderIcon } from "lucide-react";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
@@ -50,12 +51,15 @@ const DetectWorkoutPage = () => {
     }
   }, []);
   const [func, setFunc] = useState<PositionFunction>();
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const funcName = exercise.id;
     async function loadFunction() {
+      setLoading(true);
       const fetchedFunction = await importFunction(funcName);
+      // sleep 1 second
 
+      setLoading(false);
       setFunc(() => fetchedFunction);
     }
     loadFunction();
@@ -63,23 +67,21 @@ const DetectWorkoutPage = () => {
 
   return (
     <>
-      {func ? (
-        <Detection
-          name={exercise.name}
-          pos_function={func}
-          start_pos={2}
-        />
-      ) : (
-        <div className="flex items-center justify-center h-svh">
+      {loading ? (
+        <div className="h-[calc(100vh-104px)] md:h-[calc(100vh-48px)] flex items-center justify-center">
+          <LoaderIcon className="animate-spin" />
+        </div>
+      ) : !func ? (
+        <div className="flex items-center justify-center h-[calc(100vh-104px)] md:h-[calc(100vh-48px)]">
           <Card className="max-w-sm">
             <CardHeader>
               <CardTitle>Error!</CardTitle>
             </CardHeader>
             <CardContent>
               <p>
-                The detection function for
-                {exercise.name}
-                is not implemented yet! Visit later
+                The detection function for{" "}
+                <span className="text-accent">{exercise.name}</span> is not
+                implemented yet! Visit later
               </p>
             </CardContent>
             <CardFooter>
@@ -92,6 +94,12 @@ const DetectWorkoutPage = () => {
             </CardFooter>
           </Card>
         </div>
+      ) : (
+        <Detection
+          name={exercise.name}
+          pos_function={func}
+          start_pos={2}
+        />
       )}
     </>
   );

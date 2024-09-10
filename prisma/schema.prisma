@@ -120,7 +120,7 @@ model Stats {
 }
 
 type ExerciseStats {
-  name       String //name of the exercise
+  id       String //name of the exercise
   reps       Int // best reps performance
   avgRepTime Float // best avg rep time performance
   weight     Float? // most weight lifted on that exercise
