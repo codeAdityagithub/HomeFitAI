@@ -10,6 +10,7 @@ import {
   Scripts,
   ScrollRestoration,
   ShouldRevalidateFunction,
+  useLoaderData,
   useRouteError,
 } from "@remix-run/react";
 import { Button } from "./components/ui/button";
@@ -22,6 +23,7 @@ import {
 } from "./components/ui/card";
 import { getAuthUser } from "./utils/auth/auth.server";
 import { themeCookie } from "./utils/themeCookie.server";
+import { cn } from "./lib/utils";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -49,10 +51,11 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({ formAction }) => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { theme } = useLoaderData<typeof loader>();
   return (
     <html
       lang="en"
-      className="scroll-smooth"
+      className={cn("scroll-smooth", theme)}
     >
       <head>
         <meta charSet="utf-8" />

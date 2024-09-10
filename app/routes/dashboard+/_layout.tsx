@@ -46,11 +46,10 @@ export const clientAction = ({ serverAction }: ClientActionFunctionArgs) =>
 
 const DashboardLayout = () => {
   // const data = useLoaderData<typeof loader>();
-  const theme = useTheme();
   return (
-    <div className={cn("flex flex-col-reverse md:flex-row", theme)}>
+    <div className="flex flex-col-reverse md:flex-row">
       <Sidebar />
-      <main className="flex-1 w-full h-full min-h-[calc(100vh-56px)] md:min-h-screen bg-secondary text-secondary-foreground p-6 md:p-4 lg:p-6">
+      <main className="flex-1 w-full h-full min-h-[calc(100vh-56px)] md:min-h-screen bg-background text-foreground p-6 md:p-4 lg:p-6">
         <Outlet />
       </main>
     </div>

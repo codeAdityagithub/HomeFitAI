@@ -17,7 +17,7 @@ const WorkoutSearch = ({ exercises }: { exercises: DashboardExercise[] }) => {
   return (
     <div
       onFocus={() => setHidden(false)}
-      className="max-w-md relative mx-auto"
+      className="max-w-md relative"
     >
       <div
         onClick={() => {
@@ -35,8 +35,8 @@ const WorkoutSearch = ({ exercises }: { exercises: DashboardExercise[] }) => {
       >
         <Input
           name="q"
-          className="z-40"
-          placeholder="Search for exercises..."
+          className="z-40 bg-secondary"
+          placeholder="Search for exercises here..."
           onChange={(e) => setQuery(e.target.value)}
         />
         <Button
