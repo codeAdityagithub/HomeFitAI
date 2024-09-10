@@ -31,6 +31,7 @@ const ExercisePage = () => {
   const { exercise } = useLoaderData<typeof loader>();
   // console.log(exercise);
   const data = useDashboardLayoutData();
+
   return (
     <div className="max-w-4xl mx-auto md:p-4">
       <div className="sm:flex sm:gap-2">

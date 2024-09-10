@@ -39,10 +39,7 @@ const DetectWorkoutPage = () => {
     if ("serviceWorker" in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register("/service-worker.js").then(
         (registration) => {
-          console.log(
-            "ServiceWorker registration successful with scope: ",
-            registration.scope
-          );
+          console.log("ServiceWorker registration successful!");
         },
         (error) => {
           console.log("ServiceWorker registration failed: ", error);
@@ -57,8 +54,6 @@ const DetectWorkoutPage = () => {
     async function loadFunction() {
       setLoading(true);
       const fetchedFunction = await importFunction(funcName);
-      // sleep 1 second
-
       setLoading(false);
       setFunc(() => fetchedFunction);
     }

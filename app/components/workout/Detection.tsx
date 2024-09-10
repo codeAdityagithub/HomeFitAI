@@ -36,6 +36,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const detectorRef = useRef<poseDetection.PoseDetector>();
+  const streamRef = useRef<MediaStream>();
   const lastFrameTime = useRef(performance.now());
   const targetFrameRate = 30; // Set your desired frame rate here
   const isdrawing = useRef(false);
@@ -171,11 +172,11 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
     const startCamera = async () => {
       setLoading(true);
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
+        streamRef.current = await navigator.mediaDevices.getUserMedia({
           video: true,
         });
         if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+          videoRef.current.srcObject = streamRef.current;
           // animationFrameId.current = requestAnimationFrame(animate);
         }
         if (videoRef.current) {
@@ -202,6 +203,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
     return () => {
       // Stop animation loop when component unmounts
       stopAnimation();
+
       window.removeEventListener("resize", handleResize);
       clearInterval(sendSuggestionIntervalId.current);
     };
@@ -225,6 +227,14 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
     clearInterval(sendSuggestionIntervalId.current);
     isdrawing.current = false;
     cancelAnimationFrame(animationFrameId.current!);
+
+    if (streamRef.current) {
+      console.log("camera stopping");
+      streamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      }); // Stops the camera
+    }
+
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (canvas && video) {
@@ -245,7 +255,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
           " Average time was : " +
           totalTime.current / reps_ref.current
       );
-  }, []);
+  }, [setSuggestion]);
 
   return (
     <div>
