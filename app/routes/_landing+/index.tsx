@@ -8,7 +8,7 @@ export const links: LinksFunction = () => {
   return [
     {
       rel: "preload",
-      href: "/HeroImage.png",
+      href: "/HeroDark.png",
       as: "image",
     },
   ];

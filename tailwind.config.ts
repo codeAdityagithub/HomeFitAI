@@ -19,7 +19,7 @@ const config = {
     },
     extend: {
       screens: {
-        xs: "380px",
+        xs: "400px",
         llg: "1180px",
       },
       dropShadow: {
