@@ -9,26 +9,32 @@ const Hero = () => {
       id="home"
       className="h-[calc(100vh-88px)] relative flex justify-between gap-4"
     >
-      <div className="absolute inset-0 -z-10 flex items-center overflow-hidden justify-center lg:justify-start xl:pr-14 xl:justify-center">
-        <picture>
+      <div className="absolute inset-0 -z-10 flex items-center overflow-hidden justify-center">
+        {/* <picture>
           <source
-            srcSet="HeroImage.png"
+            srcSet="HeroDark.png"
             media="(min-width: 1024px)"
           />
           <img
             src="HeroImageMd.png"
             loading="lazy"
-            className="w-full max-w-[600px] lg:max-w-[1000px] max-h-screen lg:max-h-[90vh] llg:max-h-screen h-full object-cover mask-left-fade"
+            className="w-full max-w-[600px] max-h-screen lg:max-h-[90vh] llg:max-h-screen h-full object-cover mask-left-fade"
             alt="Hero Image"
           />
-        </picture>
+        </picture> */}
+        <img
+          src="HeroDark.png"
+          loading="lazy"
+          className="w-full max-w-[600px] object-cover"
+          alt="Hero Image"
+        />
       </div>
       <div className="flex-1 flex flex-col gap-8 justify-center mb-12 min-w-[300px] items-center lg:items-start rounded-lg ">
         <h1 className="text-5xl outline-text xs:text-6xl font-bold tracking-tighter text-accent lg:text-foreground text-center lg:text-left">
           Track Your <p className="text-primary"> Active </p>
           Lifestyle
         </h1>
-        <p className="lg:test-base bg-white/60 lg:bg-transparent p-2 rounded-md backdrop-blur-sm lg:backdrop-blur-0 font-semibold lg:text-secondary-foreground tracking-wide text-center lg:text-left">
+        <p className="lg:test-base bg-white/20 lg:bg-transparent text-gray-900 p-2 rounded-md backdrop-blur-sm lg:backdrop-blur-0 font-semibold lg:text-secondary-foreground tracking-wide text-center lg:text-left">
           Track Workout's.
           <span className="block">
             Get Suggestions in{" "}

@@ -9,10 +9,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Menu } from "lucide-react";
+import { Menu, MoonIcon, SunIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { useUser } from "@/hooks/userContext";
+import ThemeToggle from "../dashboard/themeButton";
 
 const Links = [
   { to: "", name: "Home" },
@@ -29,7 +30,7 @@ const Navbar = () => {
   }, [location.hash]);
   return (
     <>
-      <nav className="hidden md:flex pt-10 pb-2 gap-8 lg:gap-12 z-50 sticky -top-8 xs:px-10 md:px-12 lg:px-16 xl:px-20 ">
+      <nav className="hidden bg-background/80 backdrop-blur-md lg:flex pt-10 pb-2 gap-8 lg:gap-12 z-50 sticky -top-8 xs:px-10 md:px-12 lg:px-16 xl:px-20 ">
         <span className="min-w-8 min-h-8 w-8 h-8 aspect-square">
           <img
             src="/logo.png"
@@ -62,11 +63,18 @@ const Navbar = () => {
             </li>
           ))}
         </ul>
-        {user ? (
-          <Link
-            className="ml-auto"
-            to="/dashboard"
+        <ThemeToggle className="ml-auto w-auto">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-secondary gap-2 hover:text-secondary-foreground"
           >
+            <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          </Button>
+        </ThemeToggle>
+        {user ? (
+          <Link to="/dashboard">
             <Button
               className="px-8"
               variant="primary"
@@ -84,10 +92,7 @@ const Navbar = () => {
             </Button>
           </Link>
         ) : (
-          <Link
-            className="ml-auto"
-            to="/login"
-          >
+          <Link to="/login">
             <Button
               className="px-8"
               variant="primary"
@@ -106,7 +111,7 @@ const NavbarSm = ({ hash }: { hash: string }) => {
   const [open, setOpen] = useState(false);
   const user = useUser();
   return (
-    <nav className="md:hidden flex pt-10 pb-2 gap-4 z-50 sticky -top-8 px-6 xs:px-10">
+    <nav className="lg:hidden bg-background/80 backdrop-blur-md flex pt-10 pb-2 gap-4 z-50 sticky -top-8 px-6 xs:px-10">
       <span className="min-w-8 min-h-8 w-8 h-8 aspect-square">
         <img
           src="/logo.png"
@@ -178,6 +183,19 @@ const NavbarSm = ({ hash }: { hash: string }) => {
                 </Link>
               </li>
             ))}
+            <li className="w-full h-10">
+              <ThemeToggle>
+                <Button
+                  variant="ghost"
+                  className="hover:bg-secondary w-full gap-2 hover:text-secondary-foreground"
+                >
+                  <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                  <MoonIcon className="absolute -translate-x-4 h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                  <span className="dark:hidden">Light</span>
+                  <span className="hidden dark:inline">Dark</span>
+                </Button>
+              </ThemeToggle>
+            </li>
           </ul>
         </SheetContent>
       </Sheet>
