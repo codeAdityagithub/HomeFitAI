@@ -48,16 +48,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   return await editStats({ stat: _action, userId: user.id, value });
 };
+
 export { clientLoader } from "@/utils/routeCache.client";
 export const clientAction = ({ serverAction }: ClientActionFunctionArgs) =>
   cacheClientAction("dashboardLayout", serverAction);
 
 const DashboardProfile = () => {
   const { user, creationTime } = useLoaderData<typeof loader>();
-  const { stats } = useDashboardLayoutData();
+  const { stats, log } = useDashboardLayoutData();
 
   return (
     <div className="h-full">
+      {/* Profile info */}
       <Card className="flex flex-col gap-2 bg-secondary/50">
         <CardHeader className="flex flex-col relative items-center">
           <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
@@ -105,6 +107,7 @@ const DashboardProfile = () => {
           </div>
         </CardContent>
       </Card>
+      {/* Other Stats */}
     </div>
   );
 };
