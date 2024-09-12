@@ -19,3 +19,10 @@ export function convertToFeetInches(cm: number): {
   const inch = Math.round(totalInches % 12);
   return { feet, inch };
 }
+
+export function convertToLbs(kg: number) {
+  return Number((kg * 2.20462).toFixed(2));
+}
+export function convertToKg(lbs: number) {
+  return Number((lbs * 0.453592).toFixed(2));
+}

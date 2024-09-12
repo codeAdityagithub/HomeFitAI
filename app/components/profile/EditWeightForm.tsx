@@ -3,55 +3,50 @@ import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { useEffect, useMemo, useState } from "react";
 import { Unit } from "@prisma/client";
-import { convertToCm, convertToFeetInches } from "@/lib/utils";
-import CountUp from "react-countup";
+import { convertToKg, convertToLbs } from "@/lib/utils";
 import useLongPress from "@/hooks/useLongPress";
 
-const EditHeightForm = ({ init, unit }: { init: number; unit: Unit }) => {
+const EditWeightForm = ({
+  init,
+  unit,
+  type,
+}: {
+  init: number;
+  unit: Unit;
+  type: "Weight" | "Goal Weight";
+}) => {
   const fetcher = useFetcher();
   const [value, setValue] = useState(init);
-  const [other, setOther] = useState(convertToFeetInches(init));
-  const otherInit = useMemo(() => convertToFeetInches(init), [init]);
-  const min = 100,
-    max = 251;
-  const disabled =
-    fetcher.state !== "idle" ||
-    (unit === "kgcm"
-      ? value === init
-      : other.feet === otherInit.feet && other.inch === otherInit.inch);
-  console.log(init, value);
+  const [other, setOther] = useState(convertToLbs(init));
+  const min = 30,
+    max = 200;
+  const disabled = fetcher.state !== "idle" || value === init;
+
   function decrement() {
     if (unit === "kgcm")
-      setValue((prev) => Math.max(min, Math.min(max, prev - 0.5)));
-    else
-      setOther((prev) => ({
-        feet: prev.inch > 0 ? prev.feet : prev.feet - 1,
-        inch: prev.inch > 0 ? prev.inch - 1 : 11,
-      }));
+      setValue((prev) =>
+        Math.max(min, Math.min(max, Number((prev - 0.1).toFixed(2))))
+      );
+    else setOther((prev) => Number((prev - 0.1).toFixed(2)));
   }
   function increment() {
     if (unit === "kgcm")
-      setValue((prev) => Math.max(min, Math.min(max, prev + 0.5)));
-    else
-      setOther((prev) => ({
-        feet: prev.inch < 11 ? prev.feet : prev.feet + 1,
-        inch: prev.inch < 11 ? prev.inch + 1 : 0,
-      }));
+      setValue((prev) =>
+        Math.max(min, Math.min(max, Number((prev + 0.1).toFixed(2))))
+      );
+    else setOther((prev) => Number((prev + 0.1).toFixed(2)));
   }
   const decrementProps = useLongPress({ callback: decrement });
   const incrementProps = useLongPress({ callback: increment });
   useEffect(() => {
-    if (unit === "lbsft")
-      setValue(
-        Math.min(Math.max(convertToCm(other.feet, other.inch), min), max)
-      );
+    setValue(Math.min(Math.max(convertToKg(other), min), max));
   }, [other]);
 
   function handleSubmit(e: any) {
     e.preventDefault();
 
     fetcher.submit(
-      { value, _action: "height" },
+      { value, _action: type === "Weight" ? "weight" : "goalWeight" },
       {
         method: "put",
         encType: "application/json",
@@ -76,28 +71,12 @@ const EditHeightForm = ({ init, unit }: { init: number; unit: Unit }) => {
           <span className="sr-only">Decrease</span>
         </Button>
         <div className="flex-1 text-center">
-          {unit === "kgcm" ? (
-            <div className="text-5xl md:text-6xl font-bold tracking-tighter">
-              <CountUp
-                start={value}
-                end={value}
-                decimals={1}
-              />
-            </div>
-          ) : (
-            <div className="flex items-end justify-center gap-0.5">
-              <span className="text-5xl md:text-6xl font-bold">
-                {other.feet}
-              </span>
-              ft
-              <span className="text-5xl md:text-6xl font-bold">
-                {other.inch}
-              </span>
-              in
-            </div>
-          )}
+          <div className="text-5xl md:text-6xl font-bold tracking-tighter">
+            {unit === "kgcm" ? value.toFixed(1) : other.toFixed(1)}
+          </div>
+
           <div className="text-[0.70rem] uppercase text-muted-foreground">
-            Height
+            {type}
           </div>
         </div>
         <Button
@@ -122,4 +101,4 @@ const EditHeightForm = ({ init, unit }: { init: number; unit: Unit }) => {
     </form>
   );
 };
-export default EditHeightForm;
+export default EditWeightForm;

@@ -9,10 +9,7 @@ const EditAgeForm = ({ init }: { init: number }) => {
   const min = 5,
     max = 100;
 
-  const disabled =
-    fetcher.state === "submitting" ||
-    // @ts-expect-error
-    value === (fetcher.json ? fetcher.json.value : init);
+  const disabled = fetcher.state !== "idle" || value === init;
 
   function onClick(adjustment: number) {
     setValue(Math.max(min, Math.min(max, value + adjustment)));

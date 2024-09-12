@@ -13,7 +13,7 @@ const schema = z
       case "age":
         return value >= 5 && value <= 100;
       case "height":
-        return value >= 100 && value <= 250;
+        return value >= 100 && value <= 251;
       case "weight":
         return value >= 30 && value <= 200;
       case "goalWeight":

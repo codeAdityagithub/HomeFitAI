@@ -4,9 +4,10 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { GiWeightScale } from "react-icons/gi";
 import { Unit } from "@prisma/client";
-import { convertToFeetInches } from "@/lib/utils";
+import { convertToFeetInches, convertToLbs } from "@/lib/utils";
 import EditAgeForm from "./EditAgeForm";
 import EditHeightForm from "./EditHeightForm";
+import EditWeightForm from "./EditWeightForm";
 
 const icons = {
   age: <Calendar size={30} />,
@@ -63,7 +64,11 @@ const EditUserStats = (props: Props) => {
           <div className="flex flex-col items-start">
             {stat !== "height" ? (
               <h2 className="text-xl xs:text-2xl font-bold">
-                {init}
+                {stat !== "age"
+                  ? props.unit === "kgcm"
+                    ? init.toFixed(1)
+                    : convertToLbs(init).toFixed(1)
+                  : init}
                 <small className="ml-1 text-xs font-normal text-secondary-foreground/80">
                   {stat === "age"
                     ? "years"
@@ -104,6 +109,20 @@ const EditUserStats = (props: Props) => {
       {stat === "height" ? (
         <EditHeightForm
           init={init}
+          unit={props.unit}
+        />
+      ) : null}
+      {stat === "weight" ? (
+        <EditWeightForm
+          init={init}
+          type="Weight"
+          unit={props.unit}
+        />
+      ) : null}
+      {stat === "goalWeight" ? (
+        <EditWeightForm
+          init={init}
+          type="Goal Weight"
           unit={props.unit}
         />
       ) : null}
