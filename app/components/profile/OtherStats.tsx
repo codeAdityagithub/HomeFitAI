@@ -61,6 +61,11 @@ const OtherStats = ({
                 ? totalLogs
                 : // @ts-expect-error
                   stats[e.type]}
+              {e.type === "currentStreak" || e.type === "bestStreak" ? (
+                <small className="ml-1 text-xs font-normal text-secondary-foreground/80">
+                  days
+                </small>
+              ) : null}
             </h2>
             <small className="text-muted-foreground">{e.text}</small>
           </div>

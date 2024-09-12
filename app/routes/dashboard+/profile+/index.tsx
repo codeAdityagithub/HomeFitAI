@@ -1,4 +1,5 @@
 import { editStats } from "@/.server/handlers/profile/editStats";
+import Achievements from "@/components/profile/Achievements";
 import EditUserStats from "@/components/profile/EditUserStats";
 import OtherStats from "@/components/profile/OtherStats";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,9 +25,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
   const dbuser = await db.user.findUnique({
     where: { id: user.id },
-    include: { _count: { select: { achievements: true, logs: true } } },
+    include: {
+      _count: { select: { logs: true } },
+      achievements: {
+        orderBy: { createdAt: "desc" },
+      },
+    },
   });
-
   if (!dbuser) return await authenticator.logout(request, { redirectTo: "/" });
   const creationTime = DateTime.fromJSDate(dbuser.createdAt)
     .setZone(dbuser.timezone!)
@@ -56,7 +61,7 @@ export const clientAction = ({ serverAction }: ClientActionFunctionArgs) =>
 
 const DashboardProfile = () => {
   const { user, creationTime } = useLoaderData<typeof loader>();
-  const { stats, log } = useDashboardLayoutData();
+  const { stats } = useDashboardLayoutData();
   // console.log(user._count.logs);
   return (
     <div className="h-full space-y-6">
@@ -120,6 +125,17 @@ const DashboardProfile = () => {
             stats={stats}
             totalLogs={user._count.logs}
           />
+        </CardContent>
+      </Card>
+      {/* Achievements */}
+      <Card className="flex flex-col gap-2 bg-secondary/50">
+        <CardHeader className="flex flex-col relative items-center">
+          <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
+            Achievements
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <Achievements achievements={user.achievements} />
         </CardContent>
       </Card>
     </div>
