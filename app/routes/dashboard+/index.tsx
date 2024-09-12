@@ -25,6 +25,7 @@ export default function Dashboard() {
   const { logs } = useLoaderData<typeof loader>();
   const matches = useDashboardLayoutData();
   // console.log(matches.log);
+  // console.log(logs.length);
   return (
     <div className="h-full">
       {/* <Form

@@ -1,5 +1,6 @@
 import { editStats } from "@/.server/handlers/profile/editStats";
 import EditUserStats from "@/components/profile/EditUserStats";
+import OtherStats from "@/components/profile/OtherStats";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
@@ -56,9 +57,9 @@ export const clientAction = ({ serverAction }: ClientActionFunctionArgs) =>
 const DashboardProfile = () => {
   const { user, creationTime } = useLoaderData<typeof loader>();
   const { stats, log } = useDashboardLayoutData();
-
+  // console.log(user._count.logs);
   return (
-    <div className="h-full">
+    <div className="h-full space-y-6">
       {/* Profile info */}
       <Card className="flex flex-col gap-2 bg-secondary/50">
         <CardHeader className="flex flex-col relative items-center">
@@ -108,6 +109,19 @@ const DashboardProfile = () => {
         </CardContent>
       </Card>
       {/* Other Stats */}
+      <Card className="flex flex-col gap-2 bg-secondary/50">
+        <CardHeader className="flex flex-col relative items-center">
+          <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
+            Other Stats
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <OtherStats
+            stats={stats}
+            totalLogs={user._count.logs}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 };

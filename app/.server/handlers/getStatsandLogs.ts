@@ -3,6 +3,7 @@ import db from "@/utils/db.server";
 import { Stats } from "@prisma/client";
 import { redirect } from "@remix-run/node";
 import { DateTime } from "luxon";
+import { getDayDiff } from "../utils";
 export async function getStatsandLogs(user: AuthUser) {
   let stats = await db.stats.findUnique({ where: { userId: user.id } });
 
@@ -22,7 +23,9 @@ export async function getStatsandLogs(user: AuthUser) {
     let log = await db.log.findUnique({
       where: { date_userId: { date: date, userId: user.id } },
     });
+
     let updatedStats: Stats | null = null;
+
     if (!log) {
       const { newLog, newStats } = await db.$transaction(async (tx) => {
         // create todays log
@@ -37,8 +40,9 @@ export async function getStatsandLogs(user: AuthUser) {
         const updateLogAndStats = async () => {
           const prev = await tx.log.findFirst({
             where: { date: { lt: date }, userId: user.id },
-            select: { id: true, totalCalories: true },
+            select: { id: true, totalCalories: true, date: true },
           });
+          // when first day of login
           if (!prev) return null;
           const prevPr = tx.log.update({
             where: { id: prev.id },
@@ -46,9 +50,25 @@ export async function getStatsandLogs(user: AuthUser) {
               weight: stats.weight,
             },
           });
+          const diff = getDayDiff(prev.date, date);
+          let currentStreak = stats.currentStreak,
+            bestStreak = stats.bestStreak;
+          // streak update
+          if (diff > 1) {
+            // streak break
+            currentStreak = 0;
+          } else if (diff === 1) {
+            currentStreak++;
+          }
+          bestStreak = Math.max(bestStreak, currentStreak);
+
           const updatedPr = tx.stats.update({
             where: { id: stats.id },
-            data: { totalCalories: { increment: prev.totalCalories } },
+            data: {
+              totalCalories: { increment: prev.totalCalories },
+              currentStreak: currentStreak,
+              bestStreak: bestStreak,
+            },
           });
           const [prevLog, updatedStats] = await Promise.all([
             prevPr,
