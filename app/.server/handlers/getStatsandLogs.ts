@@ -35,18 +35,25 @@ export async function getStatsandLogs(user: AuthUser) {
         });
         // update yesterdays log with any stats updated from yesterday
         const updateLogAndStats = async () => {
-          const prevDate = new Date(date);
-          prevDate.setDate(prevDate.getDate() - 1);
-          const prevLog = await tx.log.update({
-            where: { date_userId: { date: prevDate, userId: user.id } },
+          const prev = await tx.log.findFirst({
+            where: { date: { lt: date }, userId: user.id },
+            select: { id: true, totalCalories: true },
+          });
+          if (!prev) return null;
+          const prevPr = tx.log.update({
+            where: { id: prev.id },
             data: {
               weight: stats.weight,
             },
           });
-          const updatedStats = await tx.stats.update({
+          const updatedPr = tx.stats.update({
             where: { id: stats.id },
-            data: { totalCalories: { increment: prevLog.totalCalories } },
+            data: { totalCalories: { increment: prev.totalCalories } },
           });
+          const [prevLog, updatedStats] = await Promise.all([
+            prevPr,
+            updatedPr,
+          ]);
           return updatedStats;
         };
         const updatePr = updateLogAndStats();
@@ -60,7 +67,7 @@ export async function getStatsandLogs(user: AuthUser) {
 
     return { stats: updatedStats ? updatedStats : stats, log };
   } catch (error) {
-    console.log(error);
-    throw new Error("Something went wrong");
+    console.log("Stats log error", error);
+    throw new Error("Something went wrong while fetching stats and logs.");
   }
 }
