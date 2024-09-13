@@ -12,7 +12,7 @@ const clientLoader = async ({
 }: ClientLoaderFunctionArgs) => {
   if (cache.has(request.url)) return cache.get(request.url);
   const data = await serverLoader();
-  cache.set(request.url, data);
+  if (data) cache.set(request.url, data);
   return data;
 };
 
@@ -22,19 +22,22 @@ const clientAction: ClientActionFunction = async ({
   request,
   serverAction,
 }) => {
-  cache.delete(request.url);
-  return await serverAction();
+  const res = await serverAction<any>();
+  if (res && !res.error) cache.delete(request.url);
+  return res;
 };
 
 const cacheClientLoader = async (key: string, serverLoader: () => any) => {
   if (cache.has(key)) return cache.get(key);
   const data = await serverLoader();
-  cache.set(key, data);
+  if (data) cache.set(key, data);
   return data;
 };
-const cacheClientAction = async (key: string, serverAction: () => any) => {
-  cache.delete(key);
-  return await serverAction();
+const cacheClientAction = async (keys: string[], serverAction: () => any) => {
+  const res = await serverAction();
+  if (res && !res.error) keys.forEach((key) => cache.delete(key));
+
+  return res;
 };
 
 export { clientLoader, clientAction, cacheClientLoader, cacheClientAction };

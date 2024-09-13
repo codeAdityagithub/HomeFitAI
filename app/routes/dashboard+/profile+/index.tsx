@@ -17,7 +17,6 @@ import {
 } from "@remix-run/react";
 import { DateTime } from "luxon";
 import { IoPersonOutline } from "react-icons/io5";
-import invariant from "tiny-invariant";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
@@ -28,9 +27,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     include: {
       _count: {
         select: { logs: { where: { exercises: { isEmpty: false } } } },
-      },
-      achievements: {
-        orderBy: { createdAt: "desc" },
       },
     },
   });
@@ -51,16 +47,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
   });
-  const { value, _action } = await request.json();
-  if (!value || !_action || typeof value !== "number")
-    return json({ error: "Invalid Input." }, { status: 403 });
+  if (request.method === "PUT") {
+    const { value, _action } = await request.json();
+    if (!value || !_action || typeof value !== "number")
+      return json({ error: "Invalid Input." }, { status: 403 });
 
-  return await editStats({ stat: _action, userId: user.id, value });
+    return await editStats({ stat: _action, userId: user.id, value });
+  } else {
+    return json({ errr: "Invalid Method" }, { status: 404 });
+  }
 };
 
 export { clientLoader } from "@/utils/routeCache.client";
-export const clientAction = ({ serverAction }: ClientActionFunctionArgs) =>
-  cacheClientAction("dashboardLayout", serverAction);
+export const clientAction = ({
+  serverAction,
+  request,
+}: ClientActionFunctionArgs) =>
+  cacheClientAction(["dashboardLayout"], serverAction);
 
 const DashboardProfile = () => {
   const { user, creationTime } = useLoaderData<typeof loader>();

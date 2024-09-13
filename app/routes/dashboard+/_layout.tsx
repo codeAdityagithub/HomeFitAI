@@ -42,7 +42,7 @@ export const clientLoader = async ({
 clientLoader.hydrate = true;
 
 export const clientAction = ({ serverAction }: ClientActionFunctionArgs) =>
-  cacheClientAction("dashboardLayout", serverAction);
+  cacheClientAction(["dashboardLayout"], serverAction);
 
 const DashboardLayout = () => {
   // const data = useLoaderData<typeof loader>();
