@@ -1,9 +1,16 @@
-import { Button } from "@/components/ui/button";
+import TodaysLogs from "@/components/dashboard/TodaysLogs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
@@ -15,26 +22,33 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const logs = await db.log.findMany({
     where: { date: { lt: date } },
     orderBy: { date: "desc" },
-    take: 6,
+    take: 7,
   });
-  return { logs };
+  return { logs, user };
 };
 
 export { clientLoader } from "@/utils/routeCache.client";
 
 export default function Dashboard() {
-  const { logs } = useLoaderData<typeof loader>();
+  const { logs, user } = useLoaderData<typeof loader>();
   const matches = useDashboardLayoutData();
-  // console.log(matches.log);
-  // console.log(logs);
+
   return (
     <div className="h-full">
-      {/* <Form
-        method="post"
-        action="/dashboard"
-      >
-        <Button> Submit</Button>
-      </Form> */}
+      <Card className="flex flex-col gap-2 bg-secondary/50">
+        <CardHeader className="flex flex-col relative items-center">
+          <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
+            Hello <span className="text-primary">{user.username}!</span>👋
+          </CardTitle>
+          <CardDescription className="text-left w-full">
+            Ready to crush today's goals and take a step closer to your fitness
+            journey?
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <TodaysLogs log={matches.log} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

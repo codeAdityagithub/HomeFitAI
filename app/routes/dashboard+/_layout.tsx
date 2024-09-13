@@ -1,3 +1,4 @@
+import { editTodaysLog } from "@/.server/handlers/dashboard/editTodaysLog";
 import { getStatsandLogs } from "@/.server/handlers/getStatsandLogs";
 import Sidebar from "@/components/dashboard/sidebar";
 import { useTheme } from "@/hooks/userContext";
@@ -16,7 +17,7 @@ import type {
   ClientActionFunctionArgs,
   ClientLoaderFunctionArgs,
 } from "@remix-run/react";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { json, Outlet, useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
@@ -26,9 +27,24 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return { stats, log };
 };
-export const action = ({ request }: ActionFunctionArgs) => {
-  console.log("layout");
-  return null;
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const user = await requireUser(request, {
+    failureRedirect: "/login",
+  });
+  if (request.method === "PUT") {
+    const { value, _action, logId } = await request.json();
+    if (!value || !_action || typeof value !== "number")
+      return json({ error: "Invalid Input." }, { status: 403 });
+
+    return await editTodaysLog({
+      type: _action,
+      userId: user.id,
+      logId,
+      value,
+    });
+  } else {
+    return json({ errr: "Invalid Method" }, { status: 404 });
+  }
 };
 
 export type DashboardLayoutData = SerializeFrom<typeof loader>;

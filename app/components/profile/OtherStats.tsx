@@ -30,7 +30,7 @@ const elems = [
         size={30}
       />
     ),
-    text: "Total Calories",
+    text: "Total Calories Burned",
     type: "totalCalories",
   },
   {

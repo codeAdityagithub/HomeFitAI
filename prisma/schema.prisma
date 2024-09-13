@@ -55,7 +55,7 @@ type ExerciseLog {
   sets     Set[]
   duration Float
   calories Int
-  time     DateTime
+  time     DateTime  @default(now())
 }
 
 type Set {
@@ -116,7 +116,7 @@ model Stats {
 }
 
 type ExerciseStats {
-  id       String //name of the exercise
+  id       String //name of the exercise 
   reps       Int // best reps performance
   avgRepTime Float // best avg rep time performance
   weight     Float? // most weight lifted on that exercise

@@ -1,5 +1,13 @@
-import { Achievement } from "@prisma/client";
+import { Achievement, type AchievementType } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
+
+const icons = {
+  FIRST_WORKOUT: "🏅",
+  GOAL_ACHIEVED: "🎖",
+  MILESTONE_REACHED: "🎯",
+  PERSONAL_BEST: "🏆",
+  STREAK: "🔥",
+};
 
 const Achievements = ({
   achievements,
@@ -14,13 +22,13 @@ const Achievements = ({
       createdAt: "2024-08-18",
     },
     {
-      title: "100 Workouts Milestone",
+      title: "100 Workouts",
       description: "Completed 100 workouts!",
       type: "GOAL_ACHIEVED",
       createdAt: "2024-08-18",
     },
     {
-      title: "Challenge Completed",
+      title: "30-day Streak",
       description: "Successfully completed the 30-day fitness challenge!",
       type: "MILESTONE_REACHED",
       createdAt: "2024-08-18",
@@ -33,7 +41,7 @@ const Achievements = ({
           key={`achi-${ind}`}
           className="rounded-lg p-2 sm:p-4 border border-accent/10 bg-secondary flex items-center gap-4"
         >
-          <span>Icon</span>
+          <span className="text-xl">{icons[a.type]}</span>
           <div className="flex flex-col items-start">
             <h2 className="text-lg sm:text-xl font-bold">{a.title}</h2>
             <small className="text-muted-foreground">

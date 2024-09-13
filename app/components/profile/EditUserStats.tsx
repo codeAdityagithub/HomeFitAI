@@ -21,25 +21,6 @@ const text = {
   goalWeight: "Goal Weight",
   weight: "Weight",
 };
-const units = {
-  kgcm: {
-    age: "years",
-    goalWeight: "kg",
-    weight: "kg",
-  },
-  lbsft: {
-    age: "years",
-    goalWeight: "lbs",
-    weight: "lbs",
-  },
-};
-
-const limits = {
-  age: [18, 65],
-  height: [140, 220],
-  goalWeight: [30, 200],
-  weight: [30, 200],
-};
 
 type Props =
   | {

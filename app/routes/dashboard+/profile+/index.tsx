@@ -144,6 +144,17 @@ const DashboardProfile = () => {
           <Achievements achievements={user.achievements} />
         </CardContent>
       </Card>
+      {/* Exercise stats */}
+      <Card className="flex flex-col gap-2 bg-secondary/50">
+        <CardHeader className="flex flex-col relative items-center">
+          <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
+            Exercise Stats
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          All exercises PB's displayed here.
+        </CardContent>
+      </Card>
     </div>
   );
 };
