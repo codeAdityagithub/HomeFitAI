@@ -19,7 +19,8 @@ export async function getStatsandLogs(user: AuthUser) {
     );
 
   try {
-    const date = new Date(todaysDate.startOf("day").toISODate());
+    const date = new Date(todaysDate.toISODate());
+    // const date = new Date(todaysDate.startOf("day").toISODate());
     let log = await db.log.findUnique({
       where: { date_userId: { date: date, userId: user.id } },
     });
@@ -40,6 +41,7 @@ export async function getStatsandLogs(user: AuthUser) {
         const updateLogAndStats = async () => {
           const prev = await tx.log.findFirst({
             where: { date: { lt: date }, userId: user.id },
+            orderBy: { date: "desc" },
             select: { id: true, totalCalories: true, date: true },
           });
           // when first day of login
@@ -54,10 +56,10 @@ export async function getStatsandLogs(user: AuthUser) {
           let currentStreak = stats.currentStreak,
             bestStreak = stats.bestStreak;
           // streak update
-          if (diff > 1) {
+          if (diff > 10) {
             // streak break
             currentStreak = 0;
-          } else if (diff === 1) {
+          } else if (diff <= 10) {
             currentStreak++;
           }
           bestStreak = Math.max(bestStreak, currentStreak);

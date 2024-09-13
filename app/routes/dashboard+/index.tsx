@@ -10,10 +10,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
   // sleep for 2 seconds
   const date = new Date();
-  date.setDate(date.getDate() - 1);
+  // date.setDate(date.getDate() - 1);
 
   const logs = await db.log.findMany({
     where: { date: { lt: date } },
+    orderBy: { date: "desc" },
     take: 6,
   });
   return { logs };
@@ -25,7 +26,7 @@ export default function Dashboard() {
   const { logs } = useLoaderData<typeof loader>();
   const matches = useDashboardLayoutData();
   // console.log(matches.log);
-  // console.log(logs.length);
+  // console.log(logs);
   return (
     <div className="h-full">
       {/* <Form

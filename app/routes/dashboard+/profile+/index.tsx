@@ -26,12 +26,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const dbuser = await db.user.findUnique({
     where: { id: user.id },
     include: {
-      _count: { select: { logs: true } },
+      _count: {
+        select: { logs: { where: { exercises: { isEmpty: false } } } },
+      },
       achievements: {
         orderBy: { createdAt: "desc" },
       },
     },
   });
+
   if (!dbuser) return await authenticator.logout(request, { redirectTo: "/" });
   const creationTime = DateTime.fromJSDate(dbuser.createdAt)
     .setZone(dbuser.timezone!)
