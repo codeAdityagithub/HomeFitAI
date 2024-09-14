@@ -64,6 +64,7 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
     <div className="w-full grid grid-cols-1 xs:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
       {elems.map((e) => (
         <ResponsiveDialog
+          key={e.type + "dialog"}
           title={`Edit ${e.text}`}
           description={`Update your ${e.text} to keep progress consistent.`}
           trigger={

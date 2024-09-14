@@ -2,6 +2,7 @@ import { useFetcher } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const EditLogForm = ({
   init,
@@ -14,7 +15,7 @@ const EditLogForm = ({
 }: {
   logId: string;
   init: number;
-  type: "waterIntake" | "sleep" | "steps";
+  type: "waterIntake" | "sleep" | "steps" | "totalCalories";
   text: string;
   min: number;
   max: number;
@@ -23,7 +24,8 @@ const EditLogForm = ({
   const fetcher = useFetcher();
   const [value, setValue] = useState(init);
 
-  const disabled = fetcher.state !== "idle" || value === init;
+  const disabled =
+    fetcher.state !== "idle" || (type !== "totalCalories" && value === init);
 
   function onClick(adjustment: number) {
     setValue(Math.max(min, Math.min(max, value + adjustment)));
@@ -43,7 +45,7 @@ const EditLogForm = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-4 pb-0"
+      className={cn("pb-0", type === "totalCalories" ? "" : "p-4")}
     >
       <div className="flex items-center justify-center space-x-2">
         <Button
@@ -80,7 +82,7 @@ const EditLogForm = ({
       <Button
         variant="accent"
         disabled={disabled}
-        className="w-full mt-4"
+        className="w-full mt-2"
       >
         Save
       </Button>

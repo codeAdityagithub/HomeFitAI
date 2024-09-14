@@ -1,3 +1,4 @@
+import { addExerciseCalories } from "@/.server/handlers/dashboard/addExerciseCalories";
 import { editTodaysLog } from "@/.server/handlers/dashboard/editTodaysLog";
 import { getStatsandLogs } from "@/.server/handlers/getStatsandLogs";
 import Sidebar from "@/components/dashboard/sidebar";
@@ -32,18 +33,26 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     failureRedirect: "/login",
   });
   if (request.method === "PUT") {
-    const { value, _action, logId } = await request.json();
-    if (!value || !_action || typeof value !== "number")
+    const { value, _action, logId, exerciseId } = await request.json();
+    if (!value || !_action)
       return json({ error: "Invalid Input." }, { status: 403 });
 
-    return await editTodaysLog({
-      type: _action,
-      userId: user.id,
+    if (_action !== "totalCalories") {
+      return await editTodaysLog({
+        type: _action,
+        userId: user.id,
+        logId,
+        value,
+      });
+    }
+    return await addExerciseCalories({
+      exerciseId,
       logId,
       value,
+      userId: user.id,
     });
   } else {
-    return json({ errr: "Invalid Method" }, { status: 404 });
+    return json({ error: "Invalid Method" }, { status: 404 });
   }
 };
 
@@ -63,7 +72,7 @@ export const clientAction = ({ serverAction }: ClientActionFunctionArgs) =>
 const DashboardLayout = () => {
   // const data = useLoaderData<typeof loader>();
   return (
-    <div className="flex flex-col-reverse md:flex-row">
+    <div className="flex flex-col-reverse md:flex-row min-h-[500px]">
       <Sidebar />
       <main className="flex-1 w-full h-full min-h-[calc(100vh-56px)] md:min-h-screen bg-background text-foreground p-6 md:p-4 lg:p-6">
         <Outlet />

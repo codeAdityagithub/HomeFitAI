@@ -29,42 +29,45 @@ export async function getStatsandLogs(user: AuthUser) {
 
     if (!log) {
       const { newLog, newStats } = await db.$transaction(async (tx) => {
-        // create todays log
-        const logPr = tx.log.create({
+        // Create today's log
+        const newLog = await tx.log.create({
           data: {
             date: date,
             weight: stats.weight,
             user: { connect: { id: user.id } },
           },
         });
-        // update yesterdays log with any stats updated from yesterday
+
+        // Update yesterday's log and stats
         const updateLogAndStats = async () => {
           const prev = await tx.log.findFirst({
             where: { date: { lt: date }, userId: user.id },
             orderBy: { date: "desc" },
             select: { id: true, totalCalories: true, date: true },
           });
-          // when first day of login
-          if (!prev) return null;
-          const prevPr = tx.log.update({
+
+          if (!prev) return null; // When it's the first day of login
+
+          const prevLog = await tx.log.update({
             where: { id: prev.id },
             data: {
               weight: stats.weight,
             },
           });
+
           const diff = getDayDiff(prev.date, date);
           let currentStreak = stats.currentStreak,
             bestStreak = stats.bestStreak;
-          // streak update
-          if (diff > 10) {
-            // streak break
-            currentStreak = 0;
-          } else if (diff <= 10) {
+
+          // Update streaks
+          if (diff > 1) {
+            currentStreak = 0; // Streak break
+          } else if (diff === 1) {
             currentStreak++;
           }
           bestStreak = Math.max(bestStreak, currentStreak);
 
-          const updatedPr = tx.stats.update({
+          const updatedStats = await tx.stats.update({
             where: { id: stats.id },
             data: {
               totalCalories: { increment: prev.totalCalories },
@@ -72,17 +75,15 @@ export async function getStatsandLogs(user: AuthUser) {
               bestStreak: bestStreak,
             },
           });
-          const [prevLog, updatedStats] = await Promise.all([
-            prevPr,
-            updatedPr,
-          ]);
+
           return updatedStats;
         };
-        const updatePr = updateLogAndStats();
-        const [newLog, newStats] = await Promise.all([logPr, updatePr]);
+
+        const newStats = await updateLogAndStats();
 
         return { newLog, newStats };
       });
+
       log = newLog;
       updatedStats = newStats;
     }

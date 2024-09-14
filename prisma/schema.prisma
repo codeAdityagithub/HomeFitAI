@@ -60,7 +60,7 @@ type ExerciseLog {
 
 type Set {
   reps       Int
-  weight     Float? // weight lifted in that set
+  // weight     Float? // weight lifted in that set
   avgRepTime Float
 }
 
