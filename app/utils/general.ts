@@ -29,3 +29,9 @@ export function capitalizeEachWord(str: string) {
 export function caloriePerMin(met: number, weight: number) {
   return ((met * 3.5 * weight) / 200).toFixed(1);
 }
+
+export function convertMinutesToText(decimalMinutes: number) {
+  const minutes = Math.floor(decimalMinutes); // Get the whole minutes
+  const seconds = Math.round((decimalMinutes - minutes) * 60); // Convert the decimal part to seconds
+  return `${minutes > 0 ? minutes + " min " : ""}${seconds} sec`;
+}

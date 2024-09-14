@@ -1,3 +1,4 @@
+import ExerciseTable from "@/components/dashboard/ExerciseTable";
 import TodaysLogs from "@/components/dashboard/TodaysLogs";
 import {
   Card,
@@ -31,10 +32,10 @@ export { clientLoader } from "@/utils/routeCache.client";
 
 export default function Dashboard() {
   const { logs, user } = useLoaderData<typeof loader>();
-  const matches = useDashboardLayoutData();
+  const { log } = useDashboardLayoutData();
 
   return (
-    <div className="h-full">
+    <div className="h-full space-y-6">
       <Card className="flex flex-col gap-2 bg-secondary/50">
         <CardHeader className="flex flex-col relative items-center">
           <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
@@ -46,7 +47,17 @@ export default function Dashboard() {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <TodaysLogs log={matches.log} />
+          <TodaysLogs log={log} />
+        </CardContent>
+      </Card>
+      <Card className="flex flex-col gap-2 bg-secondary/50">
+        <CardHeader className="flex flex-col relative items-center">
+          <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
+            Exercise Statistics
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <ExerciseTable exercises={log.exercises} />
         </CardContent>
       </Card>
     </div>
