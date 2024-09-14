@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import CaloriesExerciseSelectForm from "./CaloriesExerciseSelectForm";
+import { resetFetcher } from "@/utils/resetFetcher";
 
 type Exercise = { name: string; id: string; imageUrl: string; met: number };
 
@@ -20,8 +21,8 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
       setSelected(null);
       setInput("");
       setMessage(fetcher.data.message);
-      setTimeout(() => setMessage(""), 1000);
-      // resetFetcher(fetcher);
+      setTimeout(() => setMessage(""), 2000);
+      resetFetcher(fetcher);
     }
   }, [fetcher.data]);
 

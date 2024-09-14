@@ -38,6 +38,32 @@ export async function addExerciseCalories(input: z.infer<typeof schema>) {
     const calories = Math.round(
       Number(caloriePerMin(exercise.met, stat.weight)) * duration
     );
+    const log = await db.log.findUnique({
+      where: { userId: data.userId, id: data.logId },
+      select: { exercises: true },
+    });
+    if (!log) return json({ error: "Log not found" }, { status: 404 });
+
+    let newExercises = log.exercises;
+    const index = newExercises.findIndex((e) => e.name === exercise.name);
+    if (index != -1) {
+      // update the existing exercise
+      const entry = newExercises[index];
+      newExercises[index] = {
+        ...entry,
+        calories: entry.calories + calories,
+        duration: entry.duration + duration,
+        sets: sets.concat(entry.sets),
+      };
+    } else {
+      newExercises.push({
+        calories: calories,
+        duration: duration,
+        name: exercise.name,
+        sets: sets,
+        time: new Date(),
+      });
+    }
 
     await db.$transaction([
       db.log.update({
@@ -45,16 +71,10 @@ export async function addExerciseCalories(input: z.infer<typeof schema>) {
         data: {
           totalCalories: { increment: calories },
           exercises: {
-            push: {
-              calories: calories,
-              duration: duration,
-              name: exercise.name,
-              sets: sets,
-            },
+            set: newExercises,
           },
         },
       }),
-
       db.stats.update({
         where: { userId: data.userId },
         data: { totalCalories: { increment: calories } },
