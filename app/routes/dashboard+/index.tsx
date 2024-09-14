@@ -50,16 +50,8 @@ export default function Dashboard() {
           <TodaysLogs log={log} />
         </CardContent>
       </Card>
-      <Card className="flex flex-col gap-2 bg-secondary/50">
-        <CardHeader className="flex flex-col relative items-center">
-          <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
-            Exercise Statistics
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <ExerciseTable exercises={log.exercises} />
-        </CardContent>
-      </Card>
+
+      <ExerciseTable exercises={log.exercises} />
     </div>
   );
 }

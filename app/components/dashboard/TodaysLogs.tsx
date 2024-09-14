@@ -66,7 +66,11 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
         <ResponsiveDialog
           key={e.type + "dialog"}
           title={`Edit ${e.text}`}
-          description={`Update your ${e.text} to keep progress consistent.`}
+          description={
+            e.type === "totalCalories"
+              ? "Its recommended to track exercises for much better accuracy."
+              : `Update your ${e.text} to keep progress consistent.`
+          }
           trigger={
             <div className="rounded-lg p-2 sm:p-4 border border-accent/10 bg-secondary hover:cursor-pointer flex items-center gap-4">
               <span>{e.icon}</span>
