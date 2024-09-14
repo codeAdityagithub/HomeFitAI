@@ -1,3 +1,6 @@
+import SleepChart from "@/components/dashboard/charts/SleepChart";
+import StepsChart from "@/components/dashboard/charts/StepsChart";
+import WeightChart from "@/components/dashboard/charts/WeightChart";
 import ExerciseTable from "@/components/dashboard/ExerciseTable";
 import TodaysLogs from "@/components/dashboard/TodaysLogs";
 import {
@@ -18,7 +21,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
   // sleep for 2 seconds
   const date = new Date();
-  // date.setDate(date.getDate() - 1);
+  date.setDate(date.getDate() - 1);
 
   const logs = await db.log.findMany({
     where: { date: { lt: date } },
@@ -50,7 +53,9 @@ export default function Dashboard() {
           <TodaysLogs log={log} />
         </CardContent>
       </Card>
-
+      <WeightChart logs={logs} />
+      <StepsChart logs={logs} />
+      <SleepChart logs={logs} />
       <ExerciseTable exercises={log.exercises} />
     </div>
   );

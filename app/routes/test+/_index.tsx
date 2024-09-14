@@ -32,7 +32,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Separator } from "@/components/ui/separator";
-import db from "@/utils/db.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // console.log(

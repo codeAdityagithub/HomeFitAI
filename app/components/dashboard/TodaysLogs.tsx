@@ -32,7 +32,7 @@ const elems = [
     unit: "hours",
     min: 0,
     max: 16,
-    step: 1,
+    step: 0.5,
   },
   {
     type: "steps",
