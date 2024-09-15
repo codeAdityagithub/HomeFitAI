@@ -19,7 +19,7 @@ function SleepChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const { log } = useDashboardLayoutData();
   return (
     <Card
-      className="max-w-md"
+      className="max-w-md bg-secondary/50"
       x-chunk="charts-01-chunk-7"
     >
       <CardHeader className="space-y-0 pb-0">

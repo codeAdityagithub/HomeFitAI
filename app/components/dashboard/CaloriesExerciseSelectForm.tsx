@@ -30,12 +30,13 @@ function CaloriesExerciseSelectForm({
   const handleNumberOfSetsChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newNumber = Math.max(1, Math.min(6, parseInt(e.target.value, 10)));
     setNumberOfSets(newNumber);
-    setSets(
-      Array.from({ length: newNumber }, () => ({
-        reps: 1,
-        intensity: "explosive",
-      }))
-    );
+    if (!isNaN(newNumber))
+      setSets(
+        Array.from({ length: newNumber }, () => ({
+          reps: 1,
+          intensity: "explosive",
+        }))
+      );
   };
 
   const handleSetChange = (
@@ -49,10 +50,10 @@ function CaloriesExerciseSelectForm({
       );
       setSets(newSets);
     } else {
+      const newReps = Math.max(1, Math.min(50, parseInt(value, 10)));
+
       const newSets = sets.map((set, i) =>
-        i === index
-          ? { ...set, reps: Math.max(1, Math.min(50, Number(value))) }
-          : set
+        i === index ? { ...set, reps: newReps } : set
       );
       setSets(newSets);
     }
@@ -93,6 +94,7 @@ function CaloriesExerciseSelectForm({
             type="button"
             size="sm"
             variant="outline"
+            disabled={isNaN(numberOfSets)}
             onClick={() => setStep(2)}
           >
             Next
@@ -146,6 +148,7 @@ function CaloriesExerciseSelectForm({
           {currentSet === 0 && (
             <div className="flex items-center space-x-2">
               <Checkbox
+                disabled={isNaN(sets[0].reps)}
                 onCheckedChange={(e) => {
                   const newSets = sets.map((set) => ({
                     ...set,
@@ -190,6 +193,7 @@ function CaloriesExerciseSelectForm({
               type="button"
               size="sm"
               variant="secondary"
+              disabled={isNaN(sets[currentSet].reps)}
               onClick={() => {
                 setCurrentSet((prev) => Math.min(prev + 1, sets.length - 1));
                 if (currentSet === sets.length - 1) {
@@ -233,6 +237,9 @@ function CaloriesExerciseSelectForm({
             <Button
               type="submit"
               size="sm"
+              disabled={
+                fetcher.state !== "idle" || sets.some((s) => isNaN(s.reps))
+              }
             >
               Add To Log
             </Button>
