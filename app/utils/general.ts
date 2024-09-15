@@ -30,6 +30,23 @@ export function caloriePerMin(met: number, weight: number) {
   return ((met * 3.5 * weight) / 200).toFixed(1);
 }
 
+/**
+ * Calculate calories burned based on the number of steps taken, height, and weight.
+ *
+ * @param {number} height - Height of the person in cm.
+ * @param {number} weight - Weight of the person in kilograms.
+ * @param {number} steps - Total number of steps taken.
+ * @returns {number} - Estimated calories burned.
+ */
+export function stepsToCal(
+  height: number,
+  weight: number,
+  steps: number
+): number {
+  const h = height / 100;
+  return Number(((5.05 * weight * h * steps) / 16094).toFixed(2));
+}
+
 export function convertMinutesToText(decimalMinutes: number) {
   const minutes = Math.floor(decimalMinutes); // Get the whole minutes
   const seconds = Math.round((decimalMinutes - minutes) * 60); // Convert the decimal part to seconds

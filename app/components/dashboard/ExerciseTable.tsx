@@ -103,9 +103,8 @@ function ExerciseTable({
                         <DropdownMenuSeparator />
                         {e.sets.map((s, i) => (
                           <DropdownMenuItem key={`set-${i}`}>
-                            {s.reps}{" "}
-                            {s.avgRepTime <= 2 ? "explosive" : "controlled"}{" "}
-                            reps
+                            Set-{i + 1} : {s.reps} reps (
+                            {s.avgRepTime <= 2 ? "explosive" : "controlled"})
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>

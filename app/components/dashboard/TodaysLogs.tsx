@@ -4,6 +4,8 @@ import { Droplet, Footprints, MoonStar, SquareActivity } from "lucide-react";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
 import EditLogForm from "./EditLogForm";
 import EditCaloriesForm from "./EditCaloriesForm";
+import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { stepsToCal } from "@/utils/general";
 
 const elems = [
   {
@@ -55,11 +57,12 @@ const elems = [
         size={30}
       />
     ),
-    text: "Total Calories",
+    text: "Calories Burned",
     unit: "calories",
   },
 ];
 const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
+  const { stats } = useDashboardLayoutData();
   return (
     <div className="w-full grid grid-cols-1 xs:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
       {elems.map((e) => (
@@ -76,10 +79,13 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
               <span>{e.icon}</span>
               <div className="flex flex-col items-start">
                 <h2 className="text-xl xs:text-2xl font-bold">
-                  {
-                    // @ts-expect-error
-                    log[e.type]
-                  }
+                  {e.type === "totalCalories"
+                    ? log[e.type] +
+                      Math.round(
+                        stepsToCal(stats.height, stats.weight, log.steps)
+                      )
+                    : // @ts-expect-error
+                      log[e.type]}
                   <small className="ml-1 text-xs font-normal text-secondary-foreground/80">
                     {e.unit}
                   </small>

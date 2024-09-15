@@ -4,6 +4,7 @@ import { Stats } from "@prisma/client";
 import { redirect } from "@remix-run/node";
 import { DateTime } from "luxon";
 import { getDayDiff } from "../utils";
+import { stepsToCal } from "@/utils/general";
 export async function getStatsandLogs(user: AuthUser) {
   let stats = await db.stats.findUnique({ where: { userId: user.id } });
 
@@ -43,7 +44,7 @@ export async function getStatsandLogs(user: AuthUser) {
           const prev = await tx.log.findFirst({
             where: { date: { lt: date }, userId: user.id },
             orderBy: { date: "desc" },
-            select: { id: true, totalCalories: true, date: true },
+            select: { id: true, totalCalories: true, date: true, steps: true },
           });
 
           if (!prev) return null; // When it's the first day of login
@@ -52,6 +53,9 @@ export async function getStatsandLogs(user: AuthUser) {
             where: { id: prev.id },
             data: {
               weight: stats.weight,
+              totalCalories: {
+                increment: stepsToCal(stats.height, stats.weight, prev.steps),
+              },
             },
           });
 
@@ -70,7 +74,7 @@ export async function getStatsandLogs(user: AuthUser) {
           const updatedStats = await tx.stats.update({
             where: { id: stats.id },
             data: {
-              totalCalories: { increment: prev.totalCalories },
+              totalCalories: { increment: prevLog.totalCalories },
               currentStreak: currentStreak,
               bestStreak: bestStreak,
             },
