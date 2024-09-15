@@ -36,7 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (request.method === "PUT") {
     const { value, _action, logId, exerciseId, duration } =
       await request.json();
-    if ((!value && !duration) || !_action)
+    if (((value === null || value === undefined) && !duration) || !_action)
       return json({ error: "Invalid Input." }, { status: 403 });
 
     if (_action !== "totalCalories") {

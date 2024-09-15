@@ -56,6 +56,7 @@ export async function addExercseDuration(input: z.infer<typeof schema>) {
         duration: duration,
         name: exercise.name,
         sets: [],
+        target: exercise.target,
         time: new Date(),
       });
     }

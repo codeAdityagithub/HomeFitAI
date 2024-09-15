@@ -1,126 +1,95 @@
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
+
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import {
+  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
-import { Area, AreaChart, XAxis, YAxis } from "recharts";
+import { useMemo } from "react";
 
-function ExercisesChart({ logs }: { logs: SerializeFrom<Log>[] }) {
-  const { log } = useDashboardLayoutData();
+const chartConfig = {
+  exercises: {
+    label: "Exercises",
+    color: "hsl(var(--primary))",
+  },
+} satisfies ChartConfig;
+
+export default function ExercisesChart({
+  logs,
+}: {
+  logs: SerializeFrom<Log>[];
+}) {
+  const chartData = useMemo(() => {
+    const exercises = logs.reduce(
+      (acc, log) => acc.concat(log.exercises.map((e) => e.target)),
+      [] as string[]
+    );
+    const count = exercises.reduce((acc, e) => {
+      if (!acc[e]) {
+        acc[e] = 1;
+      } else {
+        acc[e]++;
+      }
+      return acc;
+    }, {} as any);
+    return Object.entries(count).map(([target, count]) => ({
+      target,
+      exercises: count,
+    }));
+  }, [logs]);
+
   return (
-    <Card
-      className="max-w-md"
-      x-chunk="charts-01-chunk-7"
-    >
-      <CardHeader className="space-y-0 pb-0">
-        <CardDescription>Sleep</CardDescription>
-        <CardTitle className="flex items-baseline gap-1 text-4xl tabular-nums">
-          {log.sleep}
-          <span className="font-sans text-sm font-normal tracking-normal text-muted-foreground">
-            hr
-          </span>
-        </CardTitle>
+    <Card className="bg-secondary/50">
+      <CardHeader className="items-start pb-4">
+        <CardTitle>Exercise Volume Distribution</CardTitle>
+        <CardDescription>
+          Exercise volume distribution for various body parts of past{" "}
+          <span className="text-accent font-semibold">7</span> days.
+        </CardDescription>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="pb-0">
         <ChartContainer
-          config={{
-            time: {
-              label: "Time",
-              color: "hsl(var(--chart-2))",
-            },
-          }}
+          config={chartConfig}
+          className="mx-auto aspect-square w-full max-h-[250px]"
         >
-          <AreaChart
-            accessibilityLayer
-            data={logs
-              .map((log) => ({
-                time: log.sleep,
-                date: log.date,
-              }))
-              .reverse()}
-            margin={{
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-            }}
-          >
-            <XAxis
-              dataKey="date"
-              hide
-            />
-            <YAxis
-              domain={["dataMin - 5", "dataMax + 2"]}
-              hide
-            />
-            <defs>
-              <linearGradient
-                id="fillTime"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-time)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-time)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-            </defs>
-            <Area
-              dataKey="time"
-              type="natural"
-              fill="url(#fillTime)"
-              fillOpacity={0.4}
-              stroke="var(--color-time)"
-            />
+          <RadarChart data={chartData}>
             <ChartTooltip
               cursor={false}
-              content={
-                <ChartTooltipContent
-                  hideIndicator
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    });
-                  }}
-                />
-              }
-              formatter={(value) => (
-                <div className="flex min-w-[120px] items-center text-xs text-muted-foreground">
-                  Sleep
-                  <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-                    {value}
-                    <span className="font-normal text-muted-foreground">
-                      hr
-                    </span>
-                  </div>
-                  {}
-                </div>
-              )}
+              content={<ChartTooltipContent />}
             />
-          </AreaChart>
+            <PolarGrid
+              gridType="circle"
+              radialLines={false}
+            />
+            <PolarAngleAxis dataKey="target" />
+            <Radar
+              dataKey="exercises"
+              fill="var(--color-exercises)"
+              fillOpacity={0.6}
+              dot={{
+                r: 4,
+                fillOpacity: 1,
+              }}
+            />
+          </RadarChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter className="flex-col gap-2 text-sm">
+        <div className="flex items-center gap-2 font-medium leading-none">
+          todo: adding some insight from the graph
+        </div>
+      </CardFooter>
     </Card>
   );
 }
-export default ExercisesChart;

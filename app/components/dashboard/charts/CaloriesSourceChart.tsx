@@ -1,0 +1,158 @@
+import { Flame, TrendingUp } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { SerializeFrom } from "@remix-run/node";
+import { Log } from "@prisma/client";
+import { useMemo } from "react";
+import { stepsToCal } from "@/utils/general";
+import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+
+export const description = "A stacked bar chart with a legend";
+
+const chartConfig = {
+  steps: {
+    label: "Steps",
+    color: "hsl(var(--chart-2))",
+  },
+  exercise: {
+    label: "Exercise",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig;
+
+export default function CaloriesSourceChart({
+  logs,
+}: {
+  logs: SerializeFrom<Log>[];
+}) {
+  const { stats } = useDashboardLayoutData();
+  const chartData = useMemo(() => {
+    return logs
+      .map((log) => {
+        const caloriesFromSteps = Math.round(
+          stepsToCal(stats.height, stats.weight, log.steps)
+        );
+        return {
+          date: log.date,
+          steps: caloriesFromSteps,
+          exercise: log.totalCalories - caloriesFromSteps,
+          total: log.totalCalories,
+        };
+      })
+      .reverse();
+  }, [logs, stats]);
+  const avgCalories = useMemo(
+    () =>
+      (
+        logs.reduce((acc, log) => acc + log.totalCalories, 0) / logs.length
+      ).toFixed(1),
+    [logs]
+  );
+  return (
+    <Card className="bg-secondary/50">
+      <CardHeader>
+        <CardTitle>Calorie Expenditure</CardTitle>
+        <CardDescription>
+          Source of calories expenditure in the past 7 days
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig}>
+          <BarChart
+            accessibilityLayer
+            data={chartData}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => {
+                return new Date(value).toLocaleDateString("en-US", {
+                  weekday: "short",
+                });
+              }}
+            />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  hideLabel
+                  formatter={(value, name, item, index) => (
+                    <>
+                      <div className="flex w-full items-center text-xs text-muted-foreground">
+                        {chartConfig[name as keyof typeof chartConfig]?.label ||
+                          name}
+                        <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
+                          {value}
+                          <span className="font-normal text-muted-foreground">
+                            kcal
+                          </span>
+                        </div>
+                      </div>
+                      {index === 1 && (
+                        <div className="mt-1.5 flex basis-full items-center border-t pt-1.5 text-xs font-medium text-foreground">
+                          Total
+                          <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium text-foreground">
+                            {item.payload.steps + item.payload.exercise}
+                            <span className="font-normal text-muted-foreground">
+                              kcal
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                />
+              }
+            />
+            <ChartLegend content={<ChartLegendContent />} />
+            <Bar
+              dataKey="steps"
+              stackId="a"
+              fill="var(--color-steps)"
+              radius={[0, 0, 4, 4]}
+            />
+            <Bar
+              dataKey="exercise"
+              stackId="a"
+              fill="var(--color-exercise)"
+              radius={[4, 4, 0, 0]}
+            />
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <div className="flex gap-2 font-medium text-muted-foreground leading-none">
+          <p>
+            Average Calorie Expenditure was{" "}
+            <span className="text-secondary-foreground">
+              {avgCalories} kcal
+            </span>{" "}
+            last week.
+          </p>
+          <Flame className="h-4 w-4 text-primary" />
+        </div>
+        <div className="leading-none text-muted-foreground">
+          Showing calorie expenditure for the last 7 days
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}

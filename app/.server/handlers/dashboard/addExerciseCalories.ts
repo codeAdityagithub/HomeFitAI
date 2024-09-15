@@ -61,6 +61,7 @@ export async function addExerciseCalories(input: z.infer<typeof schema>) {
         duration: duration,
         name: exercise.name,
         sets: sets,
+        target: exercise.target,
         time: new Date(),
       });
     }

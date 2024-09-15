@@ -55,6 +55,7 @@ type ExerciseLog {
   sets     Set[]
   duration Float
   calories Int
+  target   String //target area
   time     DateTime  @default(now())
 }
 
