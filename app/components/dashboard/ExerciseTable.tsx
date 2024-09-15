@@ -14,9 +14,17 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { useMemo, useState } from "react";
 import { Button } from "../ui/button";
-import { Plus, Search } from "lucide-react";
+import { ArrowUpRight, Info, Plus, Search } from "lucide-react";
 import { Label } from "../ui/label";
 import ExerciseAddTable from "./ExerciseAddTable";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "../ui/dropdown-menu";
 
 function ExerciseTable({
   exercises,
@@ -66,7 +74,44 @@ function ExerciseTable({
                 <TableCell className="font-medium">
                   {capitalizeEachWord(e.name)}
                 </TableCell>
-                <TableCell className="">{e.sets.length}</TableCell>
+                <TableCell className="">
+                  {e.sets.length === 0 ? (
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="hover:bg-secondary"
+                    >
+                      -
+                    </Button>
+                  ) : (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          className="relative"
+                          size="icon"
+                          variant="ghost"
+                        >
+                          <Info
+                            size={12}
+                            className="absolute top-1 right-1"
+                          />
+                          {e.sets.length}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuLabel>Set Information</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {e.sets.map((s, i) => (
+                          <DropdownMenuItem key={`set-${i}`}>
+                            {s.reps}{" "}
+                            {s.avgRepTime <= 2 ? "explosive" : "controlled"}{" "}
+                            reps
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                </TableCell>
                 <TableCell>{convertMinutesToText(e.duration)}</TableCell>
                 <TableCell className="">{e.calories} Kcal</TableCell>
               </TableRow>

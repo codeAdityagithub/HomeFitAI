@@ -21,6 +21,7 @@ const config = {
       screens: {
         xs: "400px",
         llg: "1180px",
+        mmd: "850px",
       },
       dropShadow: {
         custom: "0 10px 10px rgba(250, 89, 57, 0.5)", // 0.5 is the alpha value

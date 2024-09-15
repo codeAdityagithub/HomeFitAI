@@ -1,6 +1,7 @@
 [
   {
     "bodyPart": "cardio",
+    "type":"duration",
     "met": 10,
     "equipment": "rope",
     "id": "jump_rope",
@@ -18,6 +19,7 @@
   },
   {
     "bodyPart": "waist",
+    "type":"duration",
     "equipment": "body weight",
     "id": "mountain_climber_cross_body",
     "name": "mountain climber (cross body)",
@@ -44,6 +46,7 @@
   {
     "bodyPart": "cardio",
     "equipment": "body weight",
+    "type":"duration",
     "id": "burpee",
     "name": "burpee",
     "target": "cardio",
@@ -63,6 +66,7 @@
   {
     "bodyPart": "upper legs",
     "equipment": "body weight",
+    "type":"sets",
     "id": "bulgarian_split_squats",
     "name": "bulgarian split squats",
     "target": "quads",
@@ -81,6 +85,7 @@
   {
     "bodyPart": "chest",
     "equipment": "body weight",
+    "type":"duration",
     "id": "dynamic_chest_stretch",
     "name": "dynamic chest stretch",
     "target": "cardio",
@@ -99,6 +104,7 @@
   {
     "bodyPart": "upper legs",
     "equipment": "dumbbell",
+    "type":"sets",
     "id": "dumbbell_single_leg_deadlift",
     "name": "dumbbell single leg deadlift",
     "target": "hamstrings",
@@ -120,6 +126,7 @@
     "equipment": "body weight",
     "id": "plank",
     "name": "plank",
+    "type":"duration",
     "target": "abs",
     "secondaryMuscles": ["shoulders", "lower back"],
     "instructions": [
@@ -140,6 +147,7 @@
     "equipment": "body weight",
     "id": "russian_twist",
     "name": "russian twist",
+    "type":"duration",
     "target": "abs",
     "secondaryMuscles": ["obliques"],
     "instructions": [
@@ -159,6 +167,7 @@
     "equipment": "body weight",
     "id": "situp",
     "name": "3/4 sit-up",
+    "type":"sets",
     "target": "abs",
     "secondaryMuscles": ["hip flexors", "lower back"],
     "instructions": [
@@ -176,6 +185,7 @@
     "equipment": "body weight",
     "id": "hanging_knee_raise",
     "name": "hanging knee raise",
+    "type":"sets",
     "target": "abs",
     "secondaryMuscles": ["hip flexors"],
     "instructions": [
@@ -193,6 +203,7 @@
     "equipment": "body weight",
     "id": "hanging_straight_leg_raise",
     "name": "hanging straight leg raise",
+    "type":"sets",
     "target": "abs",
     "secondaryMuscles": ["hip flexors"],
     "instructions": [
@@ -210,6 +221,7 @@
     "equipment": "body weight",
     "id": "seated_knee_tucks",
     "name": "seated knee tucks",
+    "type":"sets",
     "target": "abs",
     "secondaryMuscles": ["hip flexors"],
     "instructions": [
@@ -228,6 +240,7 @@
     "id": "incline_side_plank",
     "name": "incline side plank",
     "target": "abs",
+    "type":"duration",
     "secondaryMuscles": ["obliques", "shoulders"],
     "instructions": [
       "Start by lying on your side with your legs extended and stacked on top of each other.",
@@ -244,6 +257,7 @@
     "equipment": "body weight",
     "id": "side_plank",
     "name": "side plank",
+    "type":"duration",
     "target": "abs",
     "secondaryMuscles": ["obliques", "shoulders"],
     "instructions": [
@@ -261,6 +275,7 @@
     "equipment": "body weight",
     "id": "jump_squat",
     "name": "jump squat",
+    "type":"sets",
     "target": "glutes",
     "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
@@ -278,6 +293,7 @@
     "bodyPart": "upper legs",
     "equipment": "body weight",
     "id": "squat",
+    "type":"sets",
     "name": "squat",
     "target": "glutes",
     "secondaryMuscles": ["quads", "hamstrings", "calves"],
@@ -297,6 +313,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_front_squat",
     "name": "dumbbell front squat",
+    "type":"sets",
     "target": "quads",
     "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
@@ -314,6 +331,7 @@
     "bodyPart": "chest",
     "equipment": "body weight",
     "id": "clap_push_up",
+    "type":"sets",
     "name": "clap push up",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders"],
@@ -331,6 +349,7 @@
     "bodyPart": "upper arms",
     "equipment": "band",
     "id": "band_alternating_biceps_curl",
+    "type":"sets",
     "name": "band alternating biceps curl",
     "target": "biceps",
     "secondaryMuscles": ["forearms"],
@@ -347,6 +366,7 @@
     "bodyPart": "chest",
     "equipment": "band",
     "id": "band_bench_press",
+    "type":"sets",
     "name": "band bench press",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders"],
@@ -364,6 +384,7 @@
     "bodyPart": "back",
     "equipment": "band",
     "id": "band_closegrip_pulldown",
+    "type":"sets",
     "name": "band close-grip pulldown",
     "target": "lats",
     "secondaryMuscles": ["biceps", "forearms"],
@@ -381,6 +402,7 @@
   {
     "bodyPart": "upper arms",
     "equipment": "band",
+    "type":"sets",
     "id": "band_concentration_curl",
     "name": "band concentration curl",
     "target": "biceps",
@@ -401,6 +423,7 @@
     "equipment": "band",
     "id": "band_front_raise",
     "name": "band front raise",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["triceps", "upper back"],
     "instructions": [
@@ -417,6 +440,7 @@
     "equipment": "band",
     "id": "band_lateral_raise",
     "name": "band lateral raise",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["traps", "upper back"],
     "instructions": [
@@ -433,6 +457,7 @@
     "equipment": "band",
     "id": "band_biceps_curl",
     "name": "band biceps curl",
+    "type":"sets",
     "target": "biceps",
     "secondaryMuscles": ["forearms"],
     "instructions": [
@@ -450,6 +475,7 @@
     "equipment": "band",
     "id": "band_reverse_fly",
     "name": "band reverse fly",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["upper back", "trapezius"],
     "instructions": [
@@ -468,6 +494,7 @@
     "equipment": "band",
     "id": "band_shoulder_press",
     "name": "band shoulder press",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["triceps", "upper back"],
     "instructions": [
@@ -485,6 +512,7 @@
     "equipment": "band",
     "id": "band_single_leg_split_squat",
     "name": "band single leg split squat",
+    "type":"sets",
     "target": "quads",
     "secondaryMuscles": ["glutes", "hamstrings"],
     "instructions": [
@@ -502,6 +530,7 @@
     "equipment": "band",
     "id": "band_squat",
     "name": "band squat",
+    "type":"sets",
     "target": "glutes",
     "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
@@ -517,6 +546,7 @@
   {
     "bodyPart": "upper legs",
     "equipment": "band",
+    "type":"sets",
     "id": "band_stiff_leg_deadlift",
     "name": "band stiff leg deadlift",
     "target": "hamstrings",
@@ -536,6 +566,7 @@
   {
     "bodyPart": "chest",
     "equipment": "dumbbell",
+    "type":"sets",
     "id": "dumbbell_bench_press",
     "name": "dumbbell bench press",
     "target": "pectorals",
@@ -553,6 +584,7 @@
   {
     "bodyPart": "chest",
     "equipment": "dumbbell",
+    "type":"sets",
     "id": "dumbbell_fly",
     "name": "dumbbell fly",
     "target": "pectorals",
@@ -571,6 +603,7 @@
     "bodyPart": "chest",
     "equipment": "body weight",
     "id": "chest_dip",
+    "type":"sets",
     "name": "chest dip",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders"],
@@ -588,6 +621,7 @@
     "equipment": "body weight",
     "id": "archer_pull_up",
     "name": "archer pull up",
+    "type":"sets",
     "target": "lats",
     "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
@@ -606,6 +640,7 @@
     "equipment": "band",
     "id": "band_assisted_pullup",
     "name": "band assisted pull-up",
+    "type":"sets",
     "target": "lats",
     "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
@@ -623,6 +658,7 @@
     "bodyPart": "back",
     "equipment": "body weight",
     "id": "pullup",
+    "type":"sets",
     "name": "pull-up",
     "target": "lats",
     "secondaryMuscles": ["biceps", "forearms"],
@@ -641,6 +677,7 @@
     "equipment": "body weight",
     "id": "wide_grip_pullup",
     "name": "wide grip pull-up",
+    "type":"sets",
     "target": "lats",
     "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
@@ -658,6 +695,7 @@
     "equipment": "body weight",
     "id": "scapular_pullup",
     "name": "scapular pull-up",
+    "type":"sets",
     "target": "upper back",
     "secondaryMuscles": ["biceps", "rhomboids", "rear deltoids"],
     "instructions": [
@@ -675,6 +713,7 @@
     "equipment": "body weight",
     "id": "close_grip_chinup",
     "name": "close grip chin-up",
+    "type":"sets",
     "target": "lats",
     "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
@@ -693,6 +732,7 @@
     "equipment": "band",
     "id": "band_standing_rear_delt_row",
     "name": "band standing rear delt row",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["trapezius", "rhomboids", "biceps"],
     "instructions": [
@@ -711,6 +751,7 @@
     "equipment": "body weight",
     "id": "bodyweight_standing_row",
     "name": "bodyweight standing row",
+    "type":"sets",
     "target": "upper back",
     "secondaryMuscles": ["biceps", "shoulders"],
     "instructions": [
@@ -729,6 +770,7 @@
     "bodyPart": "back",
     "equipment": "body weight",
     "id": "bodyweight_standing_row_with_towel",
+    "type":"sets",
     "name": "bodyweight standing row (with towel)",
     "target": "upper back",
     "secondaryMuscles": ["biceps", "shoulders"],
@@ -747,6 +789,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_bent_over_row",
     "name": "dumbbell bent over row",
+    "type":"sets",
     "target": "upper back",
     "secondaryMuscles": ["biceps", "forearms"],
     "instructions": [
@@ -765,6 +808,7 @@
     "equipment": "body weight",
     "id": "suspended_row",
     "name": "suspended row",
+    "type":"sets",
     "target": "upper back",
     "secondaryMuscles": ["biceps", "shoulders"],
     "instructions": [
@@ -784,6 +828,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_standing_overhead_press",
     "name": "dumbbell standing overhead press",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["triceps", "upper back"],
     "instructions": [
@@ -800,6 +845,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_arnold_press",
     "name": "dumbbell arnold press",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["triceps", "upper chest"],
     "instructions": [
@@ -817,6 +863,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_lateral_raise",
     "name": "dumbbell lateral raise",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["traps"],
     "instructions": [
@@ -834,6 +881,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_one_arm_lateral_raise",
     "name": "dumbbell one arm lateral raise",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["trapezius", "triceps"],
     "instructions": [
@@ -852,6 +900,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_rear_lateral_raise",
     "name": "dumbbell rear lateral raise",
+    "type":"sets",
     "target": "delts",
     "secondaryMuscles": ["traps", "rhomboids"],
     "instructions": [
@@ -869,6 +918,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_biceps_curl",
     "name": "dumbbell biceps curl",
+    "type":"sets",
     "target": "biceps",
     "secondaryMuscles": ["forearms"],
     "instructions": [
@@ -887,6 +937,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_alternate_biceps_curl",
     "name": "dumbbell alternate biceps curl",
+    "type":"sets",
     "target": "biceps",
     "secondaryMuscles": ["forearms"],
     "instructions": [
@@ -905,6 +956,7 @@
     "equipment": "band",
     "id": "band_triceps_extension",
     "name": "band triceps extension",
+    "type":"sets",
     "target": "triceps",
     "secondaryMuscles": ["shoulders"],
     "instructions": [
@@ -922,6 +974,7 @@
     "equipment": "body weight",
     "id": "bodyweight_kneeling_triceps_extension",
     "name": "bodyweight kneeling triceps extension",
+    "type":"sets",
     "target": "triceps",
     "secondaryMuscles": ["shoulders", "chest"],
     "instructions": [
@@ -940,6 +993,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_hammer_curl",
     "name": "dumbbell hammer curl",
+    "type":"sets",
     "target": "biceps",
     "secondaryMuscles": ["forearms"],
     "instructions": [
@@ -960,6 +1014,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_lunge",
     "name": "dumbbell lunge",
+    "type":"sets",
     "target": "quads",
     "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
@@ -978,6 +1033,7 @@
     "equipment": "body weight",
     "id": "bodyweight_lunge",
     "name": "bodyweight lunge",
+    "type":"sets",
     "target": "quads",
     "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
@@ -995,6 +1051,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_rear_lunge",
     "name": "dumbbell rear lunge",
+    "type":"sets",
     "target": "quads",
     "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
@@ -1012,6 +1069,7 @@
     "equipment": "body weight",
     "id": "bodyweight_standing_calf_raise",
     "name": "bodyweight standing calf raise",
+    "type":"sets",
     "target": "calves",
     "secondaryMuscles": ["ankles", "feet"],
     "instructions": [
@@ -1029,6 +1087,7 @@
     "equipment": "dumbbell",
     "id": "dumbbell_standing_calf_raise",
     "name": "dumbbell standing calf raise",
+    "type":"sets",
     "target": "calves",
     "secondaryMuscles": ["ankles"],
     "instructions": [
@@ -1045,6 +1104,7 @@
     "equipment": "body weight",
     "id": "standing_split_squats",
     "name": "standing split squats",
+    "type":"sets",
     "target": "quads",
     "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
@@ -1063,6 +1123,7 @@
     "equipment": "body weight",
     "id": "glute_bridge_on_bench",
     "name": "glute bridge on bench",
+    "type":"sets",
     "target": "glutes",
     "secondaryMuscles": ["hamstrings", "core"],
     "instructions": [
@@ -1080,6 +1141,7 @@
     "equipment": "body weight",
     "id": "low_glute_bridge_on_floor",
     "name": "low glute bridge on floor",
+    "type":"sets",
     "target": "glutes",
     "secondaryMuscles": ["hamstrings", "core"],
     "instructions": [
@@ -1098,6 +1160,7 @@
     "equipment": "body weight",
     "id": "archer_push_up",
     "name": "archer push up",
+    "type":"sets",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders", "core"],
     "instructions": [
@@ -1116,6 +1179,7 @@
     "equipment": "band",
     "id": "band_pushup",
     "name": "band push-up",
+    "type":"sets",
     "target": "triceps",
     "secondaryMuscles": ["chest", "shoulders"],
     "instructions": [
@@ -1133,6 +1197,7 @@
     "equipment": "dumbbell",
     "id": "deep_push_up",
     "name": "deep push up",
+    "type":"sets",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
@@ -1149,6 +1214,7 @@
     "equipment": "body weight",
     "id": "wide_hand_push_up",
     "name": "wide hand push up",
+    "type":"sets",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
@@ -1166,6 +1232,7 @@
     "equipment": "body weight",
     "id": "decline_pushup",
     "name": "decline push-up",
+    "type":"sets",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
@@ -1183,6 +1250,7 @@
     "equipment": "body weight",
     "id": "diamond_pushup",
     "name": "diamond push-up",
+    "type":"sets",
     "target": "triceps",
     "secondaryMuscles": ["chest", "shoulders"],
     "instructions": [
@@ -1200,6 +1268,7 @@
     "equipment": "body weight",
     "id": "handstand_pushup",
     "name": "handstand push-up",
+    "type":"sets",
     "target": "triceps",
     "secondaryMuscles": ["shoulders", "chest", "core"],
     "instructions": [
@@ -1216,6 +1285,7 @@
     "bodyPart": "shoulders",
     "equipment": "body weight",
     "id": "pike_pushup",
+    "type":"sets",
     "name": "pike push-up",
     "target": "delts",
     "secondaryMuscles": ["triceps", "chest", "core"],
@@ -1234,6 +1304,7 @@
     "equipment": "body weight",
     "id": "incline_closegrip_pushup",
     "name": "incline close-grip push-up",
+    "type":"sets",
     "target": "triceps",
     "secondaryMuscles": ["chest", "shoulders"],
     "instructions": [
@@ -1251,6 +1322,7 @@
     "equipment": "body weight",
     "id": "incline_pushup",
     "name": "incline push-up",
+    "type":"sets",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
@@ -1268,6 +1340,7 @@
     "equipment": "body weight",
     "id": "kneeling_pushup",
     "name": "kneeling push-up",
+    "type":"sets",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
@@ -1285,6 +1358,7 @@
     "equipment": "body weight",
     "id": "pushup",
     "name": "push-up",
+    "type":"sets",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "deltoids", "core"],
     "instructions": [
@@ -1301,6 +1375,7 @@
     "equipment": "body weight",
     "id": "pushup_wall",
     "name": "push-up (wall)",
+    "type":"sets",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "deltoids"],
     "instructions": [
@@ -1317,6 +1392,7 @@
   {
     "bodyPart": "chest",
     "equipment": "body weight",
+    "type":"sets",
     "id": "single_arm_pushup",
     "name": "single arm push-up",
     "target": "pectorals",
@@ -1335,6 +1411,7 @@
     "bodyPart": "chest",
     "equipment": "body weight",
     "id": "ring_pushup",
+    "type":"sets",
     "name": "ring push-up",
     "target": "pectorals",
     "secondaryMuscles": ["triceps", "shoulders", "core"],
@@ -1354,6 +1431,7 @@
     "equipment": "body weight",
     "id": "single_leg_squat_pistol",
     "name": "single leg squat (pistol)",
+    "type":"sets",
     "target": "quads",
     "secondaryMuscles": ["glutes", "hamstrings", "calves"],
     "instructions": [
@@ -1375,6 +1453,7 @@
     "name": "jumping jacks",
     "met": 8,
     "target": "cardio",
+    "type":"duration",
     "secondaryMuscles": ["quads", "hamstrings", "calves"],
     "instructions": [
       "Stand with your feet shoulder-width apart.",
@@ -1387,3 +1466,4 @@
     "videoId": "q_Z29u7nglQ?mute=1"
   }
 ]
+

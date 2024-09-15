@@ -40,7 +40,7 @@ const EditUserStats = (props: Props) => {
       title={`Edit ${text[stat]}`}
       description={`Edit your profile settings to keep progress consistent.`}
       trigger={
-        <div className="rounded-lg p-2 sm:p-4 border border-accent/10 bg-secondary hover:cursor-pointer flex items-center gap-4">
+        <div className="rounded-lg p-2 sm:p-4 border border-accent/20 hover:border-accent/50 transition-colors bg-gradient-to-tr from-secondary/50 to-accent/20 hover:cursor-pointer flex items-center gap-4">
           <span>{icons[stat]}</span>
           <div className="flex flex-col items-start">
             {stat !== "height" ? (

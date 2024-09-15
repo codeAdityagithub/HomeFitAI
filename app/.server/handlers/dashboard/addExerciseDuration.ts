@@ -8,18 +8,12 @@ import { z } from "zod";
 const schema = z.object({
   userId: z.string(),
   logId: z.string(),
-  value: z
-    .array(
-      z.object({
-        reps: z.number().min(1).max(50),
-        intensity: z.enum(["explosive", "controlled"]),
-      })
-    )
-    .max(6),
+  duration: z.number().min(0.5).max(15),
+
   exerciseId: z.string(),
 });
 
-export async function addExerciseCalories(input: z.infer<typeof schema>) {
+export async function addExercseDuration(input: z.infer<typeof schema>) {
   const { data, error } = schema.safeParse(input);
   if (error) return json({ error: error.message }, { status: 403 });
   try {
@@ -33,11 +27,12 @@ export async function addExerciseCalories(input: z.infer<typeof schema>) {
       select: { weight: true },
     });
     if (!stat) return json({ error: "Invalid User." }, { status: 401 });
-    const { duration, sets } = getDurationFromSets(data.value);
 
+    const duration = data.duration;
     const calories = Math.round(
       Number(caloriePerMin(exercise.met, stat.weight)) * duration
     );
+
     const log = await db.log.findUnique({
       where: { userId: data.userId, id: data.logId },
       select: { exercises: true },
@@ -53,14 +48,14 @@ export async function addExerciseCalories(input: z.infer<typeof schema>) {
         ...entry,
         calories: entry.calories + calories,
         duration: entry.duration + duration,
-        sets: sets.concat(entry.sets),
+        sets: [],
       };
     } else {
       newExercises.push({
         calories: calories,
         duration: duration,
         name: exercise.name,
-        sets: sets,
+        sets: [],
         time: new Date(),
       });
     }

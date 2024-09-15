@@ -72,7 +72,7 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
               : `Update your ${e.text} to keep progress consistent.`
           }
           trigger={
-            <div className="rounded-lg p-2 sm:p-4 border border-accent/10 bg-secondary hover:cursor-pointer flex items-center gap-4">
+            <div className="rounded-lg p-2 sm:p-4 border border-accent/20 hover:border-accent/50 transition-colors bg-gradient-to-tr from-secondary/50 to-accent/20 hover:cursor-pointer flex items-center gap-4">
               <span>{e.icon}</span>
               <div className="flex flex-col items-start">
                 <h2 className="text-xl xs:text-2xl font-bold">

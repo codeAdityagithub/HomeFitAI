@@ -53,9 +53,11 @@ export default function Dashboard() {
           <TodaysLogs log={log} />
         </CardContent>
       </Card>
-      <WeightChart logs={logs} />
-      <StepsChart logs={logs} />
-      <SleepChart logs={logs} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 mmd:grid-cols-2 xl:grid-cols-3 gap-6">
+        <WeightChart logs={logs} />
+        <StepsChart logs={logs} />
+        <SleepChart logs={logs} />
+      </div>
       <ExerciseTable exercises={log.exercises} />
     </div>
   );

@@ -14,6 +14,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
           e.videoId.split("?")[0]
         }/sddefault.jpg`,
         met: e.met,
+        type: e.type,
       })),
     },
     { headers: { "Cache-Control": "max-age=100" } }

@@ -2,30 +2,22 @@ import { useFetcher } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 
-const EditLogForm = ({
-  init,
-  type,
-  min,
-  max,
-  text,
-  step,
+const CaloriesExerciseDurationForm = ({
   logId,
+  exerciseId,
+  caloriePerMin,
 }: {
   logId: string;
-  init: number;
-  type: "waterIntake" | "sleep" | "steps";
-  text: string;
-  min: number;
-  max: number;
-  step: number;
+  exerciseId: string;
+  caloriePerMin: number;
 }) => {
-  const fetcher = useFetcher();
-  const [value, setValue] = useState(init);
+  const fetcher = useFetcher({ key: "totalCalories-fetcher" });
+  const [value, setValue] = useState(1);
 
-  const disabled = fetcher.state !== "idle" || value === init;
-
+  const disabled = fetcher.state !== "idle";
+  const min = 0.5,
+    max = 15;
   function onClick(adjustment: number) {
     setValue(Math.max(min, Math.min(max, value + adjustment)));
   }
@@ -33,7 +25,8 @@ const EditLogForm = ({
     e.preventDefault();
 
     fetcher.submit(
-      { value, _action: type, logId },
+      { duration: value, _action: "totalCalories", logId, exerciseId },
+
       {
         method: "put",
         action: "/dashboard",
@@ -41,6 +34,7 @@ const EditLogForm = ({
       }
     );
   }
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -52,7 +46,7 @@ const EditLogForm = ({
           type="button"
           size="icon"
           className="h-8 w-8 shrink-0 rounded-full"
-          onClick={() => onClick(step * -1)}
+          onClick={() => onClick(-0.5)}
           disabled={value <= min || fetcher.state === "submitting"}
         >
           <Minus className="h-4 w-4" />
@@ -60,10 +54,10 @@ const EditLogForm = ({
         </Button>
         <div className="flex-1 text-center">
           <div className="text-5xl md:text-6xl font-bold tracking-tighter">
-            {value}
+            {value === 0 ? value : value.toFixed(1)}
           </div>
           <div className="text-[0.70rem] uppercase text-muted-foreground">
-            {text}
+            Minutes
           </div>
         </div>
         <Button
@@ -71,12 +65,18 @@ const EditLogForm = ({
           size="icon"
           type="button"
           className="h-8 w-8 shrink-0 rounded-full"
-          onClick={() => onClick(step)}
+          onClick={() => onClick(0.5)}
           disabled={value >= max || fetcher.state === "submitting"}
         >
           <Plus className="h-4 w-4" />
           <span className="sr-only">Increase</span>
         </Button>
+      </div>
+      <div className="mt-4 text-center">
+        Total Calores Burned:{" "}
+        <span className="text-accent font-semibold">
+          {(caloriePerMin * value).toFixed(1)}
+        </span>
       </div>
       <Button
         variant="accent"
@@ -88,4 +88,4 @@ const EditLogForm = ({
     </form>
   );
 };
-export default EditLogForm;
+export default CaloriesExerciseDurationForm;

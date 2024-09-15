@@ -1,4 +1,5 @@
 import { addExerciseCalories } from "@/.server/handlers/dashboard/addExerciseCalories";
+import { addExercseDuration } from "@/.server/handlers/dashboard/addExerciseDuration";
 import { editTodaysLog } from "@/.server/handlers/dashboard/editTodaysLog";
 import { getStatsandLogs } from "@/.server/handlers/getStatsandLogs";
 import Sidebar from "@/components/dashboard/sidebar";
@@ -33,8 +34,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     failureRedirect: "/login",
   });
   if (request.method === "PUT") {
-    const { value, _action, logId, exerciseId } = await request.json();
-    if (!value || !_action)
+    const { value, _action, logId, exerciseId, duration } =
+      await request.json();
+    if ((!value && !duration) || !_action)
       return json({ error: "Invalid Input." }, { status: 403 });
 
     if (_action !== "totalCalories") {
@@ -43,6 +45,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         userId: user.id,
         logId,
         value,
+      });
+    }
+    console.log(duration);
+    if (duration) {
+      return addExercseDuration({
+        exerciseId,
+        logId,
+        duration,
+        userId: user.id,
       });
     }
     return await addExerciseCalories({

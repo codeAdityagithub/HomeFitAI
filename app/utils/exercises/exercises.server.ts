@@ -26,6 +26,7 @@ export type Exercise = {
   secondaryMuscles: string[];
   instructions: string[];
   videoId: string;
+  type: "duration" | "sets";
 };
 
 export default exercises as Exercise[];

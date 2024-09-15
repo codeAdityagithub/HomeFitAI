@@ -6,8 +6,15 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import CaloriesExerciseSelectForm from "./CaloriesExerciseSelectForm";
 import { resetFetcher } from "@/utils/resetFetcher";
+import CaloriesExerciseDurationForm from "./CaloriesExerciseDurationForm";
 
-type Exercise = { name: string; id: string; imageUrl: string; met: number };
+type Exercise = {
+  name: string;
+  id: string;
+  imageUrl: string;
+  met: number;
+  type: "duration" | "sets";
+};
 
 const EditCaloriesForm = ({ logId }: { logId: string }) => {
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -36,7 +43,7 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
     return () => {
       abortController.abort("Fetch abort");
     };
-  }, [logId]);
+  }, []);
 
   const filtered = useMemo(() => {
     const inp = input.toLowerCase().trim();
@@ -111,10 +118,18 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
               Kcal/min
             </span>
           </div>
-          <CaloriesExerciseSelectForm
-            exerciseId={selected.id}
-            logId={logId}
-          />
+          {selected.type === "duration" ? (
+            <CaloriesExerciseDurationForm
+              exerciseId={selected.id}
+              logId={logId}
+              caloriePerMin={Number(caloriePerMin(selected.met, weight))}
+            />
+          ) : (
+            <CaloriesExerciseSelectForm
+              exerciseId={selected.id}
+              logId={logId}
+            />
+          )}
         </div>
       )}
     </div>
