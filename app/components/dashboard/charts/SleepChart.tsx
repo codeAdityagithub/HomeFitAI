@@ -2,6 +2,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -17,6 +18,9 @@ import { Area, AreaChart, XAxis, YAxis } from "recharts";
 
 function SleepChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const { log } = useDashboardLayoutData();
+  const avgSleep = Number(
+    (logs.reduce((sum, log) => sum + log.sleep, 0) / logs.length).toFixed(1)
+  );
   return (
     <Card
       className="max-w-md bg-secondary/50"
@@ -113,13 +117,27 @@ function SleepChart({ logs }: { logs: SerializeFrom<Log>[] }) {
                       hr
                     </span>
                   </div>
-                  {}
                 </div>
               )}
             />
           </AreaChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter className="flex-col items-start gap-1">
+        <CardDescription>
+          Over the past 7 days, your average daily sleep was{" "}
+          <span className="font-medium text-foreground">{avgSleep}</span> hours.
+        </CardDescription>
+        <CardDescription>
+          {avgSleep < 7 &&
+            "You're not getting enough rest! Aim for at least 7 hours of sleep to recharge properly."}
+          {avgSleep >= 7 &&
+            avgSleep <= 9 &&
+            "Great job! You're getting the right amount of sleep for a healthy, energized day."}
+          {avgSleep > 9 &&
+            "You might be sleeping a bit too much! Try to stick to 7-9 hours for better energy and focus."}
+        </CardDescription>
+      </CardFooter>
     </Card>
   );
 }

@@ -11,6 +11,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -25,9 +26,9 @@ import { SerializeFrom } from "@remix-run/node";
 
 function StepsChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const { log } = useDashboardLayoutData();
-  const avgSteps = (
+  const avgSteps = Math.round(
     logs.reduce((sum, log) => sum + log.steps, 0) / logs.length
-  ).toFixed(1);
+  );
   return (
     <Card className="lg:max-w-md bg-secondary/50">
       <CardHeader className="space-y-0 pb-2">
@@ -119,16 +120,21 @@ function StepsChart({ logs }: { logs: SerializeFrom<Log>[] }) {
           </BarChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className="flex-col items-start gap-1">
-          <CardDescription>
-            Over the past 7 days, you have walked{" "}
-            <span className="font-medium text-foreground">53,305</span> steps.
-          </CardDescription>
-          <CardDescription>
-            You need <span className="font-medium text-foreground">12,584</span>{" "}
-            more steps to reach your goal.
-          </CardDescription>
-        </CardFooter> */}
+      <CardFooter className="flex-col items-start gap-1">
+        <CardDescription>
+          Over the past 7 days, you have walked{" "}
+          <span className="font-medium text-foreground">{avgSteps}</span> steps.
+        </CardDescription>
+        <CardDescription>
+          {avgSteps < 5000 &&
+            "Your weekly average shows low activity. Try to increase your daily steps for better health."}
+          {avgSteps >= 5000 &&
+            avgSteps <= 10000 &&
+            "You're maintaining a solid activity level! Keep going to hit your health goals."}
+          {avgSteps > 10000 &&
+            "Impressive! Your weekly average steps show you're highly active—keep up the great work!"}
+        </CardDescription>
+      </CardFooter>
     </Card>
   );
 }

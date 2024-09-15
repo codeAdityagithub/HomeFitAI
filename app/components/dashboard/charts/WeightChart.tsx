@@ -13,6 +13,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -29,8 +30,22 @@ import { Link } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { SquareArrowOutUpRight } from "lucide-react";
 
+const getWeightGainMessage = (diff: number, time: number) => {
+  const rate = Number((diff / time).toFixed(2));
+
+  if (rate < 0.25) {
+    return "You're gaining weight at a steady, healthy rate. Keep focusing on balanced nutrition and exercise.";
+  } else if (rate >= 0.25 && rate < 0.5) {
+    return "You're gaining weight at a steady, healthy rate. Keep focusing on balanced nutrition and exercise.";
+  } else if (rate >= 0.5 && rate < 1) {
+    return "You're gaining weight a bit quickly. Consider adjusting your diet and activity levels to maintain balance.";
+  } else if (rate >= 1) {
+    return "You're gaining weight too fast. It may be helpful to review your eating habits and increase physical activity.";
+  }
+};
 function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const { stats } = useDashboardLayoutData();
+  const diff = stats.weight - logs[logs.length - 1].weight;
 
   return (
     <Card className="flex flex-col bg-secondary/50 lg:max-w-md">
@@ -150,16 +165,20 @@ function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
           </LineChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className="flex-col items-start gap-1">
-            <CardDescription>
-              Over the past 7 days, you have walked{" "}
-              <span className="font-medium text-foreground">53,305</span> steps.
-            </CardDescription>
-            <CardDescription>
-              You need <span className="font-medium text-foreground">12,584</span>{" "}
-              more steps to reach your goal.
-            </CardDescription>
-          </CardFooter> */}
+      <CardFooter className="flex-col items-start gap-1">
+        <CardDescription>
+          Over the past 7 days, you have {diff < 0 ? "lost" : "gained"}{" "}
+          <span className="font-medium text-foreground">
+            {stats.unit === "kgcm"
+              ? diff.toFixed(1)
+              : convertToLbs(diff).toFixed(1)}
+          </span>{" "}
+          {stats.unit === "kgcm" ? "kg" : "lbs"}.
+        </CardDescription>
+        <CardDescription>
+          {getWeightGainMessage(diff, logs.length + 1)}
+        </CardDescription>
+      </CardFooter>
     </Card>
   );
 }
