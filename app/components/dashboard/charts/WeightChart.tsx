@@ -46,7 +46,6 @@ const getWeightGainMessage = (diff: number, time: number) => {
 function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const { stats } = useDashboardLayoutData();
   const diff = stats.weight - logs[logs.length - 1].weight;
-
   return (
     <Card className="flex flex-col bg-secondary/50 lg:max-w-md">
       <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2 relative [&>div]:flex-1">
@@ -104,13 +103,16 @@ function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
               top: 10,
             }}
             data={logs
-              .map((log) => ({
-                weight:
-                  stats.unit === "kgcm"
-                    ? log.weight
-                    : convertToLbs(log.weight).toFixed(1),
-                date: log.date,
-              }))
+              .map((log, ind) => {
+                const weight = ind === 0 ? stats.weight : log.weight;
+                return {
+                  weight:
+                    stats.unit === "kgcm"
+                      ? weight
+                      : convertToLbs(weight).toFixed(1),
+                  date: log.date,
+                };
+              })
               .reverse()}
           >
             <CartesianGrid

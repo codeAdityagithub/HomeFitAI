@@ -55,7 +55,8 @@ export default function ExercisesChart({
         <CardTitle>Exercise Volume Distribution</CardTitle>
         <CardDescription>
           Exercise volume distribution for various body parts of past{" "}
-          <span className="text-accent font-semibold">7</span> days.
+          {/* <span className="text-accent font-semibold">7</span> days. */}7
+          days
         </CardDescription>
       </CardHeader>
       <CardContent className="pb-0">

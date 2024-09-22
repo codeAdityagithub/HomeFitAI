@@ -32,7 +32,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const logs = await db.log.findMany({
     where: { date: { lt: date } },
     orderBy: { date: "desc" },
-    take: 7,
+    take: 6,
   });
 
   return { logs, user };
@@ -43,9 +43,9 @@ export type DashboardData = SerializeFrom<typeof loader>;
 export { clientLoader } from "@/utils/routeCache.client";
 
 export default function Dashboard() {
-  const { logs, user } = useLoaderData<typeof loader>();
+  const { logs: prev, user } = useLoaderData<typeof loader>();
   const { log, stats } = useDashboardLayoutData();
-
+  const logs = [log, ...prev];
   return (
     <div className="h-full space-y-6">
       <div className="grid grid-cols-4 gap-6">

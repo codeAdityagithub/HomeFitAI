@@ -44,15 +44,17 @@ export default function CaloriesSourceChart({
   const { stats } = useDashboardLayoutData();
   const chartData = useMemo(() => {
     return logs
-      .map((log) => {
+      .map((log, ind) => {
         const caloriesFromSteps = Math.round(
           stepsToCal(stats.height, stats.weight, log.steps)
         );
+        const totalCalories =
+          log.totalCalories + (ind === 0 ? caloriesFromSteps : 0);
         return {
           date: log.date,
           steps: caloriesFromSteps,
-          exercise: log.totalCalories - caloriesFromSteps,
-          total: log.totalCalories,
+          exercise: totalCalories - caloriesFromSteps,
+          total: totalCalories,
         };
       })
       .reverse();
