@@ -3,7 +3,10 @@ import { isRouteErrorResponse, Link, useRouteError } from "@remix-run/react";
 import Detection from "@/components/workout/Detection";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
-import { PositionFunction } from "@/utils/tensorflow/functions";
+import type {
+  PositionFunction,
+  PositionFunctionUnilateral,
+} from "@/utils/tensorflow/functions";
 import { importFunction } from "@/utils/tensorflow/imports";
 // import { flexing } from "@/utils/tensorflow/functions";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
@@ -19,6 +22,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { LoaderIcon } from "lucide-react";
+import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
@@ -47,13 +51,14 @@ const DetectWorkoutPage = () => {
       );
     }
   }, []);
-  const [func, setFunc] = useState<PositionFunction>();
+  const [func, setFunc] = useState<any>();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const funcName = exercise.id;
     async function loadFunction() {
       setLoading(true);
       const fetchedFunction = await importFunction(funcName);
+
       setLoading(false);
       setFunc(() => fetchedFunction);
     }
@@ -90,7 +95,7 @@ const DetectWorkoutPage = () => {
           </Card>
         </div>
       ) : (
-        <Detection
+        <DetectionUnilateral
           name={exercise.name}
           pos_function={func}
           start_pos={2}

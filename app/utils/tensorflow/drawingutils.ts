@@ -58,7 +58,7 @@ export function drawSkeleton(
   ctx: CanvasRenderingContext2D,
   scale = 1
 ) {
-  console.log(minConfidence);
+  // console.log(minConfidence);
   adjacentKeyPoints.forEach((indices) => {
     const [i, j] = indices;
     // if (keypoints[i].score < 0.4 || keypoints[j].score < 0.4) return; //

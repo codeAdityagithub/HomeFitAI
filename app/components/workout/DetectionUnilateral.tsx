@@ -5,7 +5,7 @@ import "@tensorflow/tfjs-backend-webgl";
 tf.ready();
 // Register one of the TF.js backends.
 import { drawKeypoints, drawSkeleton } from "@/utils/tensorflow/drawingutils";
-import { PositionFunction } from "@/utils/tensorflow/functions";
+import type { PositionFunctionUnilateral } from "@/utils/tensorflow/functions";
 import { curlsSuggestions } from "@/lib/exerciseSuggestions";
 import useStopwatch from "@/hooks/useStopwatch";
 import { Button } from "../ui/button";
@@ -15,7 +15,7 @@ import GoBack from "../GoBack";
 
 type Exercise = {
   name: string;
-  pos_function: PositionFunction;
+  pos_function: PositionFunctionUnilateral;
   start_pos: 0 | 2;
 };
 
@@ -43,7 +43,11 @@ function isRepeat(pos: number[]) {
 // 1->mid
 // 2->down
 
-function Detection({ name, pos_function, start_pos }: Exercise) {
+export default function DetectionUnilateral({
+  name,
+  pos_function,
+  start_pos,
+}: Exercise) {
   const animationFrameId = useRef<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,17 +58,33 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
   const isdrawing = useRef(false);
   const sendSuggestions = useRef(true);
   const sendSuggestionIntervalId = useRef<NodeJS.Timeout>();
-  const isModified = useRef(false);
+  const isModified_left = useRef(false);
+  const isModified_right = useRef(false);
 
-  const pos = useRef<number[]>([]);
-  const [reps, setReps] = useState(0);
-  const reps_ref = useRef(0);
+  const pos_left = useRef<number[]>([]);
+  const pos_right = useRef<number[]>([]);
+  const [reps_left, setRepsLeft] = useState(0);
+  const [reps_right, setRepsRight] = useState(0);
+  const reps_left_ref = useRef(0);
+  const reps_right_ref = useRef(0);
   const [loading, setLoading] = useState(false);
 
   const [suggestion, setSuggestion] = useState("");
-  const { start, reset, restart, time } = useStopwatch();
+  const {
+    start: start_left,
+    reset: reset_left,
+    restart: restart_left,
+    time: time_left,
+  } = useStopwatch();
+  const {
+    start: start_right,
+    reset: reset_right,
+    restart: restart_right,
+    time: time_right,
+  } = useStopwatch();
 
-  const hasStarted = useRef(false);
+  const hasStarted_left = useRef(false);
+  const hasStarted_right = useRef(false);
   const totalTime = useRef(0);
 
   const animate = useCallback(
@@ -105,68 +125,133 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
       drawSkeleton(pose.keypoints, 0.5, ctx);
       // setIsFlexing(flexing(pose.keypoints));
       if (pose.score && pose.score > 0.4) {
-        const { _pos } = pos_function(pose.keypoints, sendSuggestions.current);
+        const { _posleft, _posright } = pos_function(
+          pose.keypoints,
+          sendSuggestions.current
+        );
         // if (_suggestion) setSuggestion(_suggestion);
-        const top = pos.current[pos.current.length - 1];
+        const top_left = pos_left.current[pos_left.current.length - 1];
+        const top_right = pos_right.current[pos_right.current.length - 1];
 
         // is pos is empty only push start position
-        if (top === undefined) {
-          if (_pos === start_pos) {
-            isModified.current = true;
-            pos.current.push(_pos);
+        if (top_left === undefined) {
+          if (_posleft === start_pos) {
+            isModified_left.current = true;
+            pos_left.current.push(_posleft);
             // console.log(pos.current);
           }
         }
         // push only if different position
-        else if (top !== _pos) {
-          pos.current.push(_pos);
-          // console.log(pos.current);
-          if (pos.current.length === 2) {
-            hasStarted.current = true;
-            start(0.3);
-            console.log("started");
+        else if (top_left !== _posleft) {
+          pos_left.current.push(_posleft);
+
+          if (pos_left.current.length === 2) {
+            hasStarted_left.current = true;
+            start_left(0.3);
+            console.log("started left");
           }
-          isModified.current = true;
+
+          isModified_left.current = true;
         }
-        const len = pos.current.length;
-        if (len === 3 && isModified.current) {
-          if (isRepeat(pos.current)) {
+
+        if (top_right === undefined) {
+          if (_posright === start_pos) {
+            isModified_right.current = true;
+            pos_right.current.push(_posright);
+            // console.log(pos.current);
+          }
+        }
+        // push only if different position
+        else if (top_right !== _posright) {
+          pos_right.current.push(_posright);
+
+          if (pos_right.current.length === 2) {
+            hasStarted_right.current = true;
+            start_right(0.3);
+            console.log("started right");
+          }
+
+          isModified_right.current = true;
+        }
+
+        const len_left = pos_left.current.length;
+        const len_right = pos_right.current.length;
+
+        if (len_left === 3 && isModified_left.current) {
+          if (isRepeat(pos_left.current)) {
             setSuggestion(curlsSuggestions.INCOMPLETE);
             // restart time on repeat and reset
-            if (hasStarted.current) {
-              reset();
-              hasStarted.current = false;
+            if (hasStarted_left.current) {
+              reset_left();
+              hasStarted_left.current = false;
             }
-            pos.current.length = 0;
+            pos_left.current.length = 0;
           } else {
             setSuggestion("");
           }
-        } else if (len === 5) {
-          if (isModified.current && isComplete(start_pos, pos.current)) {
-            setReps((prev) => prev + 1);
-            reps_ref.current++;
+        } else if (len_left === 5) {
+          if (
+            isModified_left.current &&
+            isComplete(start_pos, pos_left.current)
+          ) {
+            setRepsLeft((prev) => prev + 1);
+            reps_left_ref.current++;
             setSuggestion("");
-            totalTime.current = parseFloat(
-              (time.current + totalTime.current).toFixed(2)
-            );
-            // console.log(time.current);
-            // restart();
-          } else if (isModified.current) {
+
+            if (!hasStarted_right)
+              totalTime.current = parseFloat(
+                (time_left.current + totalTime.current).toFixed(2)
+              );
+            console.log(totalTime.current);
+          } else if (isModified_left.current) {
             setSuggestion(curlsSuggestions.INCOMPLETE);
           }
-          reset();
-          pos.current.length = 0;
-          hasStarted.current = false;
+          reset_left();
+          pos_left.current.length = 0;
+          hasStarted_left.current = false;
         }
-        isModified.current = false;
+        if (len_right === 3 && isModified_right.current) {
+          if (isRepeat(pos_right.current)) {
+            setSuggestion(curlsSuggestions.INCOMPLETE);
+            // restart time on repeat and reset
+            if (hasStarted_right.current) {
+              reset_right();
+              hasStarted_right.current = false;
+            }
+            pos_right.current.length = 0;
+          } else {
+            setSuggestion("");
+          }
+        } else if (len_right === 5) {
+          if (
+            isModified_right.current &&
+            isComplete(start_pos, pos_right.current)
+          ) {
+            setRepsRight((prev) => prev + 1);
+            reps_right_ref.current++;
+            setSuggestion("");
+            if (!hasStarted_left)
+              totalTime.current = parseFloat(
+                (time_right.current + totalTime.current).toFixed(2)
+              );
+            console.log(totalTime.current);
+          } else if (isModified_right.current) {
+            setSuggestion(curlsSuggestions.INCOMPLETE);
+          }
+          reset_right();
+          pos_right.current.length = 0;
+          hasStarted_right.current = false;
+        }
+
+        isModified_left.current = false;
+        isModified_right.current = false;
       }
       // Update last frame time for the next iteration
-
       lastFrameTime.current = currentTime;
       // Request the next frame
       animationFrameId.current = requestAnimationFrame(animate);
     },
-    [setReps, setSuggestion, start_pos]
+    [setRepsLeft, setRepsRight, setSuggestion, start_pos]
   );
 
   const handleResize = useCallback(() => {
@@ -179,6 +264,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
     // console.log("toggle");
     sendSuggestions.current = !sendSuggestions.current;
   }, []);
+
   useEffect(() => {
     // Start the animation loop
     window.addEventListener("resize", handleResize);
@@ -241,10 +327,13 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
 
   const stopAnimation = useCallback(() => {
     console.log("canceling");
-    reset();
+    reset_left();
+    reset_right();
     setSuggestion("");
-    pos.current = [];
-    hasStarted.current = false;
+    pos_left.current = [];
+    pos_right.current = [];
+    hasStarted_left.current = false;
+    hasStarted_right.current = false;
     clearInterval(sendSuggestionIntervalId.current);
     isdrawing.current = false;
     cancelAnimationFrame(animationFrameId.current!);
@@ -267,7 +356,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
         "Total time was : " +
           totalTime.current +
           " Average time was : " +
-          totalTime.current / reps_ref.current
+          totalTime.current / reps_left_ref.current
       );
   }, [setSuggestion]);
 
@@ -275,8 +364,10 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
     <div>
       <div className="flex gap-2 items-center">
         <GoBack />
+        <h1>{name}</h1>
         <h1 className="text-2xl font-bold">
-          {name} Reps : {reps}
+          left : {reps_left}
+          right : {reps_right}
         </h1>
       </div>
       {/* <h1>Time : {time} seconds</h1> */}
@@ -304,7 +395,14 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
       >
         stop
       </Button>
-      <Button onClick={() => setReps(0)}>reset</Button>
+      <Button
+        onClick={() => {
+          setRepsLeft(0);
+          setRepsRight(0);
+        }}
+      >
+        reset
+      </Button>
       <br />
       {suggestion ?? null}
       <div
@@ -354,4 +452,3 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
     </div>
   );
 }
-export default Detection;

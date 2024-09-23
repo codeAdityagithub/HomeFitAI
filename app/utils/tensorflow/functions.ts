@@ -5,6 +5,11 @@ export type PositionFunction = (
   keypoints: Keypoint[],
   sendSuggestions: boolean
 ) => { _pos: 0 | 1 | 2; _suggestion?: string };
+
+export type PositionFunctionUnilateral = (
+  keypoints: Keypoint[],
+  sendSuggestions: boolean
+) => { _posleft: 0 | 1 | 2; _posright: 0 | 1 | 2; _suggestion?: string };
 // function dist(x1: number, y1: number, x2: number, y2: number) {
 //   const deltaX = x2 - x1;
 //   const deltaY = y2 - y1;
