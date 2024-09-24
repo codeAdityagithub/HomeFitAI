@@ -198,11 +198,11 @@ export default function DetectionUnilateral({
             reps_left_ref.current++;
             setSuggestion("");
 
-            if (!hasStarted_right)
+            if (!hasStarted_right.current) {
               totalTime.current = parseFloat(
                 (time_left.current + totalTime.current).toFixed(2)
               );
-            console.log(totalTime.current);
+            }
           } else if (isModified_left.current) {
             setSuggestion(curlsSuggestions.INCOMPLETE);
           }
@@ -230,11 +230,11 @@ export default function DetectionUnilateral({
             setRepsRight((prev) => prev + 1);
             reps_right_ref.current++;
             setSuggestion("");
-            if (!hasStarted_left)
+            if (!hasStarted_left.current) {
               totalTime.current = parseFloat(
                 (time_right.current + totalTime.current).toFixed(2)
               );
-            console.log(totalTime.current);
+            }
           } else if (isModified_right.current) {
             setSuggestion(curlsSuggestions.INCOMPLETE);
           }
@@ -356,7 +356,7 @@ export default function DetectionUnilateral({
         "Total time was : " +
           totalTime.current +
           " Average time was : " +
-          totalTime.current / reps_left_ref.current
+          totalTime.current / (reps_left_ref.current + reps_right_ref.current)
       );
   }, [setSuggestion]);
 
