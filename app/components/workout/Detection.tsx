@@ -39,9 +39,9 @@ function isComplete(start_pos: 0 | 2, pos: number[]): boolean {
 function isRepeat(pos: number[]) {
   return pos[0] === pos[2];
 }
-// 0-> up
+// 0-> top of movement
 // 1->mid
-// 2->down
+// 2->bottom of movement
 
 function Detection({ name, pos_function, start_pos }: Exercise) {
   const animationFrameId = useRef<number | null>(null);
@@ -201,7 +201,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
         detectorRef.current = await poseDetection.createDetector(
           poseDetection.SupportedModels.MoveNet,
           {
-            modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
+            modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
           }
         );
 

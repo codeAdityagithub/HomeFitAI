@@ -1,28 +1,24 @@
-import { MetaFunction } from "@remix-run/react";
-import { isRouteErrorResponse, Link, useRouteError } from "@remix-run/react";
 import Detection from "@/components/workout/Detection";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
-import type {
-  PositionFunction,
-  PositionFunctionUnilateral,
-} from "@/utils/tensorflow/functions";
 import { importFunction } from "@/utils/tensorflow/imports";
+import { Link, useRouteError } from "@remix-run/react";
 // import { flexing } from "@/utils/tensorflow/functions";
-import { json, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { useCallback, useEffect, useState } from "react";
-import invariant from "tiny-invariant";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
-import { LoaderIcon } from "lucide-react";
 import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
+import { ExerciseStartPosition } from "@/utils/exercises/types";
+import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { LoaderIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import invariant from "tiny-invariant";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
@@ -51,6 +47,7 @@ const DetectWorkoutPage = () => {
       );
     }
   }, []);
+
   const [func, setFunc] = useState<any>();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -94,12 +91,20 @@ const DetectWorkoutPage = () => {
             </CardFooter>
           </Card>
         </div>
-      ) : (
+      ) : exercise.movement === "bilateral" ? (
+        <Detection
+          name={exercise.name}
+          pos_function={func}
+          start_pos={ExerciseStartPosition[exercise.id]}
+        />
+      ) : exercise.movement === "unilateral" ? (
         <DetectionUnilateral
           name={exercise.name}
           pos_function={func}
-          start_pos={2}
+          start_pos={ExerciseStartPosition[exercise.id]}
         />
+      ) : (
+        <div className="">Static exercise Todo</div>
       )}
     </>
   );

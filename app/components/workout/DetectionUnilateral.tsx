@@ -287,7 +287,7 @@ export default function DetectionUnilateral({
         detectorRef.current = await poseDetection.createDetector(
           poseDetection.SupportedModels.MoveNet,
           {
-            modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING,
+            modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
           }
         );
 

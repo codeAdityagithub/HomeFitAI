@@ -20,6 +20,7 @@ export type Exercise = {
   bodyPart: string;
   met: number;
   equipment: string;
+  movement: "bilateral" | "unilateral" | "static";
   id: ExerciseId;
   name: string;
   target: string;

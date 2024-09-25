@@ -78,3 +78,91 @@ export type ExerciseId =
   | "ring_pushup"
   | "single_leg_squat_pistol"
   | "jumping_jacks";
+
+export enum ExercisePosition {
+  Top = 0, // 0 means Top or Up position
+  Mid = 1, // 1 means Mid position
+  Bottom = 2, // 2 means Bottom or Down position
+}
+
+export enum ExerciseStartPosition {
+  jump_rope = ExercisePosition.Top, // TODO
+  mountain_climber_cross_body = ExercisePosition.Top, // TODO
+  burpee = ExercisePosition.Bottom, // TODO
+  bulgarian_split_squats = ExercisePosition.Top,
+  dynamic_chest_stretch = ExercisePosition.Top,
+  dumbbell_single_leg_deadlift = ExercisePosition.Top,
+  plank = ExercisePosition.Top, // TODO
+  russian_twist = ExercisePosition.Top, // TODO
+  situp = ExercisePosition.Bottom,
+  hanging_knee_raise = ExercisePosition.Top,
+  hanging_straight_leg_raise = ExercisePosition.Top,
+  seated_knee_tucks = ExercisePosition.Top,
+  incline_side_plank = ExercisePosition.Top, // TODO
+  side_plank = ExercisePosition.Top, // TODO
+  jump_squat = ExercisePosition.Top,
+  squat = ExercisePosition.Bottom,
+  dumbbell_front_squat = ExercisePosition.Bottom,
+  clap_push_up = ExercisePosition.Top,
+  band_alternating_biceps_curl = ExercisePosition.Bottom,
+  band_bench_press = ExercisePosition.Top,
+  band_closegrip_pulldown = ExercisePosition.Bottom,
+  band_concentration_curl = ExercisePosition.Bottom,
+  band_front_raise = ExercisePosition.Bottom,
+  band_lateral_raise = ExercisePosition.Bottom,
+  band_biceps_curl = ExercisePosition.Bottom,
+  band_reverse_fly = ExercisePosition.Bottom,
+  band_shoulder_press = ExercisePosition.Top,
+  band_single_leg_split_squat = ExercisePosition.Top,
+  band_squat = ExercisePosition.Top,
+  band_stiff_leg_deadlift = ExercisePosition.Bottom,
+  dumbbell_bench_press = ExercisePosition.Top,
+  dumbbell_fly = ExercisePosition.Top,
+  chest_dip = ExercisePosition.Top,
+  archer_pull_up = ExercisePosition.Bottom,
+  band_assisted_pullup = ExercisePosition.Bottom,
+  pullup = ExercisePosition.Bottom,
+  wide_grip_pullup = ExercisePosition.Bottom,
+  scapular_pullup = ExercisePosition.Bottom,
+  close_grip_chinup = ExercisePosition.Bottom,
+  band_standing_rear_delt_row = ExercisePosition.Bottom,
+  bodyweight_standing_row = ExercisePosition.Bottom,
+  bodyweight_standing_row_with_towel = ExercisePosition.Bottom,
+  dumbbell_bent_over_row = ExercisePosition.Bottom,
+  suspended_row = ExercisePosition.Bottom,
+  dumbbell_standing_overhead_press = ExercisePosition.Top,
+  dumbbell_arnold_press = ExercisePosition.Top,
+  dumbbell_lateral_raise = ExercisePosition.Bottom,
+  dumbbell_one_arm_lateral_raise = ExercisePosition.Bottom,
+  dumbbell_rear_lateral_raise = ExercisePosition.Bottom,
+  dumbbell_biceps_curl = ExercisePosition.Bottom,
+  dumbbell_alternate_biceps_curl = ExercisePosition.Bottom,
+  band_triceps_extension = ExercisePosition.Bottom,
+  bodyweight_kneeling_triceps_extension = ExercisePosition.Bottom,
+  dumbbell_hammer_curl = ExercisePosition.Bottom,
+  dumbbell_lunge = ExercisePosition.Top,
+  bodyweight_lunge = ExercisePosition.Top,
+  dumbbell_rear_lunge = ExercisePosition.Top,
+  bodyweight_standing_calf_raise = ExercisePosition.Bottom,
+  dumbbell_standing_calf_raise = ExercisePosition.Bottom,
+  standing_split_squats = ExercisePosition.Top,
+  glute_bridge_on_bench = ExercisePosition.Bottom,
+  low_glute_bridge_on_floor = ExercisePosition.Bottom,
+  archer_push_up = ExercisePosition.Top,
+  band_pushup = ExercisePosition.Top,
+  deep_push_up = ExercisePosition.Top,
+  wide_hand_push_up = ExercisePosition.Top,
+  decline_pushup = ExercisePosition.Top,
+  diamond_pushup = ExercisePosition.Top,
+  handstand_pushup = ExercisePosition.Top,
+  pike_pushup = ExercisePosition.Top,
+  incline_closegrip_pushup = ExercisePosition.Top,
+  incline_pushup = ExercisePosition.Top,
+  kneeling_pushup = ExercisePosition.Top,
+  pushup = ExercisePosition.Top,
+  pushup_wall = ExercisePosition.Top,
+  single_arm_pushup = ExercisePosition.Top,
+  ring_pushup = ExercisePosition.Top,
+  single_leg_squat_pistol = ExercisePosition.Top,
+  jumping_jacks = ExercisePosition.Top, // TODO
+}
