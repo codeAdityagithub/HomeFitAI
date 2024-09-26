@@ -85,7 +85,7 @@ const DashboardLayout = () => {
   return (
     <div className="flex flex-col-reverse md:flex-row min-h-[500px]">
       <Sidebar />
-      <main className="flex-1 w-full h-full min-h-[calc(100lvh-56px)] md:min-h-screen bg-background text-foreground p-6 md:p-4 lg:p-6">
+      <main className="flex-1 w-full h-full min-h-[calc(100lvh-56px)] md:min-h-screen bg-background text-foreground pb-16 p-6 md:p-4 lg:p-6">
         <Outlet />
       </main>
     </div>

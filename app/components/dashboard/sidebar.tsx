@@ -158,8 +158,8 @@ export default function Sidebar() {
 
 const BottomNav = () => {
   return (
-    <div className="w-full sticky bottom-0 bg-background text-foreground z-50 block md:hidden p-2">
-      <div className="grid grid-cols-4 gap-1 items-stretch">
+    <div className="w-full fixed bottom-0 bg-background text-foreground z-50 block md:hidden p-1">
+      <div className="flex *:flex-1 items-end gap-1 h-9 xs:h-10 overflow-visible">
         {BottomLinks.map((link) => (
           <NavLink
             key={link.to}
@@ -167,7 +167,7 @@ const BottomNav = () => {
             to={link.to}
             className={({ isActive }) =>
               cn(
-                "block rounded-lg transition-colors hover:text-accent-foreground",
+                "block rounded-lg transition-colors hover:text-accent-foreground h-fit",
                 isActive
                   ? "bg-accent text-accent-foreground active-bottom-link"
                   : "hover:bg-accent/80"

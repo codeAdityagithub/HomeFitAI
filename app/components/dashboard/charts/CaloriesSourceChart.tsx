@@ -98,6 +98,18 @@ export default function CaloriesSourceChart({
                   hideLabel
                   formatter={(value, name, item, index) => (
                     <>
+                      {index === 0 && (
+                        <div className="w-full">
+                          {new Date(item.payload.date).toLocaleDateString(
+                            "en-US",
+                            {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            }
+                          )}
+                        </div>
+                      )}
                       <div className="flex w-full items-center text-xs text-muted-foreground">
                         {chartConfig[name as keyof typeof chartConfig]?.label ||
                           name}

@@ -111,7 +111,7 @@ const NavbarSm = ({ hash }: { hash: string }) => {
   const [open, setOpen] = useState(false);
   const user = useUser();
   return (
-    <nav className="lg:hidden bg-background/80 backdrop-blur-md flex pt-10 pb-2 gap-4 z-50 sticky -top-8 px-6 xs:px-10">
+    <nav className="lg:hidden bg-background/80 backdrop-blur-md flex pt-6 pb-2 gap-4 z-50 sticky -top-8 px-6 xs:px-10">
       <span className="min-w-8 min-h-8 w-8 h-8 aspect-square">
         <img
           src="/logo.png"

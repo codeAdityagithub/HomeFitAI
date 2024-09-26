@@ -77,11 +77,11 @@
   .ver_scroll::-webkit-scrollbar-thumb:hover {
     @apply bg-accent/80 transition-colors;
   }
-  .active-bottom-link .link-text {
-    @apply text-xs xs:text-sm w-auto opacity-100;
-  }
   .link-text {
-    @apply w-0 overflow-hidden opacity-0 transition-all duration-300;
+    @apply w-0 h-0 overflow-hidden opacity-0 transition-all duration-300;
+  }
+  .active-bottom-link .link-text {
+    @apply text-xs xs:text-sm w-auto h-auto opacity-100;
   }
 }
 

@@ -68,7 +68,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="ver_scroll min-h-[500px]">
         {children}
-        <ScrollRestoration />
+        <ScrollRestoration
+          getKey={(location, matches) => {
+            // default behavior
+            return location.pathname;
+          }}
+        />
         <Scripts />
       </body>
     </html>
