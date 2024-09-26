@@ -1,5 +1,4 @@
 import { Keypoint } from "@tensorflow-models/pose-detection";
-import { curlsSuggestions } from "@/lib/exerciseSuggestions";
 
 export type PositionFunction = (
   keypoints: Keypoint[],
@@ -55,28 +54,3 @@ export const squating: PositionFunction = (
   else if (left_hip_angle < 60 && right_hip_angle < 60) return { _pos: 2 };
   return { _pos: 1 };
 };
-export function push_position(keypoints: Keypoint[], sendSuggestions: boolean) {
-  // const left_elbow_angle = angle(keypoints, 6, 8, 10);
-  // const right_elbow_angle = angle(keypoints, 5, 7, 9);
-  const left_elbow_angle = angle(keypoints, 8, 6, 12); // for pullups
-  const right_elbow_angle = angle(keypoints, 7, 5, 11);
-  let suggestion = "";
-  if (sendSuggestions) {
-    const body_angle = angle(keypoints, 5, 11, 13);
-    suggestion = body_angle < 165 ? "keep your body straight" : "";
-  }
-  if (left_elbow_angle < 50 && right_elbow_angle < 50)
-    return {
-      pos: "down",
-      suggestion: suggestion,
-    };
-  else if (left_elbow_angle > 150 && right_elbow_angle > 150)
-    return {
-      pos: "up",
-      suggestion: suggestion,
-    };
-  return {
-    pos: "neutral",
-    suggestion: suggestion,
-  };
-}

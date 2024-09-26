@@ -6,7 +6,6 @@ tf.ready();
 // Register one of the TF.js backends.
 import { drawKeypoints, drawSkeleton } from "@/utils/tensorflow/drawingutils";
 import type { PositionFunctionUnilateral } from "@/utils/tensorflow/functions";
-import { curlsSuggestions } from "@/lib/exerciseSuggestions";
 import useStopwatch from "@/hooks/useStopwatch";
 import { Button } from "../ui/button";
 import GoBack from "../GoBack";
@@ -22,6 +21,9 @@ type Exercise = {
 const valid_seq = {
   0: [0, 1, 2, 1, 0],
   2: [2, 1, 0, 1, 2],
+};
+const suggestions = {
+  INCOMPLETE: "Please try to perform full range of motion.",
 };
 
 function isComplete(start_pos: 0 | 2, pos: number[]): boolean {
@@ -86,6 +88,8 @@ export default function DetectionUnilateral({
   const hasStarted_left = useRef(false);
   const hasStarted_right = useRef(false);
   const totalTime = useRef(0);
+
+  const [voice, setVoice] = useState<SpeechSynthesisVoice>();
 
   const animate = useCallback(
     async (currentTime: number) => {
@@ -179,7 +183,7 @@ export default function DetectionUnilateral({
 
         if (len_left === 3 && isModified_left.current) {
           if (isRepeat(pos_left.current)) {
-            setSuggestion(curlsSuggestions.INCOMPLETE);
+            setSuggestion(suggestions.INCOMPLETE);
             // restart time on repeat and reset
             if (hasStarted_left.current) {
               reset_left();
@@ -204,7 +208,7 @@ export default function DetectionUnilateral({
               );
             }
           } else if (isModified_left.current) {
-            setSuggestion(curlsSuggestions.INCOMPLETE);
+            setSuggestion(suggestions.INCOMPLETE);
           }
           reset_left();
           pos_left.current.length = 0;
@@ -212,7 +216,7 @@ export default function DetectionUnilateral({
         }
         if (len_right === 3 && isModified_right.current) {
           if (isRepeat(pos_right.current)) {
-            setSuggestion(curlsSuggestions.INCOMPLETE);
+            setSuggestion(suggestions.INCOMPLETE);
             // restart time on repeat and reset
             if (hasStarted_right.current) {
               reset_right();
@@ -236,7 +240,7 @@ export default function DetectionUnilateral({
               );
             }
           } else if (isModified_right.current) {
-            setSuggestion(curlsSuggestions.INCOMPLETE);
+            setSuggestion(suggestions.INCOMPLETE);
           }
           reset_right();
           pos_right.current.length = 0;
@@ -263,6 +267,40 @@ export default function DetectionUnilateral({
   const toggleSuggestion = useCallback(() => {
     // console.log("toggle");
     sendSuggestions.current = !sendSuggestions.current;
+  }, []);
+
+  useEffect(() => {
+    if ("speechSynthesis" in window && suggestion !== "") {
+      if (!window.speechSynthesis.speaking) {
+        const utterance = new SpeechSynthesisUtterance(suggestion);
+
+        if (voice) utterance.voice = voice;
+
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  }, [suggestion, voice]);
+
+  useEffect(() => {
+    // Load available voices
+    const loadVoices = () => {
+      setVoice(
+        window.speechSynthesis
+          .getVoices()
+          .find((v) => v.name === "Google UK English Male")
+      ); // Set default to a Neural voice
+    };
+
+    // Initial load
+    loadVoices();
+    // Load voices when they change
+    if ("speechSynthesis" in window)
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    return () => {
+      if ("speechSynthesis" in window)
+        window.speechSynthesis.onvoiceschanged = null; // Cleanup
+    };
   }, []);
 
   useEffect(() => {
@@ -315,15 +353,6 @@ export default function DetectionUnilateral({
       clearInterval(sendSuggestionIntervalId.current);
     };
   }, []); // Empty dependency array ensures the effect runs only once on mount
-
-  //  useEffect for time related stuff
-  // useEffect(() => {
-  //   if (lastRepTime.current > time && wasRepComplete.current) {
-  //     totalTime.current += lastRepTime.current;
-  //     // console.log(lastRepTime);
-  //   }
-  //   lastRepTime.current = time;
-  // }, [time]);
 
   const stopAnimation = useCallback(() => {
     console.log("canceling");

@@ -6,7 +6,6 @@ tf.ready();
 // Register one of the TF.js backends.
 import { drawKeypoints, drawSkeleton } from "@/utils/tensorflow/drawingutils";
 import { PositionFunction } from "@/utils/tensorflow/functions";
-import { curlsSuggestions } from "@/lib/exerciseSuggestions";
 import useStopwatch from "@/hooks/useStopwatch";
 import { Button } from "../ui/button";
 import GoBack from "../GoBack";
@@ -22,6 +21,9 @@ type Exercise = {
 const valid_seq = {
   0: [0, 1, 2, 1, 0],
   2: [2, 1, 0, 1, 2],
+};
+const suggestions = {
+  INCOMPLETE: "Please try to perform full range of motion.",
 };
 
 function isComplete(start_pos: 0 | 2, pos: number[]): boolean {
@@ -67,6 +69,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
   const hasStarted = useRef(false);
   const totalTime = useRef(0);
 
+  const [voice, setVoice] = useState<SpeechSynthesisVoice>();
   const animate = useCallback(
     async (currentTime: number) => {
       if (isdrawing.current == false) return;
@@ -131,7 +134,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
         const len = pos.current.length;
         if (len === 3 && isModified.current) {
           if (isRepeat(pos.current)) {
-            setSuggestion(curlsSuggestions.INCOMPLETE);
+            setSuggestion(suggestions.INCOMPLETE);
             // restart time on repeat and reset
             if (hasStarted.current) {
               reset();
@@ -145,14 +148,15 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
           if (isModified.current && isComplete(start_pos, pos.current)) {
             setReps((prev) => prev + 1);
             reps_ref.current++;
-            setSuggestion("");
             totalTime.current = parseFloat(
               (time.current + totalTime.current).toFixed(2)
             );
-            // console.log(time.current);
+            // if (time.current < 2)
+            //   setSuggestion("Try going slower and controlling the movement.");
+            // else setSuggestion("");
             // restart();
           } else if (isModified.current) {
-            setSuggestion(curlsSuggestions.INCOMPLETE);
+            setSuggestion(suggestions.INCOMPLETE);
           }
           reset();
           pos.current.length = 0;
@@ -179,37 +183,71 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
     // console.log("toggle");
     sendSuggestions.current = !sendSuggestions.current;
   }, []);
+
+  useEffect(() => {
+    if ("speechSynthesis" in window && suggestion !== "") {
+      if (!window.speechSynthesis.speaking) {
+        const utterance = new SpeechSynthesisUtterance(suggestion);
+
+        if (voice) utterance.voice = voice;
+
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  }, [suggestion, voice]);
+
+  useEffect(() => {
+    // Load available voices
+    const loadVoices = () => {
+      setVoice(
+        window.speechSynthesis
+          .getVoices()
+          .find((v) => v.name === "Google UK English Male")
+      ); // Set default to a Neural voice
+    };
+
+    // Initial load
+    loadVoices();
+    // Load voices when they change
+    if ("speechSynthesis" in window)
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    return () => {
+      if ("speechSynthesis" in window)
+        window.speechSynthesis.onvoiceschanged = null; // Cleanup
+    };
+  }, []);
+
   useEffect(() => {
     // Start the animation loop
     window.addEventListener("resize", handleResize);
 
     const startCamera = async () => {
       setLoading(true);
-      try {
-        streamRef.current = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        if (videoRef.current) {
-          videoRef.current.srcObject = streamRef.current;
-          // animationFrameId.current = requestAnimationFrame(animate);
-        }
-        if (videoRef.current) {
-          videoRef.current.width = videoRef.current.videoWidth;
-          videoRef.current.height = videoRef.current.videoHeight;
-        }
-
-        detectorRef.current = await poseDetection.createDetector(
-          poseDetection.SupportedModels.MoveNet,
-          {
-            modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
-          }
-        );
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error accessing user camera:", error);
-        alert(error);
+      streamRef.current = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = streamRef.current;
+        // animationFrameId.current = requestAnimationFrame(animate);
       }
+      if (videoRef.current) {
+        videoRef.current.width = videoRef.current.videoWidth;
+        videoRef.current.height = videoRef.current.videoHeight;
+      }
+
+      detectorRef.current = await poseDetection.createDetector(
+        poseDetection.SupportedModels.MoveNet,
+        {
+          modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
+        }
+      );
+
+      setLoading(false);
+      // } catch (error) {
+      //   console.error("Error accessing user camera:", error);
+      //   alert(error);
+      // }
     };
 
     startCamera();
@@ -333,6 +371,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
             maxWidth: "640px",
             maxHeight: "480px",
             transform: "scaleX(-1)", // Flip video horizontally
+            borderRadius: "0.5rem",
           }}
         />
         <canvas
