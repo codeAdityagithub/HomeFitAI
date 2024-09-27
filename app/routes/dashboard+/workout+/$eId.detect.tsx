@@ -13,7 +13,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
-import { ExerciseStartPosition } from "@/utils/exercises/types";
+import {
+  ExerciseGoalSchema,
+  ExerciseStartPosition,
+} from "@/utils/exercises/types";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
@@ -22,7 +25,12 @@ import invariant from "tiny-invariant";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
+
   invariant(params.eId);
+  const q = new URL(request.url).searchParams.get("goal");
+  let { data: goal } = ExerciseGoalSchema.safeParse(q);
+  if (!goal) goal = "Free";
+
   const exercise = exercises.find((e) => e.id === params.eId);
   if (!exercise)
     throw json("Exercise not found.", {
@@ -30,11 +38,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       statusText: `Exercise ${params.eId} not found`,
     });
 
-  return { exercise };
+  return { exercise, goal };
 };
 
 const DetectWorkoutPage = () => {
-  const { exercise } = useLoaderData<typeof loader>();
+  const { exercise, goal } = useLoaderData<typeof loader>();
   useEffect(() => {
     if ("serviceWorker" in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register("/service-worker.js").then(
@@ -96,12 +104,14 @@ const DetectWorkoutPage = () => {
           name={exercise.name}
           pos_function={func}
           start_pos={ExerciseStartPosition[exercise.id]}
+          goal={goal}
         />
       ) : exercise.movement === "unilateral" ? (
         <DetectionUnilateral
           name={exercise.name}
           pos_function={func}
           start_pos={ExerciseStartPosition[exercise.id]}
+          goal={goal}
         />
       ) : (
         <div className="">Static exercise Todo</div>

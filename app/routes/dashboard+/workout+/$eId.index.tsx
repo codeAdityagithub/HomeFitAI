@@ -11,6 +11,7 @@ import invariant from "tiny-invariant";
 import { Dumbbell, Flame, PersonStanding, Ribbon } from "lucide-react";
 import { TbJumpRope } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
+import DetectionGoalSelector from "@/components/workout/DetectionGoalSelector";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
@@ -65,12 +66,8 @@ const ExercisePage = () => {
           referrerPolicy="strict-origin-when-cross-origin"
         ></iframe>
       </div>
-
-      <Link to="detect">
-        <Button>Detect</Button>
-      </Link>
-
-      <div className="mt-6">
+      <DetectionGoalSelector />
+      <div className="">
         <ul className="flex py-4 gap-4 flex-wrap *:flex-1 *:xs:min-w-[200px] *:max-w-fit *:min-w-full">
           <li>
             <Badge

@@ -72,7 +72,7 @@ export default function Sidebar() {
   return (
     <>
       <BottomNav />
-      <div className="w-[220px] lg:w-[280px] bg-background text-foreground h-svh overflow-auto ver_scroll sticky top-0 hidden md:flex flex-col items-start justify-start px-6 py-4">
+      <div className="w-[200px] lg:w-[280px] bg-background text-foreground h-svh overflow-auto ver_scroll sticky top-0 hidden md:flex flex-col items-start justify-start pl-6 py-4">
         <Link
           to="/"
           className="font-bold flex items-center w-full p-2"
@@ -158,7 +158,7 @@ export default function Sidebar() {
 
 const BottomNav = () => {
   return (
-    <div className="w-full fixed bottom-0 bg-background text-foreground z-50 block md:hidden p-1">
+    <div className="w-full fixed -bottom-[1px] bg-background text-foreground z-50 block md:hidden p-1">
       <div className="flex *:flex-1 items-end gap-1 h-9 xs:h-10 overflow-visible">
         {BottomLinks.map((link) => (
           <NavLink

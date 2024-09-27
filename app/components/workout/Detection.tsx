@@ -10,13 +10,16 @@ import useStopwatch from "@/hooks/useStopwatch";
 import { Button } from "../ui/button";
 import GoBack from "../GoBack";
 import { capitalizeEachWord } from "@/utils/general";
+import DetectionUI from "./DetectionUI";
+import { ExerciseGoals } from "@/utils/exercises/types";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
-type Exercise = {
+type Props = {
   name: string;
   pos_function: PositionFunction;
   start_pos: 0 | 2;
+  goal:ExerciseGoals
 };
 
 const valid_seq = {
@@ -46,7 +49,7 @@ function isRepeat(pos: number[]) {
 // 1->mid
 // 2->bottom of movement
 
-function Detection({ name, pos_function, start_pos }: Exercise) {
+function Detection({ name, pos_function, start_pos, goal }: Props) {
   const animationFrameId = useRef<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -308,90 +311,28 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
           totalTime.current / reps_ref.current
       );
   }, [setSuggestion]);
+  const startDetection = () => {
+    isdrawing.current = true;
+    sendSuggestionIntervalId.current = setInterval(toggleSuggestion, 2000);
+    setSuggestion("");
 
+    animationFrameId.current = requestAnimationFrame(animate);
+  };
+  const resetTime = useCallback(() => {
+    setReps(0);
+  }, [setReps]);
   return (
-    <div className="w-full">
-      <div className="flex gap-2 items-center">
-        <GoBack />
-        <h1 className="text-2xl font-bold">{capitalizeEachWord(name)}</h1>
-      </div>
-      <h1 className="text-2xl font-bold text-center">Reps : {reps}</h1>
-      <div className="flex w-full items-center justify-center">
-        <Button
-          disabled={loading}
-          onClick={() => {
-            isdrawing.current = true;
-            sendSuggestionIntervalId.current = setInterval(
-              toggleSuggestion,
-              2000
-            );
-            setSuggestion("");
-
-            animationFrameId.current = requestAnimationFrame(animate);
-          }}
-        >
-          {loading ? "Loading..." : "detect"}
-        </Button>
-        <Button
-          style={{ margin: 10 }}
-          variant="secondary"
-          onClick={() => {
-            stopAnimation();
-            // setIsdra wing(false);
-          }}
-        >
-          stop
-        </Button>
-        <Button onClick={() => setReps(0)}>reset</Button>
-      </div>
-      <br />
-      {suggestion ?? null}
-      <div
-        style={{
-          position: "relative",
-          boxSizing: "border-box",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <video
-          ref={videoRef}
-          autoPlay
-          onLoadedMetadata={() => {
-            if (videoRef.current) {
-              videoRef.current.width = videoRef.current.videoWidth;
-              videoRef.current.height = videoRef.current.videoHeight;
-            }
-          }}
-          playsInline
-          muted
-          style={{
-            width: "100%",
-            height: "100%",
-            maxWidth: "640px",
-            maxHeight: "480px",
-            transform: "scaleX(-1)", // Flip video horizontally
-            borderRadius: "0.5rem",
-          }}
-        />
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: "absolute",
-            // backgroundColor: "red",
-            top: 0,
-            // left: 0,
-            width: "100%",
-            height: "100%",
-            alignSelf: "center",
-            maxWidth: "640px",
-            maxHeight: "480px",
-            transform: "scaleX(-1)", // Flip canvas horizontally to match video
-          }}
-        />
-      </div>
-    </div>
+    <DetectionUI
+      name={name}
+      reps={reps}
+      loading={loading}
+      startDetection={startDetection}
+      stopAnimation={stopAnimation}
+      resetTime={resetTime}
+      suggestion={suggestion}
+      videoRef={videoRef}
+      canvasRef={canvasRef}
+    />
   );
 }
 export default Detection;

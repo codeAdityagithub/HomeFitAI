@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type ExerciseId =
   | "jump_rope"
   | "mountain_climber_cross_body"
@@ -84,6 +86,10 @@ export enum ExercisePosition {
   Mid = 1, // 1 means Mid position
   Bottom = 2, // 2 means Bottom or Down position
 }
+
+export const ExerciseGoalSchema = z.enum(["Reps", "TUT", "Timed", "Free"]);
+
+export type ExerciseGoals = z.infer<typeof ExerciseGoalSchema>;
 
 export enum ExerciseStartPosition {
   jump_rope = ExercisePosition.Top, // TODO

@@ -9,13 +9,16 @@ import type { PositionFunctionUnilateral } from "@/utils/tensorflow/functions";
 import useStopwatch from "@/hooks/useStopwatch";
 import { Button } from "../ui/button";
 import GoBack from "../GoBack";
+import DetectionUI from "./DetectionUI";
+import { ExerciseGoals } from "@/utils/exercises/types";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
-type Exercise = {
+type Props = {
   name: string;
   pos_function: PositionFunctionUnilateral;
   start_pos: 0 | 2;
+  goal:ExerciseGoals
 };
 
 const valid_seq = {
@@ -49,7 +52,8 @@ export default function DetectionUnilateral({
   name,
   pos_function,
   start_pos,
-}: Exercise) {
+  goal
+}: Props) {
   const animationFrameId = useRef<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -388,96 +392,29 @@ export default function DetectionUnilateral({
           totalTime.current / (reps_left_ref.current + reps_right_ref.current)
       );
   }, [setSuggestion]);
+  const startDetection = () => {
+    isdrawing.current = true;
+    sendSuggestionIntervalId.current = setInterval(toggleSuggestion, 2000);
+    setSuggestion("");
+
+    animationFrameId.current = requestAnimationFrame(animate);
+  };
+  const resetTime = useCallback(() => {
+    setRepsLeft(0);
+    setRepsRight(0);
+  }, [setRepsLeft, setRepsRight]);
 
   return (
-    <div>
-      <div className="flex gap-2 items-center">
-        <GoBack />
-        <h1>{name}</h1>
-        <h1 className="text-2xl font-bold">
-          left : {reps_left}
-          right : {reps_right}
-        </h1>
-      </div>
-      {/* <h1>Time : {time} seconds</h1> */}
-      <Button
-        disabled={loading}
-        onClick={() => {
-          isdrawing.current = true;
-          sendSuggestionIntervalId.current = setInterval(
-            toggleSuggestion,
-            1000
-          );
-          setSuggestion("");
-
-          animationFrameId.current = requestAnimationFrame(animate);
-        }}
-      >
-        {loading ? "Loading..." : "detect"}
-      </Button>
-      <Button
-        style={{ margin: 10 }}
-        onClick={() => {
-          stopAnimation();
-          // setIsdra wing(false);
-        }}
-      >
-        stop
-      </Button>
-      <Button
-        onClick={() => {
-          setRepsLeft(0);
-          setRepsRight(0);
-        }}
-      >
-        reset
-      </Button>
-      <br />
-      {suggestion ?? null}
-      <div
-        style={{
-          position: "relative",
-          boxSizing: "border-box",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <video
-          ref={videoRef}
-          autoPlay
-          onLoadedMetadata={() => {
-            if (videoRef.current) {
-              videoRef.current.width = videoRef.current.videoWidth;
-              videoRef.current.height = videoRef.current.videoHeight;
-            }
-          }}
-          playsInline
-          muted
-          style={{
-            width: "100%",
-            height: "100%",
-            maxWidth: "640px",
-            maxHeight: "480px",
-            transform: "scaleX(-1)", // Flip video horizontally
-          }}
-        />
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: "absolute",
-            // backgroundColor: "red",
-            top: 0,
-            // left: 0,
-            width: "100%",
-            height: "100%",
-            alignSelf: "center",
-            maxWidth: "640px",
-            maxHeight: "480px",
-            transform: "scaleX(-1)", // Flip canvas horizontally to match video
-          }}
-        />
-      </div>
-    </div>
+    <DetectionUI
+      name={name}
+      reps={{ left: reps_left, right: reps_right }}
+      loading={loading}
+      startDetection={startDetection}
+      stopAnimation={stopAnimation}
+      resetTime={resetTime}
+      suggestion={suggestion}
+      videoRef={videoRef}
+      canvasRef={canvasRef}
+    />
   );
 }
