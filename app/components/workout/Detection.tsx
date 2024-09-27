@@ -9,6 +9,7 @@ import { PositionFunction } from "@/utils/tensorflow/functions";
 import useStopwatch from "@/hooks/useStopwatch";
 import { Button } from "../ui/button";
 import GoBack from "../GoBack";
+import { capitalizeEachWord } from "@/utils/general";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -70,6 +71,7 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
   const totalTime = useRef(0);
 
   const [voice, setVoice] = useState<SpeechSynthesisVoice>();
+
   const animate = useCallback(
     async (currentTime: number) => {
       if (isdrawing.current == false) return;
@@ -108,8 +110,13 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
       drawSkeleton(pose.keypoints, 0.5, ctx);
       // setIsFlexing(flexing(pose.keypoints));
       if (pose.score && pose.score > 0.4) {
-        const { _pos } = pos_function(pose.keypoints, sendSuggestions.current);
-        // if (_suggestion) setSuggestion(_suggestion);
+        const { _pos, _suggestion } = pos_function(
+          pose.keypoints,
+          sendSuggestions.current
+        );
+
+        if (_suggestion) setSuggestion(_suggestion);
+
         const top = pos.current[pos.current.length - 1];
 
         // is pos is empty only push start position
@@ -131,11 +138,13 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
           }
           isModified.current = true;
         }
+
         const len = pos.current.length;
+
         if (len === 3 && isModified.current) {
           if (isRepeat(pos.current)) {
-            setSuggestion(suggestions.INCOMPLETE);
             // restart time on repeat and reset
+            setSuggestion(suggestions.INCOMPLETE);
             if (hasStarted.current) {
               reset();
               hasStarted.current = false;
@@ -268,15 +277,6 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
     };
   }, []); // Empty dependency array ensures the effect runs only once on mount
 
-  //  useEffect for time related stuff
-  // useEffect(() => {
-  //   if (lastRepTime.current > time && wasRepComplete.current) {
-  //     totalTime.current += lastRepTime.current;
-  //     // console.log(lastRepTime);
-  //   }
-  //   lastRepTime.current = time;
-  // }, [time]);
-
   const stopAnimation = useCallback(() => {
     console.log("canceling");
     reset();
@@ -310,39 +310,40 @@ function Detection({ name, pos_function, start_pos }: Exercise) {
   }, [setSuggestion]);
 
   return (
-    <div>
+    <div className="w-full">
       <div className="flex gap-2 items-center">
         <GoBack />
-        <h1 className="text-2xl font-bold">
-          {name} Reps : {reps}
-        </h1>
+        <h1 className="text-2xl font-bold">{capitalizeEachWord(name)}</h1>
       </div>
-      {/* <h1>Time : {time} seconds</h1> */}
-      <Button
-        disabled={loading}
-        onClick={() => {
-          isdrawing.current = true;
-          sendSuggestionIntervalId.current = setInterval(
-            toggleSuggestion,
-            1000
-          );
-          setSuggestion("");
+      <h1 className="text-2xl font-bold text-center">Reps : {reps}</h1>
+      <div className="flex w-full items-center justify-center">
+        <Button
+          disabled={loading}
+          onClick={() => {
+            isdrawing.current = true;
+            sendSuggestionIntervalId.current = setInterval(
+              toggleSuggestion,
+              2000
+            );
+            setSuggestion("");
 
-          animationFrameId.current = requestAnimationFrame(animate);
-        }}
-      >
-        {loading ? "Loading..." : "detect"}
-      </Button>
-      <Button
-        style={{ margin: 10 }}
-        onClick={() => {
-          stopAnimation();
-          // setIsdra wing(false);
-        }}
-      >
-        stop
-      </Button>
-      <Button onClick={() => setReps(0)}>reset</Button>
+            animationFrameId.current = requestAnimationFrame(animate);
+          }}
+        >
+          {loading ? "Loading..." : "detect"}
+        </Button>
+        <Button
+          style={{ margin: 10 }}
+          variant="secondary"
+          onClick={() => {
+            stopAnimation();
+            // setIsdra wing(false);
+          }}
+        >
+          stop
+        </Button>
+        <Button onClick={() => setReps(0)}>reset</Button>
+      </div>
       <br />
       {suggestion ?? null}
       <div

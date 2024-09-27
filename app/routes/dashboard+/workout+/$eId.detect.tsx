@@ -63,7 +63,7 @@ const DetectWorkoutPage = () => {
   }, []);
 
   return (
-    <>
+    <div className="max-w-4xl mx-auto md:p-4">
       {loading ? (
         <div className="h-[calc(100vh-104px)] md:h-[calc(100vh-48px)] flex items-center justify-center">
           <LoaderIcon className="animate-spin" />
@@ -106,7 +106,7 @@ const DetectWorkoutPage = () => {
       ) : (
         <div className="">Static exercise Todo</div>
       )}
-    </>
+    </div>
   );
 };
 

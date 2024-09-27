@@ -19,7 +19,7 @@ const exercises = singleton("exercises", () => {
 export type Exercise = {
   bodyPart: string;
   met: number;
-  equipment: string;
+  equipment: "rope" | "body weight" | "dumbbell" | "band";
   movement: "bilateral" | "unilateral" | "static";
   id: ExerciseId;
   name: string;
