@@ -32,15 +32,15 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   return { exercise: exerciseWithVideo };
 };
 
-const icons = {
-  calories: <Flame size={30} />,
-  equipment: {
-    rope: <TbJumpRope size={30} />,
-    "body weight": <PersonStanding size={30} />,
-    dumbbell: <Dumbbell size={30} />,
-    band: <Ribbon size={30} />,
-  },
-};
+// const icons = {
+//   calories: <Flame size={30} />,
+//   equipment: {
+//     rope: <TbJumpRope size={30} />,
+//     "body weight": <PersonStanding size={30} />,
+//     dumbbell: <Dumbbell size={30} />,
+//     band: <Ribbon size={30} />,
+//   },
+// };
 
 const ExercisePage = () => {
   const { exercise } = useLoaderData<typeof loader>();
@@ -116,7 +116,7 @@ const ExercisePage = () => {
               key={index + "inst"}
               className="flex items-center justify-start gap-2 rounded-lg leading-relaxed font-medium"
             >
-              <span className="w-6 h-6 bg-accent/80 text-accent-foreground flex items-center justify-center rounded-full font-bold text-sm">
+              <span className="w-6 min-w-6 h-6 bg-accent/80 text-accent-foreground flex items-center justify-center rounded-full font-bold text-sm">
                 {index + 1}
               </span>
               {instruction}

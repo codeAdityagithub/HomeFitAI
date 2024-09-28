@@ -19,7 +19,6 @@ type Props = {
   name: string;
   pos_function: PositionFunction;
   start_pos: 0 | 2;
-  goal:ExerciseGoals
 };
 
 const valid_seq = {
@@ -49,14 +48,14 @@ function isRepeat(pos: number[]) {
 // 1->mid
 // 2->bottom of movement
 
-function Detection({ name, pos_function, start_pos, goal }: Props) {
+function Detection({ name, pos_function, start_pos }: Props) {
   const animationFrameId = useRef<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const detectorRef = useRef<poseDetection.PoseDetector>();
   const streamRef = useRef<MediaStream>();
   const lastFrameTime = useRef(performance.now());
-  const targetFrameRate = 30; // Set your desired frame rate here
+  const targetFrameRate = 25; // Set your desired frame rate here
   const isdrawing = useRef(false);
   const sendSuggestions = useRef(true);
   const sendSuggestionIntervalId = useRef<NodeJS.Timeout>();

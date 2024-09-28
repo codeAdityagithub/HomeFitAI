@@ -87,9 +87,27 @@ export enum ExercisePosition {
   Bottom = 2, // 2 means Bottom or Down position
 }
 
-export const ExerciseGoalSchema = z.enum(["Reps", "TUT", "Timed", "Free"]);
+export const ExerciseGoalSchema = z
+  .object({
+    goal: z.enum(["Reps", "TUT", "Timed", "Free"]),
+    duration: z.number().min(0, "Invalid duration selected."),
+  })
+  .refine(({ goal, duration }) => {
+    switch (goal) {
+      case "Reps":
+        return duration <= 100 && duration >= 3;
+      case "TUT":
+        return duration <= 10 && duration >= 1;
+      case "Timed":
+        return duration <= 300 && duration >= 10;
+      case "Free":
+        return true;
+      default:
+        return false;
+    }
+  });
 
-export type ExerciseGoals = z.infer<typeof ExerciseGoalSchema>;
+export type ExerciseGoals = typeof ExerciseGoalSchema._input.goal;
 
 export enum ExerciseStartPosition {
   jump_rope = ExercisePosition.Top, // TODO

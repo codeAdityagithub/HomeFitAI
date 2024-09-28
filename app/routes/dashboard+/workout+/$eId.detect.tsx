@@ -2,7 +2,7 @@ import Detection from "@/components/workout/Detection";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { importFunction } from "@/utils/tensorflow/imports";
-import { Link, useRouteError } from "@remix-run/react";
+import { Link, useParams, useRouteError } from "@remix-run/react";
 // import { flexing } from "@/utils/tensorflow/functions";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +17,7 @@ import {
   ExerciseGoalSchema,
   ExerciseStartPosition,
 } from "@/utils/exercises/types";
-import { json, LoaderFunctionArgs } from "@remix-run/node";
+import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -27,9 +27,17 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
 
   invariant(params.eId);
-  const q = new URL(request.url).searchParams.get("goal");
-  let { data: goal } = ExerciseGoalSchema.safeParse(q);
-  if (!goal) goal = "Free";
+  const sp = new URL(request.url).searchParams;
+  const g = sp.get("goal");
+  if (!g) return redirect("?goal=Free");
+
+  const dur = sp.get("duration");
+  let { data } = ExerciseGoalSchema.safeParse({
+    goal: g,
+    duration: Number(dur),
+  });
+  if (!data)
+    throw new Error("Invalid configuration entered for exercise tracker.");
 
   const exercise = exercises.find((e) => e.id === params.eId);
   if (!exercise)
@@ -38,11 +46,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       statusText: `Exercise ${params.eId} not found`,
     });
 
-  return { exercise, goal };
+  return { exercise };
 };
 
 const DetectWorkoutPage = () => {
-  const { exercise, goal } = useLoaderData<typeof loader>();
+  const { exercise } = useLoaderData<typeof loader>();
   useEffect(() => {
     if ("serviceWorker" in navigator && !navigator.serviceWorker.controller) {
       navigator.serviceWorker.register("/service-worker.js").then(
@@ -104,14 +112,12 @@ const DetectWorkoutPage = () => {
           name={exercise.name}
           pos_function={func}
           start_pos={ExerciseStartPosition[exercise.id]}
-          goal={goal}
         />
       ) : exercise.movement === "unilateral" ? (
         <DetectionUnilateral
           name={exercise.name}
           pos_function={func}
           start_pos={ExerciseStartPosition[exercise.id]}
-          goal={goal}
         />
       ) : (
         <div className="">Static exercise Todo</div>
@@ -119,10 +125,10 @@ const DetectWorkoutPage = () => {
     </div>
   );
 };
-
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.log(error);
+  const params = useParams();
+
   if (error instanceof Error) {
     return (
       <div className="flex items-center justify-center h-svh">
@@ -134,8 +140,8 @@ export function ErrorBoundary() {
             <p>{error.message}</p>
           </CardContent>
           <CardFooter>
-            <Link to="/">
-              <Button>Back to HomePage</Button>
+            <Link to={"/dashboard/workout/" + params.eId}>
+              <Button>Back to Workout</Button>
             </Link>
           </CardFooter>
         </Card>

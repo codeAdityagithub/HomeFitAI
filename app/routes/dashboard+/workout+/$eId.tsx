@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "@remix-run/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const WorkoutLayout = () => {
   const location = useLocation();
@@ -13,4 +13,5 @@ const WorkoutLayout = () => {
   }, [location.pathname]);
   return <Outlet />;
 };
+
 export default WorkoutLayout;

@@ -26,7 +26,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 
 type Props = {
   trigger: React.ReactNode;
-  title: string;
+  title: string | React.ReactNode;
   description: string;
   children: React.ReactNode;
 };

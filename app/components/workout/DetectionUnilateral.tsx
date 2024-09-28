@@ -18,7 +18,6 @@ type Props = {
   name: string;
   pos_function: PositionFunctionUnilateral;
   start_pos: 0 | 2;
-  goal:ExerciseGoals
 };
 
 const valid_seq = {
@@ -52,7 +51,6 @@ export default function DetectionUnilateral({
   name,
   pos_function,
   start_pos,
-  goal
 }: Props) {
   const animationFrameId = useRef<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
