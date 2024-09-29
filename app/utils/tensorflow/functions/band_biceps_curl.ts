@@ -6,11 +6,18 @@ export const band_biceps_curl: PositionFunction = (
   keypoints: Keypoint[],
   sendSuggestions
 ) => {
-  const elbow_angle = angle(keypoints, 6, 8, 10);
-  const _pos = elbow_angle < 40 ? 0 : elbow_angle > 150 ? 2 : 1;
+  const right_elbow_angle = angle(keypoints, 6, 8, 10);
+  const left_elbow_angle = angle(keypoints, 5, 7, 9);
+  const _pos =
+    left_elbow_angle < 40 && right_elbow_angle < 40
+      ? 0
+      : left_elbow_angle > 150 && right_elbow_angle > 150
+      ? 2
+      : 1;
+
   let _suggestion = undefined;
-  if (sendSuggestions) {
-    _suggestion = curlsSuggestions.INCOMPLETE;
-  }
+  // if (sendSuggestions) {
+  //   _suggestion = curlsSuggestions.INCOMPLETE;
+  // }
   return { _pos, _suggestion };
 };

@@ -12,6 +12,7 @@ import GoBack from "../GoBack";
 import { capitalizeEachWord } from "@/utils/general";
 import DetectionUI from "./DetectionUI";
 import { ExerciseGoals } from "@/utils/exercises/types";
+import { useSearchParams } from "@remix-run/react";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -67,7 +68,15 @@ function Detection({ name, pos_function, start_pos }: Props) {
   const [loading, setLoading] = useState(false);
 
   const [suggestion, setSuggestion] = useState("");
-  const { start, reset, restart, time } = useStopwatch();
+  const updateSuggestion = (suggestion: string) => {
+    setSuggestion(suggestion);
+    setTimeout(() => setSuggestion(""), 2000);
+  };
+  const { start, reset, restart, time, _time } = useStopwatch();
+
+  const search = useSearchParams()[0];
+  const type = search.get("goal") as ExerciseGoals;
+  const duration = Number(search.get("duration"));
 
   const hasStarted = useRef(false);
   const totalTime = useRef(0);
@@ -159,13 +168,14 @@ function Detection({ name, pos_function, start_pos }: Props) {
           if (isModified.current && isComplete(start_pos, pos.current)) {
             setReps((prev) => prev + 1);
             reps_ref.current++;
+            if (type === "Reps" && reps_ref.current === duration)
+              stopAnimation({ explicit: true });
             totalTime.current = parseFloat(
               (time.current + totalTime.current).toFixed(2)
             );
-            // if (time.current < 2)
-            //   setSuggestion("Try going slower and controlling the movement.");
-            // else setSuggestion("");
-            // restart();
+            if (type === "TUT" && time.current < duration)
+              setSuggestion("Try going slower and controlling the movement.");
+            else setSuggestion("");
           } else if (isModified.current) {
             setSuggestion(suggestions.INCOMPLETE);
           }
@@ -265,7 +275,7 @@ function Detection({ name, pos_function, start_pos }: Props) {
     // Cleanup function
     return () => {
       // Stop animation loop when component unmounts
-      stopAnimation();
+      stopAnimation({ explicit: false });
 
       if (streamRef.current) {
         console.log("camera stopping");
@@ -279,37 +289,43 @@ function Detection({ name, pos_function, start_pos }: Props) {
     };
   }, []); // Empty dependency array ensures the effect runs only once on mount
 
-  const stopAnimation = useCallback(() => {
-    console.log("canceling");
-    reset();
-    setSuggestion("");
-    pos.current = [];
-    hasStarted.current = false;
-    clearInterval(sendSuggestionIntervalId.current);
-    isdrawing.current = false;
-    cancelAnimationFrame(animationFrameId.current!);
+  const stopAnimation = useCallback(
+    ({ explicit }: { explicit: boolean }) => {
+      // TODO: Use the explicit true to show a dialog to continue
 
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    if (canvas && video) {
-      const ctx = canvas.getContext("2d")!;
-      // Ensure canvas dimensions match video dimensions
+      console.log("canceling");
+      reset();
+      setSuggestion("");
+      pos.current = [];
+      hasStarted.current = false;
+      clearInterval(sendSuggestionIntervalId.current);
+      isdrawing.current = false;
+      cancelAnimationFrame(animationFrameId.current!);
 
-      canvas.width = video.width;
-      canvas.height = video.height;
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      if (canvas && video) {
+        const ctx = canvas.getContext("2d")!;
+        // Ensure canvas dimensions match video dimensions
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+        canvas.width = video.width;
+        canvas.height = video.height;
 
-    if (totalTime.current)
-      console.info(
-        "Total time was : " +
-          totalTime.current +
-          " Average time was : " +
-          totalTime.current / reps_ref.current
-      );
-  }, [setSuggestion]);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      if (totalTime.current)
+        console.info(
+          "Total time was : " +
+            totalTime.current +
+            " Average time was : " +
+            totalTime.current / reps_ref.current
+        );
+    },
+    [setSuggestion]
+  );
+
   const startDetection = () => {
     isdrawing.current = true;
     sendSuggestionIntervalId.current = setInterval(toggleSuggestion, 2000);
@@ -331,6 +347,7 @@ function Detection({ name, pos_function, start_pos }: Props) {
       suggestion={suggestion}
       videoRef={videoRef}
       canvasRef={canvasRef}
+      _time={_time}
     />
   );
 }

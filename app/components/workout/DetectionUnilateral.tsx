@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import GoBack from "../GoBack";
 import DetectionUI from "./DetectionUI";
 import { ExerciseGoals } from "@/utils/exercises/types";
+import { useSearchParams } from "@remix-run/react";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -74,18 +75,28 @@ export default function DetectionUnilateral({
   const [loading, setLoading] = useState(false);
 
   const [suggestion, setSuggestion] = useState("");
+  const updateSuggestion = (suggestion: string) => {
+    setSuggestion(suggestion);
+    setTimeout(() => setSuggestion(""), 2000);
+  };
   const {
     start: start_left,
     reset: reset_left,
     restart: restart_left,
     time: time_left,
+    _time: _timeleft,
   } = useStopwatch();
   const {
     start: start_right,
     reset: reset_right,
     restart: restart_right,
     time: time_right,
+    _time: _timeright,
   } = useStopwatch();
+
+  const search = useSearchParams()[0];
+  const type = search.get("goal") as ExerciseGoals;
+  const duration = Number(search.get("duration"));
 
   const hasStarted_left = useRef(false);
   const hasStarted_right = useRef(false);
@@ -202,13 +213,22 @@ export default function DetectionUnilateral({
           ) {
             setRepsLeft((prev) => prev + 1);
             reps_left_ref.current++;
-            setSuggestion("");
+
+            if (
+              type === "Reps" &&
+              reps_left_ref.current >= duration &&
+              reps_right_ref.current >= duration
+            )
+              stopAnimation({ explicit: true });
 
             if (!hasStarted_right.current) {
               totalTime.current = parseFloat(
                 (time_left.current + totalTime.current).toFixed(2)
               );
             }
+            if (type === "TUT" && time_left.current < duration)
+              setSuggestion("Try going slower and controlling the movement.");
+            else setSuggestion("");
           } else if (isModified_left.current) {
             setSuggestion(suggestions.INCOMPLETE);
           }
@@ -235,12 +255,22 @@ export default function DetectionUnilateral({
           ) {
             setRepsRight((prev) => prev + 1);
             reps_right_ref.current++;
-            setSuggestion("");
+
+            if (
+              type === "Reps" &&
+              reps_left_ref.current >= duration &&
+              reps_right_ref.current >= duration
+            )
+              stopAnimation({ explicit: true });
+
             if (!hasStarted_left.current) {
               totalTime.current = parseFloat(
                 (time_right.current + totalTime.current).toFixed(2)
               );
             }
+            if (type === "TUT" && time_right.current < duration)
+              setSuggestion("Try going slower and controlling the movement.");
+            else setSuggestion("");
           } else if (isModified_right.current) {
             setSuggestion(suggestions.INCOMPLETE);
           }
@@ -342,7 +372,7 @@ export default function DetectionUnilateral({
     // Cleanup function
     return () => {
       // Stop animation loop when component unmounts
-      stopAnimation();
+      stopAnimation({ explicit: false });
 
       if (streamRef.current) {
         console.log("camera stopping");
@@ -356,40 +386,44 @@ export default function DetectionUnilateral({
     };
   }, []); // Empty dependency array ensures the effect runs only once on mount
 
-  const stopAnimation = useCallback(() => {
-    console.log("canceling");
-    reset_left();
-    reset_right();
-    setSuggestion("");
-    pos_left.current = [];
-    pos_right.current = [];
-    hasStarted_left.current = false;
-    hasStarted_right.current = false;
-    clearInterval(sendSuggestionIntervalId.current);
-    isdrawing.current = false;
-    cancelAnimationFrame(animationFrameId.current!);
+  const stopAnimation = useCallback(
+    ({ explicit }: { explicit: boolean }) => {
+      console.log("canceling");
+      reset_left();
+      reset_right();
+      setSuggestion("");
+      pos_left.current = [];
+      pos_right.current = [];
+      hasStarted_left.current = false;
+      hasStarted_right.current = false;
+      clearInterval(sendSuggestionIntervalId.current);
+      isdrawing.current = false;
+      cancelAnimationFrame(animationFrameId.current!);
 
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    if (canvas && video) {
-      const ctx = canvas.getContext("2d")!;
-      // Ensure canvas dimensions match video dimensions
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      if (canvas && video) {
+        const ctx = canvas.getContext("2d")!;
+        // Ensure canvas dimensions match video dimensions
 
-      canvas.width = video.width;
-      canvas.height = video.height;
+        canvas.width = video.width;
+        canvas.height = video.height;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
 
-    if (totalTime.current)
-      console.info(
-        "Total time was : " +
-          totalTime.current +
-          " Average time was : " +
-          totalTime.current / (reps_left_ref.current + reps_right_ref.current)
-      );
-  }, [setSuggestion]);
+      if (totalTime.current)
+        console.info(
+          "Total time was : " +
+            totalTime.current +
+            " Average time was : " +
+            totalTime.current / (reps_left_ref.current + reps_right_ref.current)
+        );
+    },
+    [setSuggestion]
+  );
+
   const startDetection = () => {
     isdrawing.current = true;
     sendSuggestionIntervalId.current = setInterval(toggleSuggestion, 2000);
@@ -413,6 +447,7 @@ export default function DetectionUnilateral({
       suggestion={suggestion}
       videoRef={videoRef}
       canvasRef={canvasRef}
+      _time={{ left: _timeleft, right: _timeright }}
     />
   );
 }
