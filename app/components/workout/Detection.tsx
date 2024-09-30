@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState, useCallback, useMemo } from "react";
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import * as tf from "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-webgl";
@@ -13,6 +13,7 @@ import { capitalizeEachWord } from "@/utils/general";
 import DetectionUI from "./DetectionUI";
 import { ExerciseGoals } from "@/utils/exercises/types";
 import { useSearchParams } from "@remix-run/react";
+import ResponsiveDialog from "../custom/ResponsiveDialog";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -168,14 +169,15 @@ function Detection({ name, pos_function, start_pos }: Props) {
           if (isModified.current && isComplete(start_pos, pos.current)) {
             setReps((prev) => prev + 1);
             reps_ref.current++;
-            if (type === "Reps" && reps_ref.current === duration)
-              stopAnimation({ explicit: true });
             totalTime.current = parseFloat(
               (time.current + totalTime.current).toFixed(2)
             );
+            // console.log(totalTime.current);
             if (type === "TUT" && time.current < duration)
               setSuggestion("Try going slower and controlling the movement.");
             else setSuggestion("");
+            if (type === "Reps" && reps_ref.current === duration)
+              stopAnimation({ explicit: true });
           } else if (isModified.current) {
             setSuggestion(suggestions.INCOMPLETE);
           }
@@ -289,10 +291,12 @@ function Detection({ name, pos_function, start_pos }: Props) {
     };
   }, []); // Empty dependency array ensures the effect runs only once on mount
 
+  const trigger_ref = useRef<HTMLButtonElement>(null);
+  const [_totalTime, _setTotalTime] = useState(0);
+  const [_isDrawing, setIsDrawing] = useState(false);
+
   const stopAnimation = useCallback(
     ({ explicit }: { explicit: boolean }) => {
-      // TODO: Use the explicit true to show a dialog to continue
-
       console.log("canceling");
       reset();
       setSuggestion("");
@@ -300,6 +304,7 @@ function Detection({ name, pos_function, start_pos }: Props) {
       hasStarted.current = false;
       clearInterval(sendSuggestionIntervalId.current);
       isdrawing.current = false;
+      setIsDrawing(false);
       cancelAnimationFrame(animationFrameId.current!);
 
       const video = videoRef.current;
@@ -322,12 +327,17 @@ function Detection({ name, pos_function, start_pos }: Props) {
             " Average time was : " +
             totalTime.current / reps_ref.current
         );
+      if (totalTime.current && explicit && trigger_ref.current) {
+        _setTotalTime(totalTime.current);
+        trigger_ref.current.click();
+      }
     },
     [setSuggestion]
   );
 
   const startDetection = () => {
     isdrawing.current = true;
+    setIsDrawing(true);
     sendSuggestionIntervalId.current = setInterval(toggleSuggestion, 2000);
     setSuggestion("");
 
@@ -336,19 +346,40 @@ function Detection({ name, pos_function, start_pos }: Props) {
   const resetTime = useCallback(() => {
     setReps(0);
   }, [setReps]);
+
   return (
-    <DetectionUI
-      name={name}
-      reps={reps}
-      loading={loading}
-      startDetection={startDetection}
-      stopAnimation={stopAnimation}
-      resetTime={resetTime}
-      suggestion={suggestion}
-      videoRef={videoRef}
-      canvasRef={canvasRef}
-      _time={_time}
-    />
+    <>
+      <DetectionUI
+        name={name}
+        reps={reps}
+        loading={loading}
+        startDetection={startDetection}
+        stopAnimation={stopAnimation}
+        resetTime={resetTime}
+        suggestion={suggestion}
+        videoRef={videoRef}
+        canvasRef={canvasRef}
+        _time={_time}
+        isDrawing={_isDrawing}
+        _totalTime={totalTime.current}
+      />
+      <ResponsiveDialog
+        description="Done"
+        title="Exercise done"
+        trigger={
+          <button
+            className="hidden"
+            ref={trigger_ref}
+          ></button>
+        }
+      >
+        <div className="px-4 md:px-0">
+          time:{_totalTime}
+          avgTime:
+          {_totalTime / reps}
+        </div>
+      </ResponsiveDialog>
+    </>
   );
 }
 export default Detection;

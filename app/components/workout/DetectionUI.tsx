@@ -16,6 +16,8 @@ type Props =
       videoRef: React.RefObject<HTMLVideoElement>;
       canvasRef: React.RefObject<HTMLCanvasElement>;
       _time: number;
+      isDrawing: boolean;
+      _totalTime: number;
     }
   | {
       reps: { left: number; right: number };
@@ -29,6 +31,8 @@ type Props =
       videoRef: React.RefObject<HTMLVideoElement>;
       canvasRef: React.RefObject<HTMLCanvasElement>;
       _time: { left: number; right: number };
+      isDrawing: boolean;
+      _totalTime: number;
     };
 const DetectionUI = ({
   name,
@@ -40,12 +44,14 @@ const DetectionUI = ({
   suggestion,
   videoRef,
   canvasRef,
+  isDrawing,
   _time,
+  _totalTime,
 }: Props) => {
   const search = useSearchParams()[0];
   const goal = search.get("goal") as ExerciseGoals;
   const duration = Number(search.get("duration"));
-
+  console.log(_totalTime);
   return (
     <div className="w-full">
       <div className="flex gap-2 items-center mb-4">
@@ -64,18 +70,19 @@ const DetectionUI = ({
           </>
         )}
         <br />
-        {goal === "TUT" && (
-          <>
-            Rep Time:{" "}
-            {typeof _time === "number" ? (
-              _time
-            ) : (
-              <>
-                left : {_time.left}s right : {_time.right}s
-              </>
-            )}
-          </>
-        )}
+        {goal === "TUT" ||
+          (goal === "Reps" && (
+            <>
+              Rep Time:{" "}
+              {typeof _time === "number" ? (
+                _time
+              ) : (
+                <>
+                  left : {_time.left}s right : {_time.right}s
+                </>
+              )}
+            </>
+          ))}
       </h1>
       {goal !== "Free" && (
         <h1 className="text-lg font-semibold text-center text-muted-foreground">
@@ -85,7 +92,7 @@ const DetectionUI = ({
       )}
       <div className="flex w-full items-center justify-center">
         <Button
-          disabled={loading}
+          disabled={loading || isDrawing}
           onClick={startDetection}
         >
           {loading ? "Loading..." : "detect"}
@@ -93,11 +100,12 @@ const DetectionUI = ({
         <Button
           style={{ margin: 10 }}
           variant="secondary"
+          disabled={!isDrawing && _totalTime === 0}
           onClick={() => {
-            stopAnimation({ explicit: true });
+            stopAnimation({ explicit: isDrawing ? false : true });
           }}
         >
-          stop
+          {isDrawing || _totalTime === 0 ? "Stop" : "Done"}
         </Button>
         <Button onClick={resetTime}>reset</Button>
       </div>

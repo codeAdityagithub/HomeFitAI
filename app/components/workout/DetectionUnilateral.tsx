@@ -12,6 +12,7 @@ import GoBack from "../GoBack";
 import DetectionUI from "./DetectionUI";
 import { ExerciseGoals } from "@/utils/exercises/types";
 import { useSearchParams } from "@remix-run/react";
+import ResponsiveDialog from "../custom/ResponsiveDialog";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -214,13 +215,6 @@ export default function DetectionUnilateral({
             setRepsLeft((prev) => prev + 1);
             reps_left_ref.current++;
 
-            if (
-              type === "Reps" &&
-              reps_left_ref.current >= duration &&
-              reps_right_ref.current >= duration
-            )
-              stopAnimation({ explicit: true });
-
             if (!hasStarted_right.current) {
               totalTime.current = parseFloat(
                 (time_left.current + totalTime.current).toFixed(2)
@@ -229,6 +223,13 @@ export default function DetectionUnilateral({
             if (type === "TUT" && time_left.current < duration)
               setSuggestion("Try going slower and controlling the movement.");
             else setSuggestion("");
+
+            if (
+              type === "Reps" &&
+              reps_left_ref.current >= duration &&
+              reps_right_ref.current >= duration
+            )
+              stopAnimation({ explicit: true });
           } else if (isModified_left.current) {
             setSuggestion(suggestions.INCOMPLETE);
           }
@@ -256,13 +257,6 @@ export default function DetectionUnilateral({
             setRepsRight((prev) => prev + 1);
             reps_right_ref.current++;
 
-            if (
-              type === "Reps" &&
-              reps_left_ref.current >= duration &&
-              reps_right_ref.current >= duration
-            )
-              stopAnimation({ explicit: true });
-
             if (!hasStarted_left.current) {
               totalTime.current = parseFloat(
                 (time_right.current + totalTime.current).toFixed(2)
@@ -271,6 +265,13 @@ export default function DetectionUnilateral({
             if (type === "TUT" && time_right.current < duration)
               setSuggestion("Try going slower and controlling the movement.");
             else setSuggestion("");
+
+            if (
+              type === "Reps" &&
+              reps_left_ref.current >= duration &&
+              reps_right_ref.current >= duration
+            )
+              stopAnimation({ explicit: true });
           } else if (isModified_right.current) {
             setSuggestion(suggestions.INCOMPLETE);
           }
@@ -386,6 +387,10 @@ export default function DetectionUnilateral({
     };
   }, []); // Empty dependency array ensures the effect runs only once on mount
 
+  const trigger_ref = useRef<HTMLButtonElement>(null);
+  const [_totalTime, _setTotalTime] = useState(0);
+  const [_isDrawing, setIsDrawing] = useState(false);
+
   const stopAnimation = useCallback(
     ({ explicit }: { explicit: boolean }) => {
       console.log("canceling");
@@ -398,6 +403,7 @@ export default function DetectionUnilateral({
       hasStarted_right.current = false;
       clearInterval(sendSuggestionIntervalId.current);
       isdrawing.current = false;
+      setIsDrawing(false);
       cancelAnimationFrame(animationFrameId.current!);
 
       const video = videoRef.current;
@@ -418,14 +424,20 @@ export default function DetectionUnilateral({
           "Total time was : " +
             totalTime.current +
             " Average time was : " +
-            totalTime.current / (reps_left_ref.current + reps_right_ref.current)
+            totalTime.current /
+              Math.max(reps_left_ref.current, reps_right_ref.current)
         );
+      if (totalTime.current && explicit && trigger_ref.current) {
+        _setTotalTime(totalTime.current);
+        trigger_ref.current.click();
+      }
     },
     [setSuggestion]
   );
 
   const startDetection = () => {
     isdrawing.current = true;
+    setIsDrawing(true);
     sendSuggestionIntervalId.current = setInterval(toggleSuggestion, 2000);
     setSuggestion("");
 
@@ -437,17 +449,37 @@ export default function DetectionUnilateral({
   }, [setRepsLeft, setRepsRight]);
 
   return (
-    <DetectionUI
-      name={name}
-      reps={{ left: reps_left, right: reps_right }}
-      loading={loading}
-      startDetection={startDetection}
-      stopAnimation={stopAnimation}
-      resetTime={resetTime}
-      suggestion={suggestion}
-      videoRef={videoRef}
-      canvasRef={canvasRef}
-      _time={{ left: _timeleft, right: _timeright }}
-    />
+    <>
+      <DetectionUI
+        name={name}
+        reps={{ left: reps_left, right: reps_right }}
+        loading={loading}
+        startDetection={startDetection}
+        stopAnimation={stopAnimation}
+        resetTime={resetTime}
+        suggestion={suggestion}
+        videoRef={videoRef}
+        canvasRef={canvasRef}
+        _time={{ left: _timeleft, right: _timeright }}
+        isDrawing={_isDrawing}
+        _totalTime={totalTime.current}
+      />
+      <ResponsiveDialog
+        description="Done"
+        title="Exercise done"
+        trigger={
+          <button
+            className="hidden"
+            ref={trigger_ref}
+          ></button>
+        }
+      >
+        <div className="px-4 md:px-0">
+          time:{_totalTime}
+          avgTime:
+          {_totalTime / Math.max(reps_left, reps_right)}
+        </div>
+      </ResponsiveDialog>
+    </>
   );
 }
