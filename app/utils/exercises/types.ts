@@ -95,7 +95,7 @@ export const ExerciseGoalSchema = z
   .refine(({ goal, duration }) => {
     switch (goal) {
       case "Reps":
-        return duration <= 100 && duration >= 3;
+        return duration <= 50 && duration >= 3;
       case "TUT":
         return duration <= 10 && duration >= 1;
       case "Timed":

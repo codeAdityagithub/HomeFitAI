@@ -50,7 +50,7 @@ const constraints: Record<
 > = {
   Reps: {
     min: 3,
-    max: 100,
+    max: 50,
     unit: "Reps",
     step: 1,
     title: "Number of Reps",

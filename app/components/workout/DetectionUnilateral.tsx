@@ -13,6 +13,7 @@ import DetectionUI from "./DetectionUI";
 import { ExerciseGoals } from "@/utils/exercises/types";
 import { useSearchParams } from "@remix-run/react";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
+import DetectionForm from "./DetectionForm";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -230,6 +231,8 @@ export default function DetectionUnilateral({
               reps_right_ref.current >= duration
             )
               stopAnimation({ explicit: true });
+            else if (type === "Timed" && totalTime.current >= duration)
+              stopAnimation({ explicit: true });
           } else if (isModified_left.current) {
             setSuggestion(suggestions.INCOMPLETE);
           }
@@ -271,6 +274,8 @@ export default function DetectionUnilateral({
               reps_left_ref.current >= duration &&
               reps_right_ref.current >= duration
             )
+              stopAnimation({ explicit: true });
+            else if (type === "Timed" && totalTime.current >= duration)
               stopAnimation({ explicit: true });
           } else if (isModified_right.current) {
             setSuggestion(suggestions.INCOMPLETE);
@@ -465,8 +470,8 @@ export default function DetectionUnilateral({
         _totalTime={totalTime.current}
       />
       <ResponsiveDialog
-        description="Done"
-        title="Exercise done"
+        description="You can save the exercise data to your daily log from here..."
+        title="Add Exercise to Log"
         trigger={
           <button
             className="hidden"
@@ -474,11 +479,10 @@ export default function DetectionUnilateral({
           ></button>
         }
       >
-        <div className="px-4 md:px-0">
-          time:{_totalTime}
-          avgTime:
-          {_totalTime / Math.max(reps_left, reps_right)}
-        </div>
+        <DetectionForm
+          totalTime={_totalTime}
+          reps={{ left: reps_left, right: reps_right }}
+        />
       </ResponsiveDialog>
     </>
   );

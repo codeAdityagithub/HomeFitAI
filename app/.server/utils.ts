@@ -17,7 +17,7 @@ export function getDurationFromSets(
   const exerciseSets: Set[] = [];
 
   for (const set of sets) {
-    const repTime = set.intensity === "explosive" ? 2 : 4;
+    const repTime = set.intensity === "explosive" ? 1.5 : 3;
     duration += set.reps * repTime;
     exerciseSets.push({ avgRepTime: repTime, reps: set.reps });
   }

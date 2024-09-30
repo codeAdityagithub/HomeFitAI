@@ -26,3 +26,7 @@ export function convertToLbs(kg: number) {
 export function convertToKg(lbs: number) {
   return Number((lbs * 0.453592).toFixed(2));
 }
+
+export function getImageFromVideoId(videoId: string) {
+  return `https://img.youtube.com/vi/${videoId.split("?")[0]}/sddefault.jpg`;
+}

@@ -104,7 +104,7 @@ function ExerciseTable({
                         {e.sets.map((s, i) => (
                           <DropdownMenuItem key={`set-${i}`}>
                             Set-{i + 1} : {s.reps} reps (
-                            {s.avgRepTime <= 2 ? "explosive" : "controlled"})
+                            {s.avgRepTime <= 1.5 ? "explosive" : "controlled"})
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>

@@ -13,9 +13,9 @@ const func: PositionFunction = (keypoints: Keypoint[], sendSuggestions) => {
       : 1;
   //   console.log({ left_elbow_angle, right_elbow_angle });
   let _suggestion = undefined;
-  if (sendSuggestions) {
-    _suggestion = curlsSuggestions.INCOMPLETE;
-  }
+  // if (sendSuggestions) {
+  //   _suggestion = curlsSuggestions.INCOMPLETE;
+  // }
   return { _pos, _suggestion };
 };
 

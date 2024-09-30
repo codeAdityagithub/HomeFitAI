@@ -1,5 +1,6 @@
 import GoBack from "@/components/GoBack";
 import ExerciseCard from "@/components/workout/ExerciseCard";
+import { getImageFromVideoId } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
@@ -15,9 +16,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .map((e) => ({
       name: e.name,
       id: e.id,
-      imageUrl: `https://img.youtube.com/vi/${
-        e.videoId.split("?")[0]
-      }/sddefault.jpg`,
+      imageUrl: getImageFromVideoId(e.videoId),
       target: e.target,
       equipment: e.equipment,
       secondaryMuscles: e.secondaryMuscles,

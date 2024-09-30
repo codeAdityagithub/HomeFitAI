@@ -14,6 +14,7 @@ import DetectionUI from "./DetectionUI";
 import { ExerciseGoals } from "@/utils/exercises/types";
 import { useSearchParams } from "@remix-run/react";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
+import DetectionForm from "./DetectionForm";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -177,6 +178,8 @@ function Detection({ name, pos_function, start_pos }: Props) {
               setSuggestion("Try going slower and controlling the movement.");
             else setSuggestion("");
             if (type === "Reps" && reps_ref.current === duration)
+              stopAnimation({ explicit: true });
+            else if (type === "Timed" && totalTime.current >= duration)
               stopAnimation({ explicit: true });
           } else if (isModified.current) {
             setSuggestion(suggestions.INCOMPLETE);
@@ -364,8 +367,8 @@ function Detection({ name, pos_function, start_pos }: Props) {
         _totalTime={totalTime.current}
       />
       <ResponsiveDialog
-        description="Done"
-        title="Exercise done"
+        description="You can save the exercise data to your daily log from here..."
+        title="Add Exercise to Log"
         trigger={
           <button
             className="hidden"
@@ -373,11 +376,10 @@ function Detection({ name, pos_function, start_pos }: Props) {
           ></button>
         }
       >
-        <div className="px-4 md:px-0">
-          time:{_totalTime}
-          avgTime:
-          {_totalTime / reps}
-        </div>
+        <DetectionForm
+          totalTime={_totalTime}
+          reps={reps}
+        />
       </ResponsiveDialog>
     </>
   );

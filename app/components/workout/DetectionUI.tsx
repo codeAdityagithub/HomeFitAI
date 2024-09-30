@@ -51,7 +51,7 @@ const DetectionUI = ({
   const search = useSearchParams()[0];
   const goal = search.get("goal") as ExerciseGoals;
   const duration = Number(search.get("duration"));
-  console.log(_totalTime);
+
   return (
     <div className="w-full">
       <div className="flex gap-2 items-center mb-4">
@@ -69,20 +69,28 @@ const DetectionUI = ({
             left:{reps.left} right:{reps.right}
           </>
         )}
-        <br />
-        {goal === "TUT" ||
-          (goal === "Reps" && (
-            <>
-              Rep Time:{" "}
-              {typeof _time === "number" ? (
-                _time
-              ) : (
-                <>
-                  left : {_time.left}s right : {_time.right}s
-                </>
-              )}
-            </>
-          ))}
+        {goal === "TUT" && (
+          <>
+            <br />
+            Rep Time:{" "}
+            {typeof _time === "number" ? (
+              _time
+            ) : (
+              <>
+                left : {_time.left}s right : {_time.right}s
+              </>
+            )}
+          </>
+        )}
+        {goal === "Timed" && (
+          <>
+            <br />
+            Total Time:{" "}
+            {typeof _time === "number"
+              ? Math.floor(_totalTime + _time)
+              : Math.floor(_totalTime + Math.min(_time.left + _time.right))}
+          </>
+        )}
       </h1>
       {goal !== "Free" && (
         <h1 className="text-lg font-semibold text-center text-muted-foreground">

@@ -1,8 +1,14 @@
+import type { ActionFunctionArgs } from "@remix-run/node";
 import Detection from "@/components/workout/Detection";
 import { requireUser } from "@/utils/auth/auth.server";
-import exercises from "@/utils/exercises/exercises.server";
+import exercises, { Exercise } from "@/utils/exercises/exercises.server";
 import { importFunction } from "@/utils/tensorflow/imports";
-import { Link, useParams, useRouteError } from "@remix-run/react";
+import {
+  ClientActionFunctionArgs,
+  Link,
+  useParams,
+  useRouteError,
+} from "@remix-run/react";
 // import { flexing } from "@/utils/tensorflow/functions";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +28,12 @@ import { useLoaderData } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
+import { cacheClientAction } from "@/utils/routeCache.client";
+import { addWorkout } from "@/.server/handlers/workout/addWorkout";
 
+export type ExerciseDetectionLoader = {
+  exercise: Pick<Exercise, "name" | "id" | "videoId" | "movement">;
+};
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
 
@@ -46,8 +57,34 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       statusText: `Exercise ${params.eId} not found`,
     });
 
-  return { exercise };
+  return {
+    exercise: {
+      id: exercise.id,
+      name: exercise.name,
+      videoId: exercise.videoId,
+      movement: exercise.movement,
+    },
+  };
 };
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const user = await requireUser(request, { failureRedirect: "/login" });
+  const { sets, logId, exerciseId, duration } = await request.json();
+  return await addWorkout({
+    duration,
+    exerciseId,
+    logId,
+    sets,
+    userId: user.id,
+  });
+};
+
+export { clientLoader } from "@/utils/routeCache.client";
+export const clientAction = ({
+  serverAction,
+  request,
+}: ClientActionFunctionArgs) =>
+  cacheClientAction(["dashboardLayout"], serverAction);
 
 const DetectWorkoutPage = () => {
   const { exercise } = useLoaderData<typeof loader>();

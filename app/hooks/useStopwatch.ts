@@ -31,6 +31,7 @@ const useStopwatch = () => {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
       prevTime_sec.current = 0;
+      setTime(0);
     }
   }, []);
 

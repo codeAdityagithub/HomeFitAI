@@ -47,7 +47,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         value,
       });
     }
-    console.log(duration);
+    // console.log(duration);
     if (duration) {
       return addExercseDuration({
         exerciseId,

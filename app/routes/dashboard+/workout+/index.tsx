@@ -2,6 +2,7 @@ import WorkoutSearch from "@/components/dashboard/workoutSearch";
 import { Button } from "@/components/ui/button";
 import ExerciseCard from "@/components/workout/ExerciseCard";
 import useExercises from "@/hooks/useExercises";
+import { getImageFromVideoId } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { capitalizeFirstLetter } from "@/utils/general";
@@ -26,9 +27,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const filtered: DashboardExercise[] = exercises.map((e) => ({
     name: e.name,
     id: e.id,
-    imageUrl: `https://img.youtube.com/vi/${
-      e.videoId.split("?")[0]
-    }/sddefault.jpg`,
+    imageUrl: getImageFromVideoId(e.videoId),
     target: e.target,
     equipment: e.equipment,
     secondaryMuscles: e.secondaryMuscles,
