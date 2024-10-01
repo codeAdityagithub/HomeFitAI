@@ -10,6 +10,8 @@ import { StaticPosFunction } from "@/utils/tensorflow/functions";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
 import StaticDetectionUI from "./StaticDetectionUI";
 import StaticForm from "./StaticDurationForm";
+import { useSearchParams } from "@remix-run/react";
+import { ExerciseGoals } from "@/utils/exercises/types";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -34,9 +36,13 @@ function StaticDetection({ name, pos_function }: Props) {
 
   const [suggestion, setSuggestion] = useState("");
 
-  const { start, reset, _time, stop } = useStopwatch();
+  const { start, reset, _time, stop, time } = useStopwatch();
 
   const [voice, setVoice] = useState<SpeechSynthesisVoice>();
+
+  const search = useSearchParams()[0];
+  const type = search.get("goal") as Exclude<ExerciseGoals, "Reps" | "TUT">;
+  const duration = Number(search.get("duration"));
 
   const animate = useCallback(
     async (currentTime: number) => {
@@ -83,7 +89,8 @@ function StaticDetection({ name, pos_function }: Props) {
         if (sendSuggestions.current) sendSuggestions.current = false;
         if (_suggestion) setSuggestion(_suggestion);
       }
-
+      if (type === "Timed" && time.current >= duration)
+        stopAnimation({ explicit: true });
       // Update last frame time for the next iteration
       lastFrameTime.current = currentTime;
       // Request the next frame

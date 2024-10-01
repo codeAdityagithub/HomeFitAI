@@ -5,7 +5,9 @@ import { capitalizeEachWord } from "@/utils/general";
 import { Form, useFetcher, useLoaderData } from "@remix-run/react";
 import { Button } from "../ui/button";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import useLongPress from "@/hooks/useLongPress";
+import { Minus, Plus } from "lucide-react";
 
 type Props = {
   totalTime: number;
@@ -15,7 +17,9 @@ const StaticForm = ({ totalTime }: Props) => {
   const { exercise } = useLoaderData<ExerciseDetectionLoader>();
   const { log } = useDashboardLayoutData();
   const fetcher = useFetcher();
-
+  const [value, setValue] = useState(totalTime);
+  const min = 0,
+    max = 300;
   const handleSubmit = (e: any) => {
     e.preventDefault();
     // Handle form submission
@@ -25,7 +29,7 @@ const StaticForm = ({ totalTime }: Props) => {
         sets: [],
         logId: log.id,
         exerciseId: exercise.id,
-        duration: totalTime,
+        duration: value,
       },
       {
         method: "put",
@@ -33,6 +37,14 @@ const StaticForm = ({ totalTime }: Props) => {
       }
     );
   };
+  function decrement() {
+    setValue((prev) => Math.max(min, Math.min(max, prev - 1)));
+  }
+  function increment() {
+    setValue((prev) => Math.max(min, Math.min(max, prev + 1)));
+  }
+  const decrementProps = useLongPress({ callback: decrement });
+  const incrementProps = useLongPress({ callback: increment });
 
   return (
     <div className="px-4 md:px-0 space-y-4">
@@ -49,11 +61,37 @@ const StaticForm = ({ totalTime }: Props) => {
           {capitalizeEachWord(exercise.name)}
         </span>
       </div>
-      <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 max-w-md mx-auto">
-        <h2 className="text-base xs:text-lg font-semibold grid grid-cols-2 xs:block">
-          <span className="text-muted-foreground">Total Time </span>:{" "}
-          {totalTime} secs
-        </h2>
+      <div className="flex items-center justify-center space-x-2">
+        <Button
+          variant="outline"
+          type="button"
+          size="icon"
+          className="h-8 w-8 shrink-0 rounded-full"
+          {...decrementProps}
+          disabled={value <= min}
+        >
+          <Minus className="h-4 w-4" />
+          <span className="sr-only">Decrease</span>
+        </Button>
+        <div className="flex-1 text-center">
+          <div className="text-5xl md:text-6xl font-bold tracking-tighter">
+            {value}
+          </div>
+          <div className="text-[0.70rem] uppercase text-muted-foreground">
+            seconds
+          </div>
+        </div>
+        <Button
+          variant="outline"
+          size="icon"
+          type="button"
+          className="h-8 w-8 shrink-0 rounded-full"
+          {...incrementProps}
+          disabled={value >= max}
+        >
+          <Plus className="h-4 w-4" />
+          <span className="sr-only">Increase</span>
+        </Button>
       </div>
       <form onSubmit={handleSubmit}>
         <Button
