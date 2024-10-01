@@ -12,6 +12,7 @@ export async function importFunction(functionName: ExerciseId) {
       return (await import("./functions/band_bench_press")).default;
     case "band_assisted_pullup":
       return (await import("./functions/band_assisted_pull-up")).default;
+
     default:
       undefined;
   }

@@ -5,6 +5,7 @@ import exercises, { Exercise } from "@/utils/exercises/exercises.server";
 import { importFunction } from "@/utils/tensorflow/imports";
 import {
   ClientActionFunctionArgs,
+  isRouteErrorResponse,
   Link,
   useParams,
   useRouteError,
@@ -30,6 +31,7 @@ import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 import { cacheClientAction } from "@/utils/routeCache.client";
 import { addWorkout } from "@/.server/handlers/workout/addWorkout";
+import StaticDetection from "@/components/workout/StaticDetection";
 
 export type ExerciseDetectionLoader = {
   exercise: Pick<Exercise, "name" | "id" | "videoId" | "movement">;
@@ -43,12 +45,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!g) return redirect("?goal=Free");
 
   const dur = sp.get("duration");
-  let { data } = ExerciseGoalSchema.safeParse({
-    goal: g,
-    duration: Number(dur),
-  });
-  if (!data)
-    throw new Error("Invalid configuration entered for exercise tracker.");
 
   const exercise = exercises.find((e) => e.id === params.eId);
   if (!exercise)
@@ -57,12 +53,28 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       statusText: `Exercise ${params.eId} not found`,
     });
 
+  let { data } = ExerciseGoalSchema.safeParse({
+    goal: g,
+    duration: Number(dur),
+  });
+  if (!data)
+    throw new Error("Invalid configuration entered for exercise tracker.");
+
+  if (
+    exercise.type === "duration" &&
+    (data.goal === "Reps" || data.goal === "TUT")
+  )
+    throw new Error("Invalid configuration entered for exercise tracker.", {
+      cause: "Invalid Input",
+    });
+
   return {
     exercise: {
       id: exercise.id,
       name: exercise.name,
       videoId: exercise.videoId,
       movement: exercise.movement,
+      type: exercise.type,
     },
   };
 };
@@ -144,49 +156,70 @@ const DetectWorkoutPage = () => {
             </CardFooter>
           </Card>
         </div>
-      ) : exercise.movement === "bilateral" ? (
+      ) : exercise.type === "sets" && exercise.movement === "bilateral" ? (
         <Detection
           name={exercise.name}
           pos_function={func}
           start_pos={ExerciseStartPosition[exercise.id]}
         />
-      ) : exercise.movement === "unilateral" ? (
+      ) : exercise.type === "sets" && exercise.movement === "unilateral" ? (
         <DetectionUnilateral
           name={exercise.name}
           pos_function={func}
           start_pos={ExerciseStartPosition[exercise.id]}
         />
       ) : (
-        <div className="">Static exercise Todo</div>
+        <StaticDetection
+          name={exercise.name}
+          pos_function={func}
+        />
       )}
     </div>
   );
 };
 export function ErrorBoundary() {
-  const error = useRouteError();
+  const error: any = useRouteError();
   const params = useParams();
 
-  if (error instanceof Error) {
+  if (isRouteErrorResponse(error)) {
     return (
       <div className="flex items-center justify-center h-svh">
         <Card className="max-w-sm">
           <CardHeader>
-            <CardTitle>Error!</CardTitle>
+            <CardTitle>
+              {error.status} {error.statusText}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p>{error.message}</p>
+            <p>{error.data}</p>
           </CardContent>
           <CardFooter>
-            <Link to={"/dashboard/workout/" + params.eId}>
-              <Button>Back to Workout</Button>
+            <Link to="/">
+              <Button>Back to HomePage</Button>
             </Link>
           </CardFooter>
         </Card>
       </div>
     );
-  } else {
-    return <h1>Unknown Error</h1>;
   }
+
+  return (
+    <div className="flex items-center justify-center h-svh">
+      <Card className="max-w-sm">
+        <CardHeader>
+          <CardTitle>Error!</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>{error?.message ?? "Something Went Wrong!"}</p>
+        </CardContent>
+        <CardFooter>
+          <Link to={"/dashboard/workout/" + params.eId}>
+            <Button>Back to Workout</Button>
+          </Link>
+        </CardFooter>
+      </Card>
+    </div>
+  );
 }
 
 export default DetectWorkoutPage;

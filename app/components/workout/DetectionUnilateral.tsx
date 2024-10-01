@@ -1,19 +1,17 @@
-import { useRef, useEffect, useState, useCallback } from "react";
 import * as poseDetection from "@tensorflow-models/pose-detection";
-import * as tf from "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-webgl";
+import * as tf from "@tensorflow/tfjs-core";
+import { useCallback, useEffect, useRef, useState } from "react";
 tf.ready();
 // Register one of the TF.js backends.
+import useStopwatch from "@/hooks/useStopwatch";
+import { ExerciseGoals } from "@/utils/exercises/types";
 import { drawKeypoints, drawSkeleton } from "@/utils/tensorflow/drawingutils";
 import type { PositionFunctionUnilateral } from "@/utils/tensorflow/functions";
-import useStopwatch from "@/hooks/useStopwatch";
-import { Button } from "../ui/button";
-import GoBack from "../GoBack";
-import DetectionUI from "./DetectionUI";
-import { ExerciseGoals } from "@/utils/exercises/types";
 import { useSearchParams } from "@remix-run/react";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
 import DetectionForm from "./DetectionForm";
+import DetectionUI from "./DetectionUI";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
@@ -213,26 +211,29 @@ export default function DetectionUnilateral({
             isModified_left.current &&
             isComplete(start_pos, pos_left.current)
           ) {
-            setRepsLeft((prev) => prev + 1);
-            reps_left_ref.current++;
+            if (reps_right_ref.current >= 50) stopAnimation({ explicit: true });
+            else {
+              setRepsLeft((prev) => prev + 1);
+              reps_left_ref.current++;
 
-            if (!hasStarted_right.current) {
-              totalTime.current = parseFloat(
-                (time_left.current + totalTime.current).toFixed(2)
-              );
+              if (!hasStarted_right.current) {
+                totalTime.current = parseFloat(
+                  (time_left.current + totalTime.current).toFixed(2)
+                );
+              }
+              if (type === "TUT" && time_left.current < duration)
+                setSuggestion("Try going slower and controlling the movement.");
+              else setSuggestion("");
+
+              if (
+                type === "Reps" &&
+                reps_left_ref.current >= duration &&
+                reps_right_ref.current >= duration
+              )
+                stopAnimation({ explicit: true });
+              else if (type === "Timed" && totalTime.current >= duration)
+                stopAnimation({ explicit: true });
             }
-            if (type === "TUT" && time_left.current < duration)
-              setSuggestion("Try going slower and controlling the movement.");
-            else setSuggestion("");
-
-            if (
-              type === "Reps" &&
-              reps_left_ref.current >= duration &&
-              reps_right_ref.current >= duration
-            )
-              stopAnimation({ explicit: true });
-            else if (type === "Timed" && totalTime.current >= duration)
-              stopAnimation({ explicit: true });
           } else if (isModified_left.current) {
             setSuggestion(suggestions.INCOMPLETE);
           }
@@ -257,26 +258,29 @@ export default function DetectionUnilateral({
             isModified_right.current &&
             isComplete(start_pos, pos_right.current)
           ) {
-            setRepsRight((prev) => prev + 1);
-            reps_right_ref.current++;
+            if (reps_left_ref.current >= 50) stopAnimation({ explicit: true });
+            else {
+              setRepsRight((prev) => prev + 1);
+              reps_right_ref.current++;
 
-            if (!hasStarted_left.current) {
-              totalTime.current = parseFloat(
-                (time_right.current + totalTime.current).toFixed(2)
-              );
+              if (!hasStarted_left.current) {
+                totalTime.current = parseFloat(
+                  (time_right.current + totalTime.current).toFixed(2)
+                );
+              }
+              if (type === "TUT" && time_right.current < duration)
+                setSuggestion("Try going slower and controlling the movement.");
+              else setSuggestion("");
+
+              if (
+                type === "Reps" &&
+                reps_left_ref.current >= duration &&
+                reps_right_ref.current >= duration
+              )
+                stopAnimation({ explicit: true });
+              else if (type === "Timed" && totalTime.current >= duration)
+                stopAnimation({ explicit: true });
             }
-            if (type === "TUT" && time_right.current < duration)
-              setSuggestion("Try going slower and controlling the movement.");
-            else setSuggestion("");
-
-            if (
-              type === "Reps" &&
-              reps_left_ref.current >= duration &&
-              reps_right_ref.current >= duration
-            )
-              stopAnimation({ explicit: true });
-            else if (type === "Timed" && totalTime.current >= duration)
-              stopAnimation({ explicit: true });
           } else if (isModified_right.current) {
             setSuggestion(suggestions.INCOMPLETE);
           }

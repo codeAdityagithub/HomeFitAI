@@ -5,50 +5,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
 tf.ready();
 // Register one of the TF.js backends.
 import useStopwatch from "@/hooks/useStopwatch";
-import { ExerciseGoals } from "@/utils/exercises/types";
 import { drawKeypoints, drawSkeleton } from "@/utils/tensorflow/drawingutils";
-import { PositionFunction } from "@/utils/tensorflow/functions";
-import { useSearchParams } from "@remix-run/react";
+import { StaticPosFunction } from "@/utils/tensorflow/functions";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
-import DetectionForm from "./DetectionForm";
-import DetectionUI from "./DetectionUI";
+import StaticDetectionUI from "./StaticDetectionUI";
+import StaticForm from "./StaticDurationForm";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
 type Props = {
   name: string;
-  pos_function: PositionFunction;
-  start_pos: 0 | 2;
+  pos_function: StaticPosFunction;
 };
 
-const valid_seq = {
-  0: [0, 1, 2, 1, 0],
-  2: [2, 1, 0, 1, 2],
-};
-const suggestions = {
-  INCOMPLETE: "Please try to perform full range of motion.",
-};
-
-function isComplete(start_pos: 0 | 2, pos: number[]): boolean {
-  const validArray = valid_seq[start_pos];
-
-  return (
-    pos[0] === validArray[0] &&
-    pos[1] === validArray[1] &&
-    pos[2] === validArray[2] &&
-    pos[3] === validArray[3] &&
-    pos[4] === validArray[4]
-  );
-}
-
-function isRepeat(pos: number[]) {
-  return pos[0] === pos[2];
-}
-// 0-> top of movement
-// 1->mid
-// 2->bottom of movement
-
-function Detection({ name, pos_function, start_pos }: Props) {
+function StaticDetection({ name, pos_function }: Props) {
   const animationFrameId = useRef<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,26 +29,12 @@ function Detection({ name, pos_function, start_pos }: Props) {
   const isdrawing = useRef(false);
   const sendSuggestions = useRef(true);
   const sendSuggestionIntervalId = useRef<NodeJS.Timeout>();
-  const isModified = useRef(false);
 
-  const pos = useRef<number[]>([]);
-  const [reps, setReps] = useState(0);
-  const reps_ref = useRef(0);
   const [loading, setLoading] = useState(false);
 
   const [suggestion, setSuggestion] = useState("");
-  const updateSuggestion = (suggestion: string) => {
-    setSuggestion(suggestion);
-    setTimeout(() => setSuggestion(""), 2000);
-  };
-  const { start, reset, restart, time, _time } = useStopwatch();
 
-  const search = useSearchParams()[0];
-  const type = search.get("goal") as ExerciseGoals;
-  const duration = Number(search.get("duration"));
-
-  const hasStarted = useRef(false);
-  const totalTime = useRef(0);
+  const { start, reset, _time, stop } = useStopwatch();
 
   const [voice, setVoice] = useState<SpeechSynthesisVoice>();
 
@@ -120,83 +76,20 @@ function Detection({ name, pos_function, start_pos }: Props) {
       drawSkeleton(pose.keypoints, 0.5, ctx);
       // setIsFlexing(flexing(pose.keypoints));
       if (pose.score && pose.score > 0.4) {
-        const { _pos, _suggestion } = pos_function(
+        const { _suggestion } = pos_function(
           pose.keypoints,
           sendSuggestions.current
         );
-
+        if (sendSuggestions.current) sendSuggestions.current = false;
         if (_suggestion) setSuggestion(_suggestion);
-
-        const top = pos.current[pos.current.length - 1];
-
-        // is pos is empty only push start position
-        if (top === undefined) {
-          if (_pos === start_pos) {
-            isModified.current = true;
-            pos.current.push(_pos);
-            // console.log(pos.current);
-          }
-        }
-        // push only if different position
-        else if (top !== _pos) {
-          pos.current.push(_pos);
-          // console.log(pos.current);
-          if (pos.current.length === 2) {
-            hasStarted.current = true;
-            start(0.3);
-            console.log("started");
-          }
-          isModified.current = true;
-        }
-
-        const len = pos.current.length;
-
-        if (len === 3 && isModified.current) {
-          if (isRepeat(pos.current)) {
-            // restart time on repeat and reset
-            setSuggestion(suggestions.INCOMPLETE);
-            if (hasStarted.current) {
-              reset();
-              hasStarted.current = false;
-            }
-            pos.current.length = 0;
-          } else {
-            setSuggestion("");
-          }
-        } else if (len === 5) {
-          if (isModified.current && isComplete(start_pos, pos.current)) {
-            if (reps_ref.current >= 50) stopAnimation({ explicit: true });
-            else {
-              setReps((prev) => prev + 1);
-              reps_ref.current++;
-              totalTime.current = parseFloat(
-                (time.current + totalTime.current).toFixed(2)
-              );
-              // console.log(totalTime.current);
-              if (type === "TUT" && time.current < duration)
-                setSuggestion("Try going slower and controlling the movement.");
-              else setSuggestion("");
-              if (type === "Reps" && reps_ref.current === duration)
-                stopAnimation({ explicit: true });
-              else if (type === "Timed" && totalTime.current >= duration)
-                stopAnimation({ explicit: true });
-            }
-          } else if (isModified.current) {
-            setSuggestion(suggestions.INCOMPLETE);
-          }
-          reset();
-          pos.current.length = 0;
-          hasStarted.current = false;
-        }
-        isModified.current = false;
       }
-      // Update last frame time for the next iteration
 
+      // Update last frame time for the next iteration
       lastFrameTime.current = currentTime;
       // Request the next frame
       animationFrameId.current = requestAnimationFrame(animate);
     },
-    [setReps, setSuggestion, start_pos]
+    [setSuggestion]
   );
 
   const handleResize = useCallback(() => {
@@ -205,9 +98,11 @@ function Detection({ name, pos_function, start_pos }: Props) {
       videoRef.current.height = videoRef.current.videoHeight;
     }
   }, []);
+
   const toggleSuggestion = useCallback(() => {
     // console.log("toggle");
     sendSuggestions.current = !sendSuggestions.current;
+    setSuggestion("");
   }, []);
 
   useEffect(() => {
@@ -301,10 +196,9 @@ function Detection({ name, pos_function, start_pos }: Props) {
   const stopAnimation = useCallback(
     ({ explicit }: { explicit: boolean }) => {
       console.log("canceling");
-      reset();
+
       setSuggestion("");
-      pos.current = [];
-      hasStarted.current = false;
+      stop();
       clearInterval(sendSuggestionIntervalId.current);
       isdrawing.current = false;
       setIsDrawing(false);
@@ -323,15 +217,7 @@ function Detection({ name, pos_function, start_pos }: Props) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
 
-      if (totalTime.current)
-        console.info(
-          "Total time was : " +
-            totalTime.current +
-            " Average time was : " +
-            totalTime.current / reps_ref.current
-        );
-      if (totalTime.current && explicit && trigger_ref.current) {
-        _setTotalTime(totalTime.current);
+      if (explicit && trigger_ref.current) {
         trigger_ref.current.click();
       }
     },
@@ -343,28 +229,23 @@ function Detection({ name, pos_function, start_pos }: Props) {
     setIsDrawing(true);
     sendSuggestionIntervalId.current = setInterval(toggleSuggestion, 2000);
     setSuggestion("");
-
+    start();
     animationFrameId.current = requestAnimationFrame(animate);
   };
-  const resetTime = useCallback(() => {
-    setReps(0);
-  }, [setReps]);
 
   return (
     <>
-      <DetectionUI
+      <StaticDetectionUI
         name={name}
-        reps={reps}
         loading={loading}
         startDetection={startDetection}
         stopAnimation={stopAnimation}
-        resetTime={resetTime}
+        resetTime={reset}
         suggestion={suggestion}
         videoRef={videoRef}
         canvasRef={canvasRef}
-        _time={_time}
         isDrawing={_isDrawing}
-        _totalTime={totalTime.current}
+        _totalTime={_time}
       />
       <ResponsiveDialog
         description="You can save the exercise data to your daily log from here..."
@@ -376,12 +257,9 @@ function Detection({ name, pos_function, start_pos }: Props) {
           ></button>
         }
       >
-        <DetectionForm
-          totalTime={_totalTime}
-          reps={reps}
-        />
+        <StaticForm totalTime={_time} />
       </ResponsiveDialog>
     </>
   );
 }
-export default Detection;
+export default StaticDetection;

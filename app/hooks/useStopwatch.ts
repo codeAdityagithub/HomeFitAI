@@ -30,14 +30,14 @@ const useStopwatch = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
-      prevTime_sec.current = 0;
-      setTime(0);
     }
   }, []);
 
   const reset = useCallback(() => {
     stop();
     time.current = 0;
+    prevTime_sec.current = 0;
+    setTime(0);
   }, [stop]);
 
   const restart = useCallback(() => {

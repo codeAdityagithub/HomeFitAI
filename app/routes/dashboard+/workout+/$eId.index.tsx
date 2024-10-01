@@ -12,6 +12,7 @@ import { Dumbbell, Flame, PersonStanding, Ribbon } from "lucide-react";
 import { TbJumpRope } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
 import DetectionGoalSelector from "@/components/workout/DetectionGoalSelector";
+import StaticGoalSelector from "@/components/workout/StaticGoalSelector";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
@@ -66,9 +67,13 @@ const ExercisePage = () => {
           referrerPolicy="strict-origin-when-cross-origin"
         ></iframe>
       </div>
-      <DetectionGoalSelector />
-      <div className="">
-        <ul className="flex py-4 gap-4 flex-wrap *:flex-1 *:xs:min-w-[200px] *:max-w-fit *:min-w-full">
+      {exercise.type === "duration" ? (
+        <StaticGoalSelector />
+      ) : (
+        <DetectionGoalSelector />
+      )}
+      <div className="my-4">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 mmd:grid-cols-3 *:max-w-md gap-4">
           <li>
             <Badge
               className="text-[13px] flex gap-1 py-1.5 px-3"
@@ -96,13 +101,13 @@ const ExercisePage = () => {
               {exercise.target}
             </Badge>
           </li>
-          <li>
+          <li className="col-span-1 sm:col-span-2">
             <Badge
               className="text-[13px] flex gap-1 py-1.5 px-3"
               variant="secondary"
             >
-              <p className="font-semibold">Secondary Muscles :</p>
-              {exercise.secondaryMuscles.join(", ")}
+              <p className="font-semibold">Secondary Muscles</p>:
+              <p>{exercise.secondaryMuscles.join(", ")}</p>
             </Badge>
           </li>
         </ul>

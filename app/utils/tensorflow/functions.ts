@@ -4,6 +4,10 @@ export type PositionFunction = (
   keypoints: Keypoint[],
   sendSuggestions: boolean
 ) => { _pos: 0 | 1 | 2; _suggestion?: string };
+export type StaticPosFunction = (
+  keypoints: Keypoint[],
+  sendSuggestions: boolean
+) => { _suggestion?: string };
 
 export type PositionFunctionUnilateral = (
   keypoints: Keypoint[],

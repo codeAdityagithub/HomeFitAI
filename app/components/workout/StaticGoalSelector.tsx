@@ -14,17 +14,9 @@ import { GiTimeTrap } from "react-icons/gi";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
 import { Button } from "../ui/button";
 
-const goals: { name: ExerciseGoals; text: string; icon: ReactNode }[] = [
-  {
-    name: "Reps",
-    text: "Reps",
-    icon: <Repeat1 size={30} />,
-  },
-  {
-    name: "TUT",
-    text: "Time Under Tension",
-    icon: <GiTimeTrap size={30} />,
-  },
+type Goals = Exclude<ExerciseGoals, "Reps" | "TUT">;
+
+const goals: { name: Goals; text: string; icon: ReactNode }[] = [
   {
     name: "Timed",
     text: "Timed Set",
@@ -38,7 +30,7 @@ const goals: { name: ExerciseGoals; text: string; icon: ReactNode }[] = [
 ];
 
 const constraints: Record<
-  Exclude<ExerciseGoals, "Free">,
+  Exclude<Goals, "Free">,
   {
     min: number;
     max: number;
@@ -48,14 +40,6 @@ const constraints: Record<
     desc: string;
   }
 > = {
-  Reps: {
-    min: 3,
-    max: 50,
-    unit: "Reps",
-    step: 1,
-    title: "Number of Reps",
-    desc: "Select the desired number of reps to perform.",
-  },
   Timed: {
     min: 10,
     max: 300,
@@ -64,19 +48,11 @@ const constraints: Record<
     title: "Timed Sets",
     desc: "Select the time for a timed set.",
   },
-  TUT: {
-    min: 1,
-    max: 10,
-    unit: "Seconds",
-    step: 1,
-    title: "Time Under Tension",
-    desc: "It is the number of seconds that each rep should be performed. The greater the number the more the time under tension.",
-  },
 };
 
-function DetectionGoalSelector() {
+function StaticGoalSelector() {
   const [selectedGoal, setSelectedGoal] = useState<Exclude<
-    ExerciseGoals,
+    Goals,
     "Free"
   > | null>(null);
   const selected = useMemo(
@@ -102,17 +78,6 @@ function DetectionGoalSelector() {
   }
   const decrementProps = useLongPress({ callback: decrement });
   const incrementProps = useLongPress({ callback: increment });
-
-  function onClick(adjustment: number) {
-    if (!selectedGoal) return;
-
-    setValue(
-      Math.max(
-        constraints[selectedGoal].min,
-        Math.min(constraints[selectedGoal].max, value + adjustment)
-      )
-    );
-  }
 
   return (
     <ResponsiveDialog
@@ -143,7 +108,7 @@ function DetectionGoalSelector() {
       trigger={<Button>Detect</Button>}
     >
       {!selected ? (
-        <div className="grid grid-cols-2 grid-rows-2 gap-4 p-4 md:p-0">
+        <div className="grid grid-cols-2 gap-4 p-4 md:p-0">
           {goals.map((g) =>
             g.name !== "Free" ? (
               <div
@@ -214,4 +179,4 @@ function DetectionGoalSelector() {
     </ResponsiveDialog>
   );
 }
-export default DetectionGoalSelector;
+export default StaticGoalSelector;
