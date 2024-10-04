@@ -44,7 +44,7 @@ const StaticDetectionUI = ({
       <h1 className="text-2xl font-bold text-center">
         <>
           <br />
-          Rep Time: {_totalTime} secs
+          Total Time: {_totalTime} secs
         </>
       </h1>
 
@@ -65,7 +65,12 @@ const StaticDetectionUI = ({
         >
           {isDrawing || _totalTime === 0 ? "Stop" : "Done"}
         </Button>
-        <Button onClick={resetTime}>reset</Button>
+        <Button
+          disabled={isDrawing || _totalTime === 0}
+          onClick={resetTime}
+        >
+          reset
+        </Button>
       </div>
       <br />
       {suggestion ?? null}

@@ -44,6 +44,13 @@ function StaticDetection({ name, pos_function }: Props) {
   const type = search.get("goal") as Exclude<ExerciseGoals, "Reps" | "TUT">;
   const duration = Number(search.get("duration"));
 
+  const updateSuggestion = (s: string) => {
+    setSuggestion(s);
+    setTimeout(() => {
+      setSuggestion("");
+    }, 2000);
+  };
+
   const animate = useCallback(
     async (currentTime: number) => {
       if (isdrawing.current == false) return;
@@ -86,17 +93,18 @@ function StaticDetection({ name, pos_function }: Props) {
           pose.keypoints,
           sendSuggestions.current
         );
-        if (sendSuggestions.current) sendSuggestions.current = false;
-        if (_suggestion) setSuggestion(_suggestion);
+        if (sendSuggestions.current) {
+          sendSuggestions.current = false;
+          if (_suggestion) setSuggestion(_suggestion);
+          else setSuggestion("");
+        }
       }
-      if (type === "Timed" && time.current >= duration)
-        stopAnimation({ explicit: true });
       // Update last frame time for the next iteration
       lastFrameTime.current = currentTime;
       // Request the next frame
       animationFrameId.current = requestAnimationFrame(animate);
     },
-    [setSuggestion]
+    [setSuggestion, type, duration]
   );
 
   const handleResize = useCallback(() => {
@@ -109,7 +117,7 @@ function StaticDetection({ name, pos_function }: Props) {
   const toggleSuggestion = useCallback(() => {
     // console.log("toggle");
     sendSuggestions.current = !sendSuggestions.current;
-    setSuggestion("");
+    // setSuggestion("");
   }, []);
 
   useEffect(() => {
@@ -118,12 +126,22 @@ function StaticDetection({ name, pos_function }: Props) {
         const utterance = new SpeechSynthesisUtterance(suggestion);
 
         if (voice) utterance.voice = voice;
-
+        utterance.rate = 1.1;
         window.speechSynthesis.speak(utterance);
       }
     }
   }, [suggestion, voice]);
 
+  // for time
+  useEffect(() => {
+    if (type === "Timed" && _time === duration)
+      stopAnimation({ explicit: true });
+
+    if (type === "Timed" && duration - _time == 5) {
+      updateSuggestion("5 more seconds to go!");
+    }
+  }, [_time]);
+  // for voice
   useEffect(() => {
     // Load available voices
     const loadVoices = () => {
@@ -146,6 +164,7 @@ function StaticDetection({ name, pos_function }: Props) {
     };
   }, []);
 
+  // for users camera access
   useEffect(() => {
     // Start the animation loop
     window.addEventListener("resize", handleResize);

@@ -67,10 +67,19 @@ function Detection({ name, pos_function, start_pos }: Props) {
   const [loading, setLoading] = useState(false);
 
   const [suggestion, setSuggestion] = useState("");
-  const updateSuggestion = (suggestion: string) => {
-    setSuggestion(suggestion);
-    setTimeout(() => setSuggestion(""), 2000);
+
+  const suggestionSet = useRef(false);
+  const updateSuggestion = (s: string) => {
+    if (suggestionSet.current) return;
+
+    setSuggestion(s);
+    suggestionSet.current = true;
+    setTimeout(() => {
+      setSuggestion("");
+      suggestionSet.current = false;
+    }, 2000);
   };
+
   const { start, reset, restart, time, _time } = useStopwatch();
 
   const search = useSearchParams()[0];
@@ -124,6 +133,7 @@ function Detection({ name, pos_function, start_pos }: Props) {
           pose.keypoints,
           sendSuggestions.current
         );
+        if (sendSuggestions.current) sendSuggestions.current = false;
 
         if (_suggestion) setSuggestion(_suggestion);
 
@@ -144,7 +154,6 @@ function Detection({ name, pos_function, start_pos }: Props) {
           if (pos.current.length === 2) {
             hasStarted.current = true;
             start(0.3);
-            console.log("started");
           }
           isModified.current = true;
         }
@@ -176,6 +185,7 @@ function Detection({ name, pos_function, start_pos }: Props) {
               if (type === "TUT" && time.current < duration)
                 setSuggestion("Try going slower and controlling the movement.");
               else setSuggestion("");
+
               if (type === "Reps" && reps_ref.current === duration)
                 stopAnimation({ explicit: true });
               else if (type === "Timed" && totalTime.current >= duration)
@@ -190,13 +200,16 @@ function Detection({ name, pos_function, start_pos }: Props) {
         }
         isModified.current = false;
       }
+      if (type === "Timed" && duration - Math.round(totalTime.current) == 5) {
+        updateSuggestion("5 more seconds to go!");
+      }
       // Update last frame time for the next iteration
 
       lastFrameTime.current = currentTime;
       // Request the next frame
       animationFrameId.current = requestAnimationFrame(animate);
     },
-    [setReps, setSuggestion, start_pos]
+    [setReps, setSuggestion, start_pos, type, duration]
   );
 
   const handleResize = useCallback(() => {
@@ -205,6 +218,7 @@ function Detection({ name, pos_function, start_pos }: Props) {
       videoRef.current.height = videoRef.current.videoHeight;
     }
   }, []);
+
   const toggleSuggestion = useCallback(() => {
     // console.log("toggle");
     sendSuggestions.current = !sendSuggestions.current;
@@ -338,14 +352,15 @@ function Detection({ name, pos_function, start_pos }: Props) {
     [setSuggestion]
   );
 
-  const startDetection = () => {
+  const startDetection = useCallback(() => {
     isdrawing.current = true;
     setIsDrawing(true);
     sendSuggestionIntervalId.current = setInterval(toggleSuggestion, 2000);
     setSuggestion("");
 
     animationFrameId.current = requestAnimationFrame(animate);
-  };
+  }, [setIsDrawing, setSuggestion]);
+
   const resetTime = useCallback(() => {
     setReps(0);
   }, [setReps]);

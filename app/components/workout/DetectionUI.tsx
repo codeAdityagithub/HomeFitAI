@@ -34,6 +34,18 @@ type Props =
       isDrawing: boolean;
       _totalTime: number;
     };
+
+function doneDisabled(reps: number | { left: number; right: number }) {
+  return typeof reps === "number"
+    ? reps === 0
+    : reps.left == 0 || reps.right == 0;
+}
+function resetDisabled(reps: number | { left: number; right: number }) {
+  return typeof reps === "number"
+    ? reps === 0
+    : reps.left == 0 && reps.right == 0;
+}
+
 const DetectionUI = ({
   name,
   reps,
@@ -108,14 +120,19 @@ const DetectionUI = ({
         <Button
           style={{ margin: 10 }}
           variant="secondary"
-          disabled={!isDrawing && _totalTime === 0}
+          disabled={!isDrawing && (_totalTime === 0 || doneDisabled(reps))}
           onClick={() => {
             stopAnimation({ explicit: isDrawing ? false : true });
           }}
         >
           {isDrawing || _totalTime === 0 ? "Stop" : "Done"}
         </Button>
-        <Button onClick={resetTime}>reset</Button>
+        <Button
+          disabled={isDrawing || resetDisabled(reps)}
+          onClick={resetTime}
+        >
+          reset
+        </Button>
       </div>
       <br />
       {suggestion ?? null}

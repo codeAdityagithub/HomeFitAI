@@ -75,10 +75,19 @@ export default function DetectionUnilateral({
   const [loading, setLoading] = useState(false);
 
   const [suggestion, setSuggestion] = useState("");
-  const updateSuggestion = (suggestion: string) => {
-    setSuggestion(suggestion);
-    setTimeout(() => setSuggestion(""), 2000);
+
+  const suggestionSet = useRef(false);
+  const updateSuggestion = (s: string) => {
+    if (suggestionSet.current) return;
+
+    setSuggestion(s);
+    suggestionSet.current = true;
+    setTimeout(() => {
+      setSuggestion("");
+      suggestionSet.current = false;
+    }, 2000);
   };
+
   const {
     start: start_left,
     reset: reset_left,
@@ -142,11 +151,14 @@ export default function DetectionUnilateral({
       drawSkeleton(pose.keypoints, 0.5, ctx);
       // setIsFlexing(flexing(pose.keypoints));
       if (pose.score && pose.score > 0.4) {
-        const { _posleft, _posright } = pos_function(
+        const { _posleft, _posright, _suggestion } = pos_function(
           pose.keypoints,
           sendSuggestions.current
         );
-        // if (_suggestion) setSuggestion(_suggestion);
+        if (sendSuggestions.current) sendSuggestions.current = false;
+
+        if (_suggestion) setSuggestion(_suggestion);
+
         const top_left = pos_left.current[pos_left.current.length - 1];
         const top_right = pos_right.current[pos_right.current.length - 1];
 
@@ -292,12 +304,15 @@ export default function DetectionUnilateral({
         isModified_left.current = false;
         isModified_right.current = false;
       }
+      if (type === "Timed" && duration - Math.round(totalTime.current) == 5) {
+        updateSuggestion("5 more seconds to go!");
+      }
       // Update last frame time for the next iteration
       lastFrameTime.current = currentTime;
       // Request the next frame
       animationFrameId.current = requestAnimationFrame(animate);
     },
-    [setRepsLeft, setRepsRight, setSuggestion, start_pos]
+    [setRepsLeft, setRepsRight, setSuggestion, start_pos, type, duration]
   );
 
   const handleResize = useCallback(() => {
@@ -444,14 +459,15 @@ export default function DetectionUnilateral({
     [setSuggestion]
   );
 
-  const startDetection = () => {
+  const startDetection = useCallback(() => {
     isdrawing.current = true;
     setIsDrawing(true);
     sendSuggestionIntervalId.current = setInterval(toggleSuggestion, 2000);
     setSuggestion("");
 
     animationFrameId.current = requestAnimationFrame(animate);
-  };
+  }, [setIsDrawing, setSuggestion]);
+
   const resetTime = useCallback(() => {
     setRepsLeft(0);
     setRepsRight(0);

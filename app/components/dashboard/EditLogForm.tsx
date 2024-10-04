@@ -3,6 +3,8 @@ import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import useLongPress from "@/hooks/useLongPress";
+import CountUp from "react-countup";
 
 const EditLogForm = ({
   init,
@@ -26,9 +28,15 @@ const EditLogForm = ({
 
   const disabled = fetcher.state !== "idle" || value === init;
 
-  function onClick(adjustment: number) {
-    setValue(Math.max(min, Math.min(max, value + adjustment)));
+  function decrement() {
+    setValue((prev) => Math.max(min, Math.min(max, prev - step)));
   }
+  function increment() {
+    setValue((prev) => Math.max(min, Math.min(max, prev + step)));
+  }
+  const decrementProps = useLongPress({ callback: decrement });
+  const incrementProps = useLongPress({ callback: increment });
+
   function handleSubmit(e: any) {
     e.preventDefault();
 
@@ -52,7 +60,7 @@ const EditLogForm = ({
           type="button"
           size="icon"
           className="h-8 w-8 shrink-0 rounded-full"
-          onClick={() => onClick(step * -1)}
+          {...decrementProps}
           disabled={value <= min || fetcher.state === "submitting"}
         >
           <Minus className="h-4 w-4" />
@@ -60,7 +68,11 @@ const EditLogForm = ({
         </Button>
         <div className="flex-1 text-center">
           <div className="text-5xl md:text-6xl font-bold tracking-tighter">
-            {value}
+            <CountUp
+              start={value}
+              end={value}
+              decimals={type === "sleep" ? 1 : 0}
+            />
           </div>
           <div className="text-[0.70rem] uppercase text-muted-foreground">
             {text}
@@ -71,7 +83,7 @@ const EditLogForm = ({
           size="icon"
           type="button"
           className="h-8 w-8 shrink-0 rounded-full"
-          onClick={() => onClick(step)}
+          {...incrementProps}
           disabled={value >= max || fetcher.state === "submitting"}
         >
           <Plus className="h-4 w-4" />

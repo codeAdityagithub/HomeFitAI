@@ -12,9 +12,9 @@ const func: PositionFunctionUnilateral = (
   const _posright =
     right_elbow_angle < 40 ? 0 : right_elbow_angle > 150 ? 2 : 1;
   let _suggestion = undefined;
-  if (sendSuggestions) {
-    _suggestion = curlsSuggestions.INCOMPLETE;
-  }
+  // if (sendSuggestions) {
+  //   _suggestion = curlsSuggestions.INCOMPLETE;
+  // }
   return { _posleft, _posright, _suggestion };
 };
 
