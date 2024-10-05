@@ -11,7 +11,9 @@ import {
   ScrollRestoration,
   ShouldRevalidateFunction,
   useLoaderData,
+  useNavigate,
   useRouteError,
+  useRouteLoaderData,
 } from "@remix-run/react";
 import { Button } from "./components/ui/button";
 import {
@@ -51,7 +53,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({ formAction }) => {
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { theme } = useLoaderData<typeof loader>();
+  const { theme } = useRouteLoaderData("root") as any;
   return (
     <html
       lang="en"
@@ -81,7 +83,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 export function ErrorBoundary() {
   const error = useRouteError();
-
+  const navigate = useNavigate();
   if (isRouteErrorResponse(error)) {
     return (
       <div className="flex items-center justify-center h-svh">
@@ -94,10 +96,17 @@ export function ErrorBoundary() {
           <CardContent>
             <p>{error.data}</p>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="gap-4">
             <Link to="/">
               <Button>Back to HomePage</Button>
             </Link>
+
+            <Button
+              variant="secondary"
+              onClick={() => navigate(-1)}
+            >
+              Go Back
+            </Button>
           </CardFooter>
         </Card>
       </div>

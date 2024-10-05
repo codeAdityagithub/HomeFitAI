@@ -1,15 +1,12 @@
 import GoBack from "@/components/GoBack";
-import { Button } from "@/components/ui/button";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { caloriePerMin, capitalizeEachWord } from "@/utils/general";
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
-import { Dumbbell, Flame, PersonStanding, Ribbon } from "lucide-react";
-import { TbJumpRope } from "react-icons/tb";
 import { Badge } from "@/components/ui/badge";
 import DetectionGoalSelector from "@/components/workout/DetectionGoalSelector";
 import StaticGoalSelector from "@/components/workout/StaticGoalSelector";

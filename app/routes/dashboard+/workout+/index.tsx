@@ -33,6 +33,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     secondaryMuscles: e.secondaryMuscles,
   }));
   // filtered.forEach((e) => console.log(e.name));
+
   return json(
     { exercises: filtered }
     // { headers: { "Cache-Control": "public, max-age=600" } }

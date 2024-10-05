@@ -5,7 +5,7 @@ import { Link } from "@remix-run/react";
 const ExerciseCard = ({ e }: { e: DashboardExercise }) => {
   return (
     <li
-      className="flex flex-col items-start drop-shadow-md hover:shadow-lg hover:opacity-100 hover:-translate-y-1 transition-all rounded-lg overflow-hidden max-w-[500px] min-w-[200px] min-h-[120px]"
+      className="flex flex-col items-start drop-shadow-md hover:shadow-accent/30 hover:shadow-lg hover:opacity-100 hover:-translate-y-1 transition-all rounded-lg overflow-hidden max-w-[500px] min-w-[200px] min-h-[120px]"
       key={e.name}
     >
       <Link
