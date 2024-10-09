@@ -1,12 +1,12 @@
 import { addWorkout } from "@/.server/handlers/workout/addWorkout";
-import GoBack from "@/components/GoBack";
+import PlaylistHeader from "@/components/playlists/PlaylistHeader";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import Detection from "@/components/workout/Detection";
 import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
@@ -19,7 +19,6 @@ import {
   ExerciseGoalSchema,
   ExerciseStartPosition,
 } from "@/utils/exercises/types";
-import { capitalizeEachWord } from "@/utils/general";
 import { cacheClientAction } from "@/utils/routeCache.client";
 import { importFunction } from "@/utils/tensorflow/imports";
 import {
@@ -33,7 +32,6 @@ import {
   isRouteErrorResponse,
   Link,
   useLoaderData,
-  useLocation,
   useParams,
   useRouteError,
 } from "@remix-run/react";
@@ -100,6 +98,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       movement: exercise.movement,
       type: exercise.type,
     },
+    playlist: allExercises,
     index,
     pId,
     url,
@@ -108,16 +107,25 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUser(request, { failureRedirect: "/login" });
   const { sets, logId, exerciseId, duration } = await request.json();
-  return await addWorkout({
+  const url = new URL(request.url);
+
+  const cur = Number(url.searchParams.get("cur"));
+
+  await addWorkout({
     duration,
     exerciseId,
     logId,
     sets,
     userId: user.id,
   });
+  if (isNaN(cur)) {
+    url.searchParams.set("cur", "0");
+  } else {
+    url.searchParams.set("cur", String(cur + 1));
+  }
+  return redirect(url.toString());
 };
 
-export { clientLoader } from "@/utils/routeCache.client";
 export const clientAction = ({
   serverAction,
   request,
@@ -125,7 +133,8 @@ export const clientAction = ({
   cacheClientAction(["dashboardLayout"], serverAction);
 
 const PlaylistPlayPage = () => {
-  const { exercise, index, pId, url } = useLoaderData<typeof loader>();
+  const { exercise, index, pId, url, playlist } =
+    useLoaderData<typeof loader>();
   useServiceWorker();
 
   const [func, setFunc] = useState<any>();
@@ -140,7 +149,7 @@ const PlaylistPlayPage = () => {
       setFunc(() => fetchedFunction);
     }
     loadFunction();
-  }, []);
+  }, [exercise]);
 
   return (
     <div className="max-w-4xl mx-auto md:p-4">
@@ -149,8 +158,9 @@ const PlaylistPlayPage = () => {
           <LoaderIcon className="animate-spin" />
         </div>
       ) : !func ? (
-        <div className="flex items-center justify-center h-[calc(100vh-104px)] md:h-[calc(100vh-48px)]">
-          <Card className="max-w-sm">
+        <div className="flex flex-col items-center justify-start h-[calc(100vh-104px)] md:h-[calc(100vh-48px)]">
+          <PlaylistHeader playlist={playlist} />
+          <Card className="max-w-sm my-auto">
             <CardHeader>
               <CardTitle>Error!</CardTitle>
             </CardHeader>
@@ -182,12 +192,7 @@ const PlaylistPlayPage = () => {
         </div>
       ) : exercise.type === "sets" && exercise.movement === "bilateral" ? (
         <>
-          <div className="flex gap-2 items-center mb-4">
-            <GoBack />
-            <h1 className="text-2xl font-bold text-muted-foreground underline underline-offset-4">
-              {capitalizeEachWord(exercise.name)}
-            </h1>
-          </div>
+          <PlaylistHeader playlist={playlist} />
           <Detection
             name={exercise.name}
             pos_function={func}
@@ -196,12 +201,7 @@ const PlaylistPlayPage = () => {
         </>
       ) : exercise.type === "sets" && exercise.movement === "unilateral" ? (
         <>
-          <div className="flex gap-2 items-center mb-4">
-            <GoBack />
-            <h1 className="text-2xl font-bold text-muted-foreground underline underline-offset-4">
-              {capitalizeEachWord(exercise.name)}
-            </h1>
-          </div>
+          <PlaylistHeader playlist={playlist} />
           <DetectionUnilateral
             name={exercise.name}
             pos_function={func}
@@ -210,12 +210,7 @@ const PlaylistPlayPage = () => {
         </>
       ) : (
         <>
-          <div className="flex gap-2 items-center mb-4">
-            <GoBack />
-            <h1 className="text-2xl font-bold text-muted-foreground underline underline-offset-4">
-              {capitalizeEachWord(exercise.name)}
-            </h1>
-          </div>
+          <PlaylistHeader playlist={playlist} />
           <StaticDetection
             name={exercise.name}
             pos_function={func}

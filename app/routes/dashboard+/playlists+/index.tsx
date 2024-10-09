@@ -92,7 +92,7 @@ const PlaylistPage = () => {
         <div key={key}>
           <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
             <span className="text-accent">{capitalizeFirstLetter(key)} </span>
-            Exercises
+            Playlists
           </h1>
           <ul className="grid p-2 sm:p-4 grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
             {playlists[key as "beginner" | "intermediate" | "advanced"].map(

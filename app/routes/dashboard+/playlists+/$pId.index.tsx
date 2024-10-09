@@ -8,7 +8,7 @@ import exercises from "@/utils/exercises/exercises.server";
 import { PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
 import { caloriePerMin, capitalizeEachWord } from "@/utils/general";
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { Play } from "lucide-react";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {

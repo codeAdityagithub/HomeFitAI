@@ -1,8 +1,8 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
 import Detection from "@/components/workout/Detection";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises, { Exercise } from "@/utils/exercises/exercises.server";
 import { importFunction } from "@/utils/tensorflow/imports";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import {
   ClientActionFunctionArgs,
   isRouteErrorResponse,
@@ -11,6 +11,7 @@ import {
   useRouteError,
 } from "@remix-run/react";
 // import { flexing } from "@/utils/tensorflow/functions";
+import { addWorkout } from "@/.server/handlers/workout/addWorkout";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,22 +20,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import DetectionHeader from "@/components/workout/DetectionHeader";
 import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
+import StaticDetection from "@/components/workout/StaticDetection";
+import useServiceWorker from "@/hooks/useServiceWorker";
 import {
   ExerciseGoalSchema,
   ExerciseStartPosition,
 } from "@/utils/exercises/types";
+import { cacheClientAction } from "@/utils/routeCache.client";
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { cacheClientAction } from "@/utils/routeCache.client";
-import { addWorkout } from "@/.server/handlers/workout/addWorkout";
-import StaticDetection from "@/components/workout/StaticDetection";
-import { capitalizeEachWord } from "@/utils/general";
-import GoBack from "@/components/GoBack";
-import useServiceWorker from "@/hooks/useServiceWorker";
 
 export type ExerciseDetectionLoader = {
   exercise: Pick<Exercise, "name" | "id" | "videoId" | "movement">;
@@ -150,12 +149,7 @@ const DetectWorkoutPage = () => {
         </div>
       ) : exercise.type === "sets" && exercise.movement === "bilateral" ? (
         <>
-          <div className="flex gap-2 items-center mb-4">
-            <GoBack />
-            <h1 className="text-2xl font-bold text-muted-foreground underline underline-offset-4">
-              {capitalizeEachWord(exercise.name)}
-            </h1>
-          </div>
+          <DetectionHeader title={exercise.name} />
           <Detection
             name={exercise.name}
             pos_function={func}
@@ -164,12 +158,7 @@ const DetectWorkoutPage = () => {
         </>
       ) : exercise.type === "sets" && exercise.movement === "unilateral" ? (
         <>
-          <div className="flex gap-2 items-center mb-4">
-            <GoBack />
-            <h1 className="text-2xl font-bold text-muted-foreground underline underline-offset-4">
-              {capitalizeEachWord(exercise.name)}
-            </h1>
-          </div>
+          <DetectionHeader title={exercise.name} />
           <DetectionUnilateral
             name={exercise.name}
             pos_function={func}
@@ -178,12 +167,7 @@ const DetectWorkoutPage = () => {
         </>
       ) : (
         <>
-          <div className="flex gap-2 items-center mb-4">
-            <GoBack />
-            <h1 className="text-2xl font-bold text-muted-foreground underline underline-offset-4">
-              {capitalizeEachWord(exercise.name)}
-            </h1>
-          </div>
+          <DetectionHeader title={exercise.name} />
           <StaticDetection
             name={exercise.name}
             pos_function={func}
