@@ -1,14 +1,17 @@
 import WorkoutSearch from "@/components/dashboard/workoutSearch";
+import PlaylistCard from "@/components/playlists/PlaylistCard";
 import { Button } from "@/components/ui/button";
 import ExerciseCard from "@/components/workout/ExerciseCard";
 import useExercises from "@/hooks/useExercises";
 import { getImageFromVideoId } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
+import { PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
 import { capitalizeFirstLetter } from "@/utils/general";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   json,
+  Link,
   ShouldRevalidateFunction,
   useLoaderData,
 } from "@remix-run/react";
@@ -32,10 +35,42 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     equipment: e.equipment,
     secondaryMuscles: e.secondaryMuscles,
   }));
-  // filtered.forEach((e) => console.log(e.name));
+
+  const playlists = {
+    BEGINNER_FULL_BODY: [
+      {
+        name: "Beginner Full Body",
+        totalExercises: PLAYLISTS.BEGINNER_FULL_BODY.length,
+      },
+    ],
+    INTERMEDIATE_LOWER_BODY: [
+      {
+        name: "Intermediate Lower Body",
+        totalExercises: PLAYLISTS.INTERMEDIATE_LOWER_BODY.length,
+      },
+    ],
+    ADVANCED_UPPER_BODY: [
+      {
+        name: "Advanced Upper Body",
+        totalExercises: PLAYLISTS.ADVANCED_UPPER_BODY.length,
+      },
+    ],
+  };
+
+  const images = Object.keys(playlists)
+    .map((p) => ({
+      [p]: getImageFromVideoId(
+        // @ts-expect-error
+        exercises.find((e) => e.id === PLAYLISTS[p][0].id).videoId
+      ),
+    }))
+    .reduce((acc, obj) => ({ ...acc, ...obj }), {}) as Record<
+    PlaylistId,
+    string
+  >;
 
   return json(
-    { exercises: filtered }
+    { exercises: filtered, popularPlaylists: playlists, images }
     // { headers: { "Cache-Control": "public, max-age=600" } }
   );
 };
@@ -45,7 +80,8 @@ export const shouldRevalidate: ShouldRevalidateFunction = () => false;
 export { clientLoader } from "@/utils/routeCache.client";
 
 const WorkoutPage = () => {
-  const { exercises } = useLoaderData<typeof loader>();
+  const { exercises, popularPlaylists, images } =
+    useLoaderData<typeof loader>();
   const {
     exercisesByTarget,
     bandGrouped,
@@ -60,8 +96,39 @@ const WorkoutPage = () => {
     <div className="space-y-10">
       <WorkoutSearch exercises={exercises} />
       <div>
+        <div className="flex items-center gap-4 mb-4">
+          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background text-accent underline underline-offset-4 z-20">
+            Popular Playlists
+          </h1>
+          <Link to="/dashboard/playlists">
+            <Button
+              size="sm"
+              variant="outline"
+            >
+              View More
+            </Button>
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
+          {Object.keys(popularPlaylists).map((key) => (
+            <PlaylistCard
+              key={key}
+              label={
+                popularPlaylists[key as keyof typeof popularPlaylists][0].name
+              }
+              imageUrl={images[key as PlaylistId]}
+              exercises={
+                popularPlaylists[key as keyof typeof popularPlaylists][0]
+                  .totalExercises
+              }
+              id={key}
+            />
+          ))}
+        </div>
+      </div>
+      <div>
         <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
-          <span className="text-[22px] sm:text-[28px] text-accent underline">
+          <span className="text-[22px] sm:text-[28px] text-accent underline underline-offset-4">
             Resistance Band
           </span>{" "}
           Exercises
@@ -106,7 +173,7 @@ const WorkoutPage = () => {
       </div>
       <div>
         <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
-          <span className="text-[22px] sm:text-[28px] text-accent underline">
+          <span className="text-[22px] sm:text-[28px] text-accent underline underline-offset-4">
             Dumbbell
           </span>{" "}
           Exercises
@@ -155,7 +222,7 @@ const WorkoutPage = () => {
         <div key={key}>
           <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
             Exercises for{" "}
-            <span className="text-[22px] sm:text-[28px] text-accent underline">
+            <span className="text-[22px] sm:text-[28px] text-accent underline underline-offset-4">
               {key.split(" ").map((w) => capitalizeFirstLetter(w) + " ")}
             </span>
           </h1>

@@ -66,12 +66,7 @@ const DetectionUI = ({
 
   return (
     <div className="w-full">
-      <div className="flex gap-2 items-center mb-4">
-        <GoBack />
-        <h1 className="text-2xl font-bold text-muted-foreground underline underline-offset-4">
-          {capitalizeEachWord(name)}
-        </h1>
-      </div>
+      
       <h1 className="text-2xl font-bold text-center">
         Reps :{" "}
         {typeof reps === "number" ? (

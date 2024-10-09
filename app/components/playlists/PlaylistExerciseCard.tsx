@@ -18,7 +18,7 @@ const PlaylistExerciseCard = ({
           src={imageUrl}
           alt={label}
           loading="lazy"
-          className="h-full aspect-[2/1] object-cover"
+          className="h-full aspect-[2/1] object-cover max-h-[80px] rounded-md"
         />
       </div>
       <div className="col-span-2 flex flex-col items-start justify-center">

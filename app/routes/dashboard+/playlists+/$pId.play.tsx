@@ -1,60 +1,75 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
-import Detection from "@/components/workout/Detection";
-import { requireUser } from "@/utils/auth/auth.server";
-import exercises, { Exercise } from "@/utils/exercises/exercises.server";
-import { importFunction } from "@/utils/tensorflow/imports";
-import {
-  ClientActionFunctionArgs,
-  isRouteErrorResponse,
-  Link,
-  useParams,
-  useRouteError,
-} from "@remix-run/react";
-// import { flexing } from "@/utils/tensorflow/functions";
+import { addWorkout } from "@/.server/handlers/workout/addWorkout";
+import GoBack from "@/components/GoBack";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
+  CardContent,
+  CardFooter,
 } from "@/components/ui/card";
+import Detection from "@/components/workout/Detection";
 import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
+import StaticDetection from "@/components/workout/StaticDetection";
+import useServiceWorker from "@/hooks/useServiceWorker";
+import { requireUser } from "@/utils/auth/auth.server";
+import exercises from "@/utils/exercises/exercises.server";
+import { PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
 import {
   ExerciseGoalSchema,
   ExerciseStartPosition,
 } from "@/utils/exercises/types";
-import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { capitalizeEachWord } from "@/utils/general";
+import { cacheClientAction } from "@/utils/routeCache.client";
+import { importFunction } from "@/utils/tensorflow/imports";
+import {
+  ActionFunctionArgs,
+  json,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
+import {
+  ClientActionFunctionArgs,
+  isRouteErrorResponse,
+  Link,
+  useLoaderData,
+  useLocation,
+  useParams,
+  useRouteError,
+} from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
-import { cacheClientAction } from "@/utils/routeCache.client";
-import { addWorkout } from "@/.server/handlers/workout/addWorkout";
-import StaticDetection from "@/components/workout/StaticDetection";
-import { capitalizeEachWord } from "@/utils/general";
-import GoBack from "@/components/GoBack";
-import useServiceWorker from "@/hooks/useServiceWorker";
 
-export type ExerciseDetectionLoader = {
-  exercise: Pick<Exercise, "name" | "id" | "videoId" | "movement">;
-};
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
+  const pId = params.pId;
+  invariant(pId, "Exercise id is required");
 
-  invariant(params.eId, "Exercise id is required");
-  const sp = new URL(request.url).searchParams;
+  const found = Object.keys(PLAYLISTS).find((p) => p === pId);
+  if (!found)
+    throw json("Requested Playlist not found", {
+      status: 404,
+      statusText: "Playlist not found",
+    });
+
+  const allExercises = PLAYLISTS[pId as PlaylistId];
+
+  const url = new URL(request.url);
+  const sp = url.searchParams;
   const g = sp.get("goal");
-  if (!g) return redirect("?goal=Free");
+  const cur = sp.get("cur");
+
+  if (!g) {
+    url.searchParams.set("goal", "Free");
+    return redirect(url.toString());
+  }
+  if (!cur) {
+    url.searchParams.set("cur", "0");
+    return redirect(url.toString());
+  }
 
   const dur = sp.get("duration");
-
-  const exercise = exercises.find((e) => e.id === params.eId);
-  if (!exercise)
-    throw json("Exercise not found.", {
-      status: 404,
-      statusText: `Exercise ${params.eId} not found`,
-    });
 
   let { data } = ExerciseGoalSchema.safeParse({
     goal: g,
@@ -62,6 +77,12 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   });
   if (!data)
     throw new Error("Invalid configuration entered for exercise tracker.");
+  const index = Number(cur);
+
+  if (isNaN(index) || index >= allExercises.length)
+    throw new Error("Invalid current exercise index.");
+
+  const exercise = exercises.find((e) => e.id === allExercises[index].id)!;
 
   if (
     exercise.type === "duration" &&
@@ -79,9 +100,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       movement: exercise.movement,
       type: exercise.type,
     },
+    index,
+    pId,
+    url,
   };
 };
-
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUser(request, { failureRedirect: "/login" });
   const { sets, logId, exerciseId, duration } = await request.json();
@@ -101,8 +124,8 @@ export const clientAction = ({
 }: ClientActionFunctionArgs) =>
   cacheClientAction(["dashboardLayout"], serverAction);
 
-const DetectWorkoutPage = () => {
-  const { exercise } = useLoaderData<typeof loader>();
+const PlaylistPlayPage = () => {
+  const { exercise, index, pId, url } = useLoaderData<typeof loader>();
   useServiceWorker();
 
   const [func, setFunc] = useState<any>();
@@ -138,12 +161,21 @@ const DetectWorkoutPage = () => {
                 implemented yet! Visit later
               </p>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="gap-4">
               <Link
-                to={"/dashboard/workout/" + exercise.id}
+                to={"/dashboard/playlists/" + pId}
                 replace
               >
-                <Button>Back to Workout</Button>
+                <Button>Back to Playlist</Button>
+              </Link>
+              <Link
+                to={(function () {
+                  const red = new URL(url);
+                  red.searchParams.set("cur", (index + 1).toString());
+                  return red.toString();
+                })()}
+              >
+                <Button variant="outline">Next Exercise</Button>
               </Link>
             </CardFooter>
           </Card>
@@ -229,8 +261,8 @@ export function ErrorBoundary() {
           <p>{error?.message ?? "Something Went Wrong!"}</p>
         </CardContent>
         <CardFooter>
-          <Link to={"/dashboard/workout/" + params.eId}>
-            <Button>Back to Workout</Button>
+          <Link to={"/dashboard/playlists/" + params.pId}>
+            <Button>Back to Playlist</Button>
           </Link>
         </CardFooter>
       </Card>
@@ -238,4 +270,4 @@ export function ErrorBoundary() {
   );
 }
 
-export default DetectWorkoutPage;
+export default PlaylistPlayPage;

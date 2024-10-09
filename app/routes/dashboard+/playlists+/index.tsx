@@ -98,6 +98,7 @@ const PlaylistPage = () => {
             {playlists[key as "beginner" | "intermediate" | "advanced"].map(
               (e) => (
                 <PlaylistCard
+                  key={e.id}
                   label={e.name}
                   imageUrl={images[e.id as PlaylistId]}
                   exercises={e.totalExercises}

@@ -11,9 +11,9 @@ const GoBack = ({ className }: { className?: string }) => {
       size="icon"
       variant="outline"
       onClick={() => {
-        if (window.history.state.idx === 0)
-          navigate(location.pathname.split("/").slice(0, -1).join("/"));
-        else navigate(-1);
+        // if (window.history.state.idx === 0)
+        navigate(location.pathname.split("/").slice(0, -1).join("/"));
+        // else navigate(-1);
       }}
       className={cn("rounded-full hover:bg-primary", className)}
     >
