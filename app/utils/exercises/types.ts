@@ -109,7 +109,7 @@ export const ExerciseGoalSchema = z
 
 export type ExerciseGoals = typeof ExerciseGoalSchema._input.goal;
 export const ExerciseGoalText: Record<ExerciseGoals, string> = {
-  Free: "",
+  Free: "Free",
   Reps: "Reps Goal",
   TUT: "Time Under Tension Goal",
   Timed: "Timed Set Goal",

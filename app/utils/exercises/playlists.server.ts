@@ -25,7 +25,7 @@ export const PLAYLISTS: Record<PlaylistId, PlaylistType> = {
   // BEGINNER UPPER BODY
   BEGINNER_UPPER_BODY: [
     { id: "band_biceps_curl", sets: 2 },
-    { id: "band_lateral_raise", sets: 2 },
+    { id: "plank", sets: 2 },
     { id: "band_shoulder_press", sets: 2 },
     { id: "band_concentration_curl", sets: 2 },
     { id: "band_front_raise", sets: 2 },

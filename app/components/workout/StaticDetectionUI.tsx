@@ -1,8 +1,6 @@
-import { capitalizeEachWord } from "@/utils/general";
-import GoBack from "../GoBack";
-import { Button } from "../ui/button";
+import { ExerciseGoals } from "@/utils/exercises/types";
 import { useSearchParams } from "@remix-run/react";
-import { ExerciseGoals, ExerciseGoalText } from "@/utils/exercises/types";
+import { Button } from "../ui/button";
 
 type Props = {
   name: string;

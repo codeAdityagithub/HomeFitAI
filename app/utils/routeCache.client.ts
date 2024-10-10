@@ -6,6 +6,9 @@ import { singleton } from "./singleton.client";
 
 const cache = singleton("clientCache", () => new Map());
 
+export const deleteKey = (key: string) => {
+  if (cache.has(key)) cache.delete(key);
+};
 const clientLoader = async ({
   request,
   serverLoader,
@@ -40,4 +43,4 @@ const cacheClientAction = async (keys: string[], serverAction: () => any) => {
   return res;
 };
 
-export { clientLoader, clientAction, cacheClientLoader, cacheClientAction };
+export { cacheClientAction, cacheClientLoader, clientAction, clientLoader };

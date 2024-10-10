@@ -1,4 +1,4 @@
-import useLongPress from "@/hooks/useLongPress";
+import useGoalSelector from "@/hooks/useGoalSelector";
 import { ExerciseGoals } from "@/utils/exercises/types";
 import { Link } from "@remix-run/react";
 import {
@@ -9,7 +9,7 @@ import {
   Repeat1,
   TimerReset,
 } from "lucide-react";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode } from "react";
 import { GiTimeTrap } from "react-icons/gi";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
 import { Button } from "../ui/button";
@@ -37,83 +37,16 @@ const goals: { name: ExerciseGoals; text: string; icon: ReactNode }[] = [
   },
 ];
 
-const constraints: Record<
-  Exclude<ExerciseGoals, "Free">,
-  {
-    min: number;
-    max: number;
-    unit: string;
-    step: number;
-    title: string;
-    desc: string;
-  }
-> = {
-  Reps: {
-    min: 3,
-    max: 50,
-    unit: "Reps",
-    step: 1,
-    title: "Number of Reps",
-    desc: "Select the desired number of reps to perform.",
-  },
-  Timed: {
-    min: 10,
-    max: 300,
-    unit: "Seconds",
-    step: 5,
-    title: "Timed Sets",
-    desc: "Select the time for a timed set.",
-  },
-  TUT: {
-    min: 1,
-    max: 10,
-    unit: "Seconds",
-    step: 1,
-    title: "Time Under Tension",
-    desc: "It is the number of seconds that each rep should be performed. The greater the number the more the time under tension.",
-  },
-};
-
 function DetectionGoalSelector() {
-  const [selectedGoal, setSelectedGoal] = useState<Exclude<
-    ExerciseGoals,
-    "Free"
-  > | null>(null);
-  const selected = useMemo(
-    () => (selectedGoal ? constraints[selectedGoal] : null),
-    [selectedGoal]
-  );
-  const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (selected) setValue(selected.min);
-  }, [selected]);
-  function decrement() {
-    if (!selected) return;
-    setValue((prev) =>
-      Math.max(selected.min, Math.min(selected.max, prev - selected.step))
-    );
-  }
-  function increment() {
-    if (!selected) return;
-
-    setValue((prev) =>
-      Math.max(selected.min, Math.min(selected.max, prev + selected.step))
-    );
-  }
-  const decrementProps = useLongPress({ callback: decrement });
-  const incrementProps = useLongPress({ callback: increment });
-
-  function onClick(adjustment: number) {
-    if (!selectedGoal) return;
-
-    setValue(
-      Math.max(
-        constraints[selectedGoal].min,
-        Math.min(constraints[selectedGoal].max, value + adjustment)
-      )
-    );
-  }
-
+  const {
+    selectedGoal,
+    selected,
+    setSelectedGoal,
+    decrementProps,
+    incrementProps,
+    setValue,
+    value,
+  } = useGoalSelector();
   return (
     <ResponsiveDialog
       title={

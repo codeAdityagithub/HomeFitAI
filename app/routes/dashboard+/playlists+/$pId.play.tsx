@@ -19,7 +19,7 @@ import {
   ExerciseGoalSchema,
   ExerciseStartPosition,
 } from "@/utils/exercises/types";
-import { cacheClientAction } from "@/utils/routeCache.client";
+import { deleteKey } from "@/utils/routeCache.client";
 import { importFunction } from "@/utils/tensorflow/imports";
 import {
   ActionFunctionArgs,
@@ -85,10 +85,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (
     exercise.type === "duration" &&
     (data.goal === "Reps" || data.goal === "TUT")
-  )
-    throw new Error("Invalid configuration entered for exercise tracker.", {
-      cause: "Invalid Input",
-    });
+  ) {
+    url.searchParams.set("goal", "Free");
+    return redirect(url.toString());
+  }
 
   return {
     exercise: {
@@ -126,11 +126,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect(url.toString());
 };
 
-export const clientAction = ({
+export const clientAction = async ({
   serverAction,
   request,
-}: ClientActionFunctionArgs) =>
-  cacheClientAction(["dashboardLayout"], serverAction);
+}: ClientActionFunctionArgs) => {
+  deleteKey("dashboardLayout");
+  const res = await serverAction();
+  return res;
+};
 
 const PlaylistPlayPage = () => {
   const { exercise, index, pId, url, playlist } =
@@ -159,7 +162,10 @@ const PlaylistPlayPage = () => {
         </div>
       ) : !func ? (
         <div className="flex flex-col items-center justify-start h-[calc(100vh-104px)] md:h-[calc(100vh-48px)]">
-          <PlaylistHeader playlist={playlist} />
+          <PlaylistHeader
+            exerciseType={exercise.type}
+            playlist={playlist}
+          />
           <Card className="max-w-sm my-auto">
             <CardHeader>
               <CardTitle>Error!</CardTitle>
@@ -192,7 +198,10 @@ const PlaylistPlayPage = () => {
         </div>
       ) : exercise.type === "sets" && exercise.movement === "bilateral" ? (
         <>
-          <PlaylistHeader playlist={playlist} />
+          <PlaylistHeader
+            exerciseType={exercise.type}
+            playlist={playlist}
+          />
           <Detection
             name={exercise.name}
             pos_function={func}
@@ -201,7 +210,10 @@ const PlaylistPlayPage = () => {
         </>
       ) : exercise.type === "sets" && exercise.movement === "unilateral" ? (
         <>
-          <PlaylistHeader playlist={playlist} />
+          <PlaylistHeader
+            exerciseType={exercise.type}
+            playlist={playlist}
+          />
           <DetectionUnilateral
             name={exercise.name}
             pos_function={func}
@@ -210,7 +222,10 @@ const PlaylistPlayPage = () => {
         </>
       ) : (
         <>
-          <PlaylistHeader playlist={playlist} />
+          <PlaylistHeader
+            exerciseType={exercise.type}
+            playlist={playlist}
+          />
           <StaticDetection
             name={exercise.name}
             pos_function={func}

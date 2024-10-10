@@ -16,6 +16,7 @@ const exercises = singleton("exercises", () => {
   }
 });
 
+export type ExerciseType = "duration" | "sets";
 export type Exercise = {
   bodyPart: string;
   met: number;
@@ -27,7 +28,7 @@ export type Exercise = {
   secondaryMuscles: string[];
   instructions: string[];
   videoId: string;
-  type: "duration" | "sets";
+  type: ExerciseType;
 };
 
 export default exercises as Exercise[];
