@@ -1,13 +1,12 @@
+import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import useLongPress from "@/hooks/useLongPress";
 import { getImageFromVideoId } from "@/lib/utils";
 import { ExerciseDetectionLoader } from "@/routes/dashboard+/workout+/$eId.detect";
-import { Exercise } from "@/utils/exercises/exercises.server";
 import { capitalizeEachWord } from "@/utils/general";
-import { Form, useFetcher, useLoaderData } from "@remix-run/react";
-import { Button } from "../ui/button";
-import useDashboardLayoutData from "@/hooks/useDashboardLayout";
-import { useEffect, useState } from "react";
-import useLongPress from "@/hooks/useLongPress";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
+import { useState } from "react";
+import { Button } from "../ui/button";
 
 type Props = {
   totalTime: number;
@@ -16,7 +15,7 @@ type Props = {
 const StaticForm = ({ totalTime }: Props) => {
   const { exercise } = useLoaderData<ExerciseDetectionLoader>();
   const { log } = useDashboardLayoutData();
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<any>();
   const [value, setValue] = useState(totalTime);
   const min = 0,
     max = 300;
@@ -93,6 +92,11 @@ const StaticForm = ({ totalTime }: Props) => {
           <span className="sr-only">Increase</span>
         </Button>
       </div>
+      {fetcher.data?.error && (
+        <div className="px-3 py-2 rounded w-full bg-destructive text-destructive-foreground">
+          {fetcher.data.error}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <Button
           type="submit"

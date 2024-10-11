@@ -1,11 +1,9 @@
+import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { getImageFromVideoId } from "@/lib/utils";
 import { ExerciseDetectionLoader } from "@/routes/dashboard+/workout+/$eId.detect";
-import { Exercise } from "@/utils/exercises/exercises.server";
 import { capitalizeEachWord } from "@/utils/general";
-import { Form, useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
 import { Button } from "../ui/button";
-import useDashboardLayoutData from "@/hooks/useDashboardLayout";
-import { useEffect } from "react";
 
 type Props =
   | {
@@ -23,7 +21,7 @@ const DetectionForm = ({ totalTime, reps }: Props) => {
   const avg_rep_time = Number((totalTime / total_reps).toFixed(2));
   const { exercise } = useLoaderData<ExerciseDetectionLoader>();
   const { log } = useDashboardLayoutData();
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<any>();
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -94,6 +92,11 @@ const DetectionForm = ({ totalTime, reps }: Props) => {
           {avg_rep_time} secs
         </h3>
       </div>
+      {fetcher.data?.error && (
+        <div className="px-3 py-2 rounded w-full bg-destructive text-destructive-foreground">
+          {fetcher.data.error}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <Button
           type="submit"

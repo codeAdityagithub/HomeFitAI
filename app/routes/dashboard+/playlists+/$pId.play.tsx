@@ -27,8 +27,8 @@ import {
   LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
+import type { ShouldRevalidateFunction } from "@remix-run/react";
 import {
-  ClientActionFunctionArgs,
   isRouteErrorResponse,
   Link,
   useLoaderData,
@@ -111,13 +111,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const cur = Number(url.searchParams.get("cur"));
 
-  await addWorkout({
+  const res = await addWorkout({
     duration,
     exerciseId,
     logId,
     sets,
     userId: user.id,
   });
+  if (res.status !== 302) return res;
+
   if (isNaN(cur)) {
     url.searchParams.set("cur", "0");
   } else {
@@ -126,13 +128,24 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect(url.toString());
 };
 
-export const clientAction = async ({
-  serverAction,
-  request,
-}: ClientActionFunctionArgs) => {
+// export const clientAction = async ({
+//   serverAction,
+//   request,
+// }: ClientActionFunctionArgs) => {
+//   deleteKey("dashboardLayout");
+//   const res = await serverAction();
+//   console.log("client Action");
+//   return res;
+// };
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({
+  actionResult,
+  defaultShouldRevalidate,
+}) => {
+  if (actionResult && actionResult.error) return false;
   deleteKey("dashboardLayout");
-  const res = await serverAction();
-  return res;
+
+  return defaultShouldRevalidate;
 };
 
 const PlaylistPlayPage = () => {

@@ -12,13 +12,13 @@ const PlaylistExerciseCard = ({
   id: string;
 }) => {
   return (
-    <li className="grid grid-cols-3 gap-4 p-2 bg-secondary drop-shadow-md hover:shadow-accent/30 transition-colors hover:shadow-lg rounded-lg overflow-hidden">
-      <div className="overflow-clip rounded-md">
+    <li className="grid grid-cols-3 gap-4 p-2 bg-secondary drop-shadow-md hover:shadow-accent/20 transition-all hover:shadow-lg rounded-lg overflow-hidden">
+      <div className="overflow-clip rounded-sm">
         <img
           src={imageUrl}
           alt={label}
           loading="lazy"
-          className="h-full aspect-[2/1] object-cover max-h-[80px] rounded-md"
+          className="h-full aspect-[2/1] object-cover max-h-[80px] rounded-sm"
         />
       </div>
       <div className="col-span-2 flex flex-col items-start justify-center">
