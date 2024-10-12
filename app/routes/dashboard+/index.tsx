@@ -5,7 +5,6 @@ import StepsChart from "@/components/dashboard/charts/StepsChart";
 import WeightChart from "@/components/dashboard/charts/WeightChart";
 import ExerciseTable from "@/components/dashboard/ExerciseTable";
 import TodaysLogs from "@/components/dashboard/TodaysLogs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
@@ -16,16 +15,13 @@ import {
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
-import exercises from "@/utils/exercises/exercises.server";
 import type { LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { Flame } from "lucide-react";
-import { IoPersonOutline } from "react-icons/io5";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
   });
-  // sleep for 2 seconds
+
   const date = new Date();
   date.setDate(date.getDate() - 1);
 

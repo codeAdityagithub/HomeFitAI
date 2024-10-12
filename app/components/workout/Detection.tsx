@@ -263,34 +263,43 @@ function Detection({ name, pos_function, start_pos }: Props) {
     window.addEventListener("resize", handleResize);
 
     const startCamera = async () => {
-      setLoading(true);
-      streamRef.current = await navigator.mediaDevices.getUserMedia({
-        video: true,
-      });
-      if (videoRef.current) {
-        videoRef.current.srcObject = streamRef.current;
-        // animationFrameId.current = requestAnimationFrame(animate);
-      }
-      if (videoRef.current) {
-        videoRef.current.width = videoRef.current.videoWidth;
-        videoRef.current.height = videoRef.current.videoHeight;
-      }
-
-      detectorRef.current = await poseDetection.createDetector(
-        poseDetection.SupportedModels.MoveNet,
-        {
-          modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
+      try {
+        setLoading(true);
+        streamRef.current = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+        if (videoRef.current) {
+          videoRef.current.srcObject = streamRef.current;
+          // animationFrameId.current = requestAnimationFrame(animate);
         }
-      );
+        if (videoRef.current) {
+          videoRef.current.width = videoRef.current.videoWidth;
+          videoRef.current.height = videoRef.current.videoHeight;
+        }
 
-      setLoading(false);
-      // } catch (error) {
-      //   console.error("Error accessing user camera:", error);
-      //   alert(error);
-      // }
+        detectorRef.current = await poseDetection.createDetector(
+          poseDetection.SupportedModels.MoveNet,
+          {
+            modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
+          }
+        );
+
+        setLoading(false);
+      } catch (error: any) {
+        if (error.name === "NotAllowedError") {
+          // You can display a message to the user here
+
+          alert("Please allow access to your camera.");
+        } else if (error.name === "NotFoundError") {
+          alert("Cannot find a camera on your device.");
+        } else {
+          console.log("An error occurred: ", error.message??"Cannot load detector at this moment.");
+        }
+      }
     };
 
     startCamera();
+
     // Cleanup function
     return () => {
       // Stop animation loop when component unmounts

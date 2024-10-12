@@ -4,9 +4,10 @@ import exercises, { Exercise } from "@/utils/exercises/exercises.server";
 import { importFunction } from "@/utils/tensorflow/imports";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import {
-  ClientActionFunctionArgs,
+  ClientLoaderFunctionArgs,
   isRouteErrorResponse,
   Link,
+  ShouldRevalidateFunction,
   useParams,
   useRouteError,
 } from "@remix-run/react";
@@ -28,7 +29,7 @@ import {
   ExerciseGoalSchema,
   ExerciseStartPosition,
 } from "@/utils/exercises/types";
-import { cacheClientAction } from "@/utils/routeCache.client";
+import { deleteKey } from "@/utils/routeCache.client";
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
@@ -84,21 +85,37 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUser(request, { failureRedirect: "/login" });
   const { sets, logId, exerciseId, duration } = await request.json();
-  return await addWorkout({
+
+  const cookie = request.headers.get("Cookie");
+  if (!cookie) return json({ error: "Cookie missing" }, { status: 403 });
+  const res = await addWorkout({
     duration,
     exerciseId,
     logId,
     sets,
     userId: user.id,
+    cookie,
   });
+  if (!(res instanceof Headers)) return res;
+
+  return redirect("/dashboard/workout/" + exerciseId, { headers: res });
 };
 
-export { clientLoader } from "@/utils/routeCache.client";
-export const clientAction = ({
-  serverAction,
+export const shouldRevalidate: ShouldRevalidateFunction = ({
+  actionResult,
+  defaultShouldRevalidate,
+}) => {
+  if (actionResult && actionResult.error) return false;
+  return defaultShouldRevalidate;
+};
+export const clientLoader = async ({
   request,
-}: ClientActionFunctionArgs) =>
-  cacheClientAction(["dashboardLayout"], serverAction);
+  serverLoader,
+}: ClientLoaderFunctionArgs) => {
+  deleteKey("dashboardLayout");
+
+  return await serverLoader();
+};
 
 const DetectWorkoutPage = () => {
   const { exercise } = useLoaderData<typeof loader>();

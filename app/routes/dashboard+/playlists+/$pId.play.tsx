@@ -110,6 +110,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const url = new URL(request.url);
 
   const cur = Number(url.searchParams.get("cur"));
+  const cookie = request.headers.get("Cookie");
+  if (!cookie) return json({ error: "Cookie missing" }, { status: 403 });
 
   const res = await addWorkout({
     duration,
@@ -117,26 +119,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     logId,
     sets,
     userId: user.id,
+    cookie,
   });
-  if (res.status !== 302) return res;
+
+  if (!(res instanceof Headers)) return res;
 
   if (isNaN(cur)) {
     url.searchParams.set("cur", "0");
   } else {
     url.searchParams.set("cur", String(cur + 1));
   }
-  return redirect(url.toString());
+  return redirect(url.toString(), { headers: res });
 };
-
-// export const clientAction = async ({
-//   serverAction,
-//   request,
-// }: ClientActionFunctionArgs) => {
-//   deleteKey("dashboardLayout");
-//   const res = await serverAction();
-//   console.log("client Action");
-//   return res;
-// };
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({
   actionResult,
@@ -168,7 +162,7 @@ const PlaylistPlayPage = () => {
   }, [exercise]);
 
   return (
-    <div className="max-w-4xl mx-auto md:p-4">
+    <div className="w-full max-w-md mmd:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto md:p-4">
       {loading ? (
         <div className="h-[calc(100vh-104px)] md:h-[calc(100vh-48px)] flex items-center justify-center">
           <LoaderIcon className="animate-spin" />

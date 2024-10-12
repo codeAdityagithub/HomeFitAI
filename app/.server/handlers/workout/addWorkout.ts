@@ -1,8 +1,9 @@
-import { getDurationFromSets } from "@/.server/utils";
+import { commitSession, getSession } from "@/services/session.server";
 import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { caloriePerMin } from "@/utils/general";
-import { json, redirect } from "@remix-run/node";
+import { AchievementType } from "@prisma/client";
+import { json } from "@remix-run/node";
 import { z } from "zod";
 
 const schema = z.object({
@@ -18,6 +19,7 @@ const schema = z.object({
     .max(1),
   duration: z.number().min(0).max(300),
   exerciseId: z.string(),
+  cookie: z.string(),
 });
 
 export async function addWorkout(input: z.infer<typeof schema>) {
@@ -31,7 +33,7 @@ export async function addWorkout(input: z.infer<typeof schema>) {
 
     const stat = await db.stats.findUnique({
       where: { userId: data.userId },
-      select: { weight: true },
+      select: { weight: true, firstWorkout: true },
     });
     if (!stat) return json({ error: "Invalid User." }, { status: 401 });
 
@@ -66,7 +68,33 @@ export async function addWorkout(input: z.infer<typeof schema>) {
         time: new Date(),
       });
     }
-
+    const headers = new Headers();
+    if (stat.firstWorkout) {
+      await db.user.update({
+        where: { id: data.userId },
+        data: {
+          achievements: {
+            push: {
+              type: AchievementType.FIRST_WORKOUT,
+              description: "Completed your first workout detection",
+              title: "First Workout",
+            },
+          },
+          stats: {
+            update: {
+              firstWorkout: false,
+            },
+          },
+        },
+      });
+      const session = await getSession(data.cookie);
+      session.flash("achievement", {
+        type: AchievementType.FIRST_WORKOUT,
+        title: "First Workout",
+        description: "Completed your first workout detection",
+      });
+      headers.set("Set-Cookie", await commitSession(session));
+    }
     await db.log.update({
       where: { userId: data.userId, id: data.logId },
       data: {
@@ -77,7 +105,7 @@ export async function addWorkout(input: z.infer<typeof schema>) {
       },
     });
 
-    return redirect("/dashboard/workout/" + exercise.id);
+    return headers;
   } catch (error) {
     console.log(error);
     return json({ error: "Failed to add workout" }, { status: 500 });

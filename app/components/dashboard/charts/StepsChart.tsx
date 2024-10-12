@@ -29,6 +29,7 @@ function StepsChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const avgSteps = Math.round(
     logs.reduce((sum, log) => sum + log.steps, 0) / logs.length
   );
+
   return (
     <Card className="lg:max-w-md bg-secondary/50">
       <CardHeader className="space-y-0 pb-2">

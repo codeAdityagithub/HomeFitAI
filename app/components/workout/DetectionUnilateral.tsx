@@ -387,9 +387,19 @@ export default function DetectionUnilateral({
         );
 
         setLoading(false);
-      } catch (error) {
-        console.error("Error accessing user camera:", error);
-        alert(error);
+      } catch (error: any) {
+        if (error.name === "NotAllowedError") {
+          // You can display a message to the user here
+
+          alert("Please allow access to your camera.");
+        } else if (error.name === "NotFoundError") {
+          alert("Cannot find a camera on your device.");
+        } else {
+          console.log(
+            "An error occurred: ",
+            error.message ?? "Cannot load detector at this moment."
+          );
+        }
       }
     };
 
