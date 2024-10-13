@@ -30,3 +30,11 @@ export function convertToKg(lbs: number) {
 export function getImageFromVideoId(videoId: string) {
   return `https://img.youtube.com/vi/${videoId.split("?")[0]}/sddefault.jpg`;
 }
+
+export const AchievementIcons = {
+  FIRST_WORKOUT: "🏅",
+  GOAL_ACHIEVED: "🎖",
+  MILESTONE_REACHED: "🎯",
+  PERSONAL_BEST: "🏆",
+  STREAK: "🔥",
+};

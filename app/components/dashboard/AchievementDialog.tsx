@@ -1,3 +1,4 @@
+import { AchievementIcons } from "@/lib/utils";
 import { LoaderAchievement } from "@/routes/dashboard+/_layout";
 import React, { useEffect } from "react";
 import { Button } from "../ui/button";
@@ -37,6 +38,7 @@ const AchievementDialog = ({
           </DialogHeader>
           <div className="py-4 flex items-center justify-center flex-col gap-2">
             <h2 className="text-xl sm:text-2xl font-bold">
+              {achievement?.type && AchievementIcons[achievement?.type]}
               {achievement?.title}
             </h2>
             <p className="text-muted-foreground">{achievement?.description}</p>
