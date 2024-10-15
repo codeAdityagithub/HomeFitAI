@@ -41,7 +41,7 @@ model Log {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   @@unique([date, userId])  // to ensure that one log per user per day 
-  @@index([userId])
+  @@index([userId, id])
   @@index([date])
 }
 // could use this syntax for fetching data
@@ -74,7 +74,7 @@ model Playlist {
   exercises   String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  @@index([userId])
+  @@index([userId, id])
 }
 
 enum AchievementType {
