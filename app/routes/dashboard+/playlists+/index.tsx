@@ -1,17 +1,32 @@
 import PlaylistCard from "@/components/playlists/PlaylistCard";
+import { Button } from "@/components/ui/button";
 import { getImageFromVideoId } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
+import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { type PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
 import { capitalizeFirstLetter } from "@/utils/general";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await requireUser(request, {
+  const user = await requireUser(request, {
     failureRedirect: "/login",
   });
-
+  const users_playlists = await db.playlist.findMany({
+    where: {
+      userId: user.id,
+    },
+    select: {
+      id: true,
+      name: true,
+      exercises: true,
+    },
+  });
+  const user_playlists_reduced = users_playlists.map((p) => ({
+    ...p,
+    totalExercises: p.exercises.length,
+  }));
   const playlists = {
     beginner: [
       {
@@ -78,16 +93,46 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     string
   >;
 
-  return { playlists, images };
+  return { playlists, users_playlists: user_playlists_reduced, images };
 };
 
 export { clientLoader } from "@/utils/routeCache.client";
 
 const PlaylistPage = () => {
-  const { images, playlists } = useLoaderData<typeof loader>();
+  const { images, playlists, users_playlists } = useLoaderData<typeof loader>();
 
   return (
     <div>
+      <div>
+        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
+          <span className="text-primary">Your </span>
+          Playlists
+        </h1>
+        <ul className="grid p-2 sm:p-4 grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
+          {users_playlists.map((e) => (
+            <PlaylistCard
+              key={e.id}
+              label={e.name}
+              imageUrl={images[e.id as PlaylistId]}
+              exercises={e.totalExercises}
+              id={e.id}
+            />
+          ))}
+          {users_playlists.length === 0 && (
+            <li className="font-semibold w-full text-xl flex flex-col gap-2">
+              No Playlists Created
+              <Link to="create">
+                <Button
+                  size="sm"
+                  className="w-fit ml-10"
+                >
+                  Create One
+                </Button>
+              </Link>
+            </li>
+          )}
+        </ul>
+      </div>
       {Object.keys(playlists).map((key) => (
         <div key={key}>
           <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">

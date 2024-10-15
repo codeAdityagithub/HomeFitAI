@@ -137,6 +137,11 @@
 }
 
 @layer utilities {
+  @media (min-width: 500px) {
+    .grid-cols-2-500px {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
   /* @screen  */
   @media (max-width: 1024px) {
     .mask-left-fade {

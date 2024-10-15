@@ -75,6 +75,7 @@ model Playlist {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   @@index([userId, id])
+  @@index([userId])
 }
 
 enum AchievementType {

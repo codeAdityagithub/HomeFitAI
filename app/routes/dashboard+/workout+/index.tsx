@@ -97,13 +97,14 @@ const WorkoutPage = () => {
       <WorkoutSearch exercises={exercises} />
       <div>
         <div className="flex items-end gap-4 mb-4">
-          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background text-accent underline underline-offset-4 z-20">
+          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background text-primary underline underline-offset-4 z-20">
             Popular Playlists
           </h1>
           <Link to="/dashboard/playlists">
             <Button
               size="sm"
               variant="outline"
+              className="hover:bg-primary"
             >
               View More
             </Button>
