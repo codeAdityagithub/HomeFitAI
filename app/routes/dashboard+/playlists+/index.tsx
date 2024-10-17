@@ -93,10 +93,29 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     string
   >;
 
-  return { playlists, users_playlists: user_playlists_reduced, images };
+  const user_images = user_playlists_reduced.reduce(
+    (acc, p) => ({
+      ...acc,
+      [p.id]:
+        p.exercises.length > 0
+          ? getImageFromVideoId(
+              // @ts-expect-error
+              exercises.find((e) => e.id === p.exercises[0].eId).videoId
+            )
+          : "",
+    }),
+    {} as Record<string, string>
+  );
+
+  const allImages = { ...images, ...user_images };
+  return {
+    playlists,
+    users_playlists: user_playlists_reduced,
+    images: allImages,
+  };
 };
 
-export { clientLoader } from "@/utils/routeCache.client";
+// export { clientLoader } from "@/utils/routeCache.client";
 
 const PlaylistPage = () => {
   const { images, playlists, users_playlists } = useLoaderData<typeof loader>();
@@ -104,18 +123,29 @@ const PlaylistPage = () => {
   return (
     <div>
       <div>
-        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
+        <div className="text-2xl sm:text-3xl py-1 font-bold flex items-center gap-2 bg-background">
           <span className="text-primary">Your </span>
           Playlists
-        </h1>
+          {users_playlists.length < 4 && (
+            <Link to="create">
+              <Button
+                size="sm"
+                className="w-fit hover:bg-primary"
+                variant="outline"
+              >
+                Create
+              </Button>
+            </Link>
+          )}
+        </div>
         <ul className="grid p-2 sm:p-4 grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
-          {users_playlists.map((e) => (
+          {users_playlists.map((p) => (
             <PlaylistCard
-              key={e.id}
-              label={e.name}
-              imageUrl={images[e.id as PlaylistId]}
-              exercises={e.totalExercises}
-              id={e.id}
+              key={p.id}
+              label={p.name}
+              imageUrl={images[p.id as PlaylistId]}
+              exercises={p.totalExercises}
+              id={p.id}
             />
           ))}
           {users_playlists.length === 0 && (
@@ -135,7 +165,7 @@ const PlaylistPage = () => {
       </div>
       {Object.keys(playlists).map((key) => (
         <div key={key}>
-          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
+          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 bg-background">
             <span className="text-accent">{capitalizeFirstLetter(key)} </span>
             Playlists
           </h1>

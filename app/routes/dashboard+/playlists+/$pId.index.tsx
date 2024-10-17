@@ -1,18 +1,48 @@
+import deletePlaylist from "@/.server/handlers/playlist/deletePlaylist";
+import getDefaultPlaylist from "@/.server/loaders/playlists/getDefaultPlaylist";
+import getUserPlaylist from "@/.server/loaders/playlists/getUserPlaylist";
+import DeleteButtonwDialog from "@/components/custom/DeleteButtonwDialog";
 import GoBack from "@/components/GoBack";
 import PlaylistExerciseCard from "@/components/playlists/PlaylistExerciseCard";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
-import { getImageFromVideoId } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
-import exercises from "@/utils/exercises/exercises.server";
-import { PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
-import { caloriePerMin, capitalizeEachWord } from "@/utils/general";
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { isObjectId } from "@/utils/general";
+import {
+  ActionFunctionArgs,
+  json,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
+import {
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+  useSubmit,
+} from "@remix-run/react";
 import { Play } from "lucide-react";
+import { useEffect } from "react";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  await requireUser(request, { failureRedirect: "/login" });
+  const user = await requireUser(request, { failureRedirect: "/login" });
+  const pId = params.pId;
+  if (!pId)
+    throw json("Requested Playlist not found", {
+      status: 404,
+      statusText: "Playlist not found",
+    });
+  const isUserPlaylist = isObjectId(pId);
+
+  if (isUserPlaylist) {
+    return await getUserPlaylist(pId, user.id);
+  } else {
+    return await getDefaultPlaylist(pId);
+  }
+};
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  const user = await requireUser(request, { failureRedirect: "/login" });
   const pId = params.pId;
   if (!pId)
     throw json("Requested Playlist not found", {
@@ -20,46 +50,50 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       statusText: "Playlist not found",
     });
 
-  const found = Object.keys(PLAYLISTS).find((p) => p === pId);
-  if (!found)
-    throw json("Requested Playlist not found", {
-      status: 404,
-      statusText: "Playlist not found",
-    });
-
-  let expectedDuration = 0;
-  let calorieMultiplier = 0;
-  const allExercises = PLAYLISTS[pId as PlaylistId].map((e) => {
-    const exercise = exercises.find((ex) => ex.id === e.id)!;
-    const rest = exercise.met < 4 ? 30 : exercise.met < 6 ? 45 : 60;
-
-    expectedDuration += e.sets * (30 + rest);
-    calorieMultiplier +=
-      Number(caloriePerMin(exercise.met, 1)) * (e.sets * 0.5);
-
-    return {
-      ...e,
-      name: exercise.name,
-      imageUrl: getImageFromVideoId(exercise.videoId),
-    };
-  });
-
-  return {
-    allExercises,
-    playlistName: capitalizeEachWord(pId.split("_").join(" ").toLowerCase()),
-    expectedDuration: Math.ceil(expectedDuration / 60),
-    calorieMultiplier,
-  };
+  if (isObjectId(pId)) {
+    return await deletePlaylist(pId, user.id);
+  }
+  return json({ error: "Invalid Method", ok: false }, { status: 405 });
 };
+export { clientAction, clientLoader } from "@/utils/routeCache.client";
 
 const PlaylistPage = () => {
-  const { allExercises, playlistName, expectedDuration, calorieMultiplier } =
-    useLoaderData<typeof loader>();
+  const {
+    allExercises,
+    playlistName,
+    expectedDuration,
+    calorieMultiplier,
+    description,
+  } = useLoaderData<typeof loader>();
   const { stats } = useDashboardLayoutData();
   const expectedCalories = Math.round(calorieMultiplier * stats.weight);
 
+  const { toast } = useToast();
+  const submit = useSubmit();
+  const navigation = useNavigation();
+  const actionData = useActionData<typeof action>();
+  const navigate = useNavigate();
+  const deletePlaylist = () => {
+    submit(
+      {},
+      {
+        method: "delete",
+      }
+    );
+  };
+  useEffect(() => {
+    // @ts-expect-error
+    if (actionData && actionData.ok && actionData.message) {
+      toast({
+        // @ts-expect-error
+        title: actionData.message,
+        variant: "success",
+      });
+      navigate("/dashboard/playlists", { replace: true });
+    }
+  }, [actionData]);
   return (
-    <div className="flex flex-col gap-6 w-fit mx-auto max-w-3xl">
+    <div className="flex flex-col gap-4 w-fit mx-auto max-w-3xl">
       <div className="relative min-w-full">
         <img
           src={allExercises[0].imageUrl}
@@ -108,8 +142,8 @@ const PlaylistPage = () => {
           </span>
         </div>
       </div>
-
-      <h2 className="text-2xl font-bold mt-6">Exercises</h2>
+      {description && <p className="text-foreground/80">{description}</p>}
+      <h2 className="text-2xl font-bold mt-2">Exercises</h2>
       <ul className="flex flex-col gap-4 p-4 pt-0">
         {allExercises.map((e) => (
           <PlaylistExerciseCard
@@ -121,6 +155,11 @@ const PlaylistPage = () => {
           />
         ))}
       </ul>
+      <DeleteButtonwDialog
+        action={deletePlaylist}
+        disabled={navigation.state !== "idle"}
+        label="Playlist"
+      />
     </div>
   );
 };

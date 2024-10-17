@@ -52,3 +52,7 @@ export function convertMinutesToText(decimalMinutes: number) {
   const seconds = Math.round((decimalMinutes - minutes) * 60); // Convert the decimal part to seconds
   return `${minutes > 0 ? minutes + " min " : ""}${seconds} sec`;
 }
+
+export function isObjectId(id: string) {
+  return /^[a-fA-F0-9]{24}$/.test(id);
+}

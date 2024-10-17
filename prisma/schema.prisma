@@ -71,13 +71,17 @@ model Playlist {
   user        User     @relation(fields: [userId], references: [id])
   name        String
   description String?
-  exercises   String[]
+  exercises   PlaylistExercise[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   @@index([userId, id])
   @@index([userId])
 }
 
+type PlaylistExercise {
+  eId String
+  sets Int
+}
 enum AchievementType {
   FIRST_WORKOUT
   MILESTONE_REACHED

@@ -1,4 +1,5 @@
 import { addWorkout } from "@/.server/handlers/workout/addWorkout";
+import getPlaylistExercises from "@/.server/loaders/playlists/getPlaylistExercises";
 import PlaylistHeader from "@/components/playlists/PlaylistHeader";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,11 +15,11 @@ import StaticDetection from "@/components/workout/StaticDetection";
 import useServiceWorker from "@/hooks/useServiceWorker";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
-import { PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
 import {
   ExerciseGoalSchema,
   ExerciseStartPosition,
 } from "@/utils/exercises/types";
+import { isObjectId } from "@/utils/general";
 import { deleteKey } from "@/utils/routeCache.client";
 import { importFunction } from "@/utils/tensorflow/imports";
 import {
@@ -37,22 +38,17 @@ import {
 } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import invariant from "tiny-invariant";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  await requireUser(request, { failureRedirect: "/login" });
+  const user = await requireUser(request, { failureRedirect: "/login" });
   const pId = params.pId;
-  invariant(pId, "Exercise id is required");
-
-  const found = Object.keys(PLAYLISTS).find((p) => p === pId);
-  if (!found)
+  if (!pId)
     throw json("Requested Playlist not found", {
       status: 404,
       statusText: "Playlist not found",
     });
-
-  const allExercises = PLAYLISTS[pId as PlaylistId];
-
+  const isUserPlaylist = isObjectId(pId);
+  const allExercises = await getPlaylistExercises(pId, isUserPlaylist, user.id);
   const url = new URL(request.url);
   const sp = url.searchParams;
   const g = sp.get("goal");
