@@ -117,10 +117,16 @@ model Stats {
   totalCalories Int           @default(0)//total till now
   bestStreak    Int           @default(0)
   exercises     ExerciseStats[]
+  dailyGoals    DailyGoals
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 }
-
+type DailyGoals {
+  water    Int  @default(10)
+  steps    Int  @default(8000)
+  sleep    Float  @default(8)
+  calories  Int  @default(150)
+}
 type ExerciseStats {
   id       String //name of the exercise 
   reps       Int // best reps performance

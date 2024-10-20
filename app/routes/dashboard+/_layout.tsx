@@ -27,7 +27,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     failureRedirect: "/login",
   });
   const { stats, log } = await getStatsandLogs(user);
-
+  // console.log(stats);
   const session = await getSession(request.headers.get("Cookie"));
   const achievement: LoaderAchievement = session.get("achievement") || null;
   return json(

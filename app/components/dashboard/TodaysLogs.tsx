@@ -1,11 +1,11 @@
-import { Log } from "@prisma/client";
+import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { stepsToCal } from "@/utils/general";
+import { DailyGoals, Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
 import { Droplet, Footprints, MoonStar, SquareActivity } from "lucide-react";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
-import EditLogForm from "./EditLogForm";
 import EditCaloriesForm from "./EditCaloriesForm";
-import useDashboardLayoutData from "@/hooks/useDashboardLayout";
-import { stepsToCal } from "@/utils/general";
+import EditLogForm from "./EditLogForm";
 
 const elems = [
   {
@@ -45,6 +45,7 @@ const elems = [
       />
     ),
     text: "Steps",
+    unit: "steps",
     min: 0,
     max: 25000,
     step: 500,
@@ -61,6 +62,14 @@ const elems = [
     unit: "calories",
   },
 ];
+
+const goalType: Record<string, keyof DailyGoals> = {
+  steps: "steps",
+  sleep: "sleep",
+  waterIntake: "water",
+  totalCalories: "calories",
+};
+
 const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
   const { stats } = useDashboardLayoutData();
   return (
@@ -86,6 +95,10 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
                       )
                     : // @ts-expect-error
                       log[e.type]}
+                  <span className="text-foreground/60 text-sm">
+                    {" "}
+                    / {stats.dailyGoals[goalType[e.type]]}
+                  </span>
                   <small className="ml-1 text-xs font-normal text-secondary-foreground/80">
                     {e.unit}
                   </small>
@@ -104,14 +117,10 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
                 log[e.type]
               }
               text={e.text}
-              // @ts-expect-error
-              type={e.type}
-              // @ts-expect-error
-              min={e.min}
-              // @ts-expect-error
-              max={e.max}
-              // @ts-expect-error
-              step={e.step}
+              type={e.type as "waterIntake" | "sleep" | "steps"}
+              min={e.min!}
+              max={e.max!}
+              step={e.step!}
             />
           ) : (
             <EditCaloriesForm logId={log.id} />

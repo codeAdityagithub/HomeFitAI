@@ -5,5 +5,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   //   await db.log.updateMany({
   //     data: { exercises: { updateMany: { data: { target: "" }, where: {} } } },
   //   });
+  // console.log(
+  //   await db.stats.updateMany({
+  //     data: {
+  //       dailyGoals: {},
+  //     },
+  //   })
+  // );
   return "done";
 };

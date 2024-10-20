@@ -1,5 +1,7 @@
+import { editDailyGoals } from "@/.server/handlers/profile/editDailyGoals";
 import { editStats } from "@/.server/handlers/profile/editStats";
 import Achievements from "@/components/profile/Achievements";
+import EditUserGoals from "@/components/profile/EditUserGoals";
 import EditUserStats from "@/components/profile/EditUserStats";
 import OtherStats from "@/components/profile/OtherStats";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -52,9 +54,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (!value || !_action || typeof value !== "number")
       return json({ error: "Invalid Input." }, { status: 403 });
 
+    if (_action.startsWith("dailyGoals")) {
+      return await editDailyGoals({
+        goal: _action.split(":")[1],
+        userId: user.id,
+        value,
+      });
+    }
     return await editStats({ stat: _action, userId: user.id, value });
   } else {
-    return json({ errr: "Invalid Method" }, { status: 404 });
+    return json({ errr: "Invalid Method" }, { status: 405 });
   }
 };
 
@@ -115,6 +124,34 @@ const DashboardProfile = () => {
               stat="weight"
               init={stats.weight}
               unit={stats.unit}
+            />
+          </div>
+        </CardContent>
+      </Card>
+      {/* Daily goals */}
+      <Card className="flex flex-col gap-2 bg-secondary/50">
+        <CardHeader className="flex flex-col relative items-center">
+          <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
+            Daily Goals
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <div className="w-full grid grid-cols-1 xs:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
+            <EditUserGoals
+              goal="steps"
+              init={stats.dailyGoals.steps}
+            />
+            <EditUserGoals
+              goal="sleep"
+              init={stats.dailyGoals.sleep}
+            />
+            <EditUserGoals
+              goal="calories"
+              init={stats.dailyGoals.calories}
+            />
+            <EditUserGoals
+              goal="water"
+              init={stats.dailyGoals.water}
             />
           </div>
         </CardContent>

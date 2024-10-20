@@ -1,19 +1,37 @@
-import { Calendar, Goal, Minus, Plus, Ruler } from "lucide-react";
-import ResponsiveDialog from "../custom/ResponsiveDialog";
-import { Button } from "../ui/button";
-import { useState } from "react";
-import { GiWeightScale } from "react-icons/gi";
-import { Unit } from "@prisma/client";
 import { convertToFeetInches, convertToLbs } from "@/lib/utils";
+import { Unit } from "@prisma/client";
+import { Calendar, Goal, Ruler } from "lucide-react";
+import { GiWeightScale } from "react-icons/gi";
+import ResponsiveDialog from "../custom/ResponsiveDialog";
 import EditAgeForm from "./EditAgeForm";
 import EditHeightForm from "./EditHeightForm";
 import EditWeightForm from "./EditWeightForm";
 
 const icons = {
-  age: <Calendar size={30} />,
-  height: <Ruler size={30} />,
-  goalWeight: <Goal size={30} />,
-  weight: <GiWeightScale size={30} />,
+  age: (
+    <Calendar
+      size={30}
+      className="text-gray-300"
+    />
+  ),
+  height: (
+    <Ruler
+      size={30}
+      className="text-yellow-600"
+    />
+  ),
+  goalWeight: (
+    <Goal
+      size={30}
+      className="text-red-400"
+    />
+  ),
+  weight: (
+    <GiWeightScale
+      size={30}
+      className="text-indigo-400"
+    />
+  ),
 };
 const text = {
   age: "Age",
