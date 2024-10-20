@@ -12,7 +12,7 @@ const PlaylistExerciseCard = ({
   id: string;
 }) => {
   return (
-    <li className="grid grid-cols-3 gap-4 p-2 bg-secondary drop-shadow-md hover:shadow-accent/20 transition-all hover:shadow-lg rounded-lg overflow-hidden">
+    <li className="grid grid-cols-3 gap-4 p-2 bg-secondary drop-shadow-sm hover:drop-shadow-md transition-all hover:shadow-lg rounded-lg overflow-hidden">
       <div className="overflow-clip rounded-sm">
         <img
           src={imageUrl}

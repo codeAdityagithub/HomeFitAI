@@ -23,6 +23,14 @@ export async function getAuthUser(request: Request | Session) {
   if (!user) return null;
   return user;
 }
+export async function isJWTValid(request: Request | Session) {
+  const token = await authenticator.isAuthenticated(request);
+  if (!token) return true;
+  const user = verifyJWT(token.token);
+  if (!user) return false;
+  return true;
+}
+
 export async function redirectIfAuth(
   request: Request | Session,
   {

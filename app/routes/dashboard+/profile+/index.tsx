@@ -83,7 +83,7 @@ const DashboardProfile = () => {
             <Avatar className="h-16 w-16">
               <AvatarImage
                 alt={user.username}
-                src={user.image ?? ""}
+                src={user.image || ""}
               ></AvatarImage>
               <AvatarFallback>
                 <IoPersonOutline className="w-full h-full p-2" />
