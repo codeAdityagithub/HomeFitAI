@@ -1,10 +1,13 @@
+import { useToast } from "@/hooks/use-toast";
+import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import useLongPress from "@/hooks/useLongPress";
+import { stepsToCal } from "@/utils/general";
 import { useFetcher } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
-import { Button } from "../ui/button";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
-import useLongPress from "@/hooks/useLongPress";
+import { useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
+import { Button } from "../ui/button";
+import { goalType } from "./TodaysLogs";
 
 const EditLogForm = ({
   init,
@@ -14,6 +17,7 @@ const EditLogForm = ({
   text,
   step,
   logId,
+  unit,
 }: {
   logId: string;
   init: number;
@@ -22,12 +26,20 @@ const EditLogForm = ({
   min: number;
   max: number;
   step: number;
+  unit: string;
 }) => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<any>();
   const [value, setValue] = useState(init);
-
+  const { stats, log } = useDashboardLayoutData();
+  const { toast } = useToast();
   const disabled = fetcher.state !== "idle" || value === init;
 
+  const curval = useRef(log[type]);
+  const prev_cal_val = useRef(
+    type === "steps"
+      ? stepsToCal(stats.height, stats.weight, log.steps) + log.totalCalories
+      : Infinity
+  );
   function decrement() {
     setValue((prev) => Math.max(min, Math.min(max, prev - step)));
   }
@@ -49,6 +61,39 @@ const EditLogForm = ({
       }
     );
   }
+  useEffect(() => {
+    let description = "";
+    if (
+      fetcher.data &&
+      fetcher.data.updatedStat &&
+      fetcher.data.updatedStat === type &&
+      curval.current < stats.dailyGoals[goalType[type]] &&
+      log[type] >= stats.dailyGoals[goalType[type]]
+    ) {
+      description += `Congratulations 🎉! You have reached your daily goal for ${text} of ${
+        stats.dailyGoals[goalType[type]]
+      } ${unit}.`;
+      toast({
+        title: "Daily Goal reached.",
+        description,
+        variant: "success",
+      });
+    }
+    if (
+      fetcher.data?.updatedStat === "steps" &&
+      prev_cal_val.current < stats.dailyGoals.calories &&
+      log.totalCalories + stepsToCal(stats.height, stats.weight, log.steps) >=
+        stats.dailyGoals.calories
+    ) {
+      description += `\nCongratulations 🎉! You have reached your daily goal for Total Calories of ${stats.dailyGoals.calories} Kcal.`;
+      toast({
+        title: "Daily Goal reached.",
+        description,
+        variant: "success",
+      });
+    }
+  }, [fetcher.data, stats, log]);
+
   return (
     <form
       onSubmit={handleSubmit}

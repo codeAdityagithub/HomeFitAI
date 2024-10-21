@@ -70,7 +70,7 @@ const EditUserGoals = (props: Props) => {
             <h2 className="text-xl xs:text-2xl font-bold">
               {init}
               <small className="ml-1 text-xs font-normal text-secondary-foreground/80">
-                {goals[goal].unit}
+                {goals[goal].unit} / day
               </small>
             </h2>
             <small className="text-muted-foreground">{goals[goal].text}</small>

@@ -48,7 +48,7 @@ const OtherStats = ({
   totalLogs: number;
 }) => {
   return (
-    <div className="w-full grid grid-cols-1 xs:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
+    <div className="w-full grid grid-cols-1 ssm:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
       {elems.map((e) => (
         <div
           key={e.text}

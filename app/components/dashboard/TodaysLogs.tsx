@@ -63,7 +63,7 @@ const elems = [
   },
 ];
 
-const goalType: Record<string, keyof DailyGoals> = {
+export const goalType: Record<string, keyof DailyGoals> = {
   steps: "steps",
   sleep: "sleep",
   waterIntake: "water",
@@ -72,8 +72,24 @@ const goalType: Record<string, keyof DailyGoals> = {
 
 const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
   const { stats } = useDashboardLayoutData();
+  // const { toast } = useToast();
+  // const stepsachieved = log.steps >= stats.dailyGoals.steps;
+  // const sleepachieved = log.sleep >= stats.dailyGoals.sleep;
+  // const waterachieved = log.waterIntake >= stats.dailyGoals.water;
+  // const calachieved = log.totalCalories >= stats.dailyGoals.calories;
+
+  // useEffect(() => {
+  //   if (stepsachieved || sleepachieved || waterachieved || calachieved) {
+  //     console.log("hi");
+  //     toast({
+  //       title: "Daily Goal Achieved",
+  //       description: `You have reached your daily goal. Keep up the good work!`,
+  //       variant: "success",
+  //     });
+  //   }
+  // }, [stepsachieved, sleepachieved, waterachieved, calachieved]);
   return (
-    <div className="w-full grid grid-cols-1 xs:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
+    <div className="w-full grid grid-cols-1 ssm:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
       {elems.map((e) => (
         <ResponsiveDialog
           key={e.type + "dialog"}
@@ -121,6 +137,7 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
               min={e.min!}
               max={e.max!}
               step={e.step!}
+              unit={e.unit}
             />
           ) : (
             <EditCaloriesForm logId={log.id} />

@@ -1,5 +1,12 @@
-import { Flame, TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { Flame } from "lucide-react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Label,
+  ReferenceLine,
+  XAxis,
+} from "recharts";
 
 import {
   Card,
@@ -17,11 +24,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { SerializeFrom } from "@remix-run/node";
-import { Log } from "@prisma/client";
-import { useMemo } from "react";
-import { stepsToCal } from "@/utils/general";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { stepsToCal } from "@/utils/general";
+import { Log } from "@prisma/client";
+import { SerializeFrom } from "@remix-run/node";
+import { useMemo } from "react";
 
 export const description = "A stacked bar chart with a legend";
 
@@ -149,6 +156,27 @@ export default function CaloriesSourceChart({
               fill="var(--color-exercise)"
               radius={[4, 4, 0, 0]}
             />
+            <ReferenceLine
+              y={stats.dailyGoals.calories}
+              stroke="hsl(var(--muted-foreground))"
+              strokeDasharray="3 3"
+              strokeWidth={1}
+            >
+              <Label
+                position="insideBottomLeft"
+                value="Daily Calorie Goal"
+                offset={10}
+                fill="hsl(var(--foreground))"
+              />
+              <Label
+                position="insideTopLeft"
+                value={stats.dailyGoals.calories}
+                className="text-base"
+                fill="hsl(var(--foreground))"
+                offset={10}
+                startOffset={100}
+              />
+            </ReferenceLine>
           </BarChart>
         </ChartContainer>
       </CardContent>

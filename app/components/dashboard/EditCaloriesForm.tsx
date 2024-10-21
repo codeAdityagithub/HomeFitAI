@@ -1,12 +1,13 @@
+import { useToast } from "@/hooks/use-toast";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
-import { caloriePerMin, capitalizeEachWord } from "@/utils/general";
+import { caloriePerMin, capitalizeEachWord, stepsToCal } from "@/utils/general";
+import { resetFetcher } from "@/utils/resetFetcher";
 import { Link, useFetcher } from "@remix-run/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import CaloriesExerciseSelectForm from "./CaloriesExerciseSelectForm";
-import { resetFetcher } from "@/utils/resetFetcher";
 import CaloriesExerciseDurationForm from "./CaloriesExerciseDurationForm";
+import CaloriesExerciseSelectForm from "./CaloriesExerciseSelectForm";
 
 type Exercise = {
   name: string;
@@ -20,9 +21,15 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [input, setInput] = useState("");
   const [selected, setSelected] = useState<Exercise | null>(null);
-  const weight = useDashboardLayoutData().stats.weight;
+  const { stats, log } = useDashboardLayoutData();
   const fetcher = useFetcher<any>({ key: "totalCalories-fetcher" });
   const [message, setMessage] = useState("");
+
+  const { toast } = useToast();
+  const curval = useRef(
+    log.totalCalories + stepsToCal(stats.height, stats.weight, log.steps)
+  );
+
   useEffect(() => {
     if (fetcher.data?.message) {
       setSelected(null);
@@ -31,7 +38,21 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
       setTimeout(() => setMessage(""), 2000);
       resetFetcher(fetcher);
     }
-  }, [fetcher.data]);
+    if (
+      fetcher.data &&
+      fetcher.data.updatedStat &&
+      fetcher.data.updatedStat === "totalCalories" &&
+      curval.current < stats.dailyGoals.calories &&
+      log.totalCalories + stepsToCal(stats.height, stats.weight, log.steps) >=
+        stats.dailyGoals.calories
+    ) {
+      toast({
+        title: "Daily Goal reached.",
+        description: `You have reached your daily goal for Total Calories of ${stats.dailyGoals.calories} Kcal.`,
+        variant: "success",
+      });
+    }
+  }, [fetcher.data, stats, log]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -113,7 +134,7 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
             </span>
             <span className="text-xs">
               <span className="text-accent text-base">
-                {caloriePerMin(selected.met, weight)}
+                {caloriePerMin(selected.met, stats.weight)}
               </span>{" "}
               Kcal/min
             </span>
@@ -122,7 +143,7 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
             <CaloriesExerciseDurationForm
               exerciseId={selected.id}
               logId={logId}
-              caloriePerMin={Number(caloriePerMin(selected.met, weight))}
+              caloriePerMin={Number(caloriePerMin(selected.met, stats.weight))}
             />
           ) : (
             <CaloriesExerciseSelectForm

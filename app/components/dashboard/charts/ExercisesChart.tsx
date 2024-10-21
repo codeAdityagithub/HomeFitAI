@@ -87,8 +87,9 @@ export default function ExercisesChart({
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          todo: adding some insight from the graph
+        <div className="flex items-center gap-2 font-medium leading-none text-muted-foreground">
+          You have performed exercises for {chartData.length} different body
+          parts in the past 7 days
         </div>
       </CardFooter>
     </Card>

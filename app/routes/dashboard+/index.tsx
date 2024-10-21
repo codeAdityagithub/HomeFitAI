@@ -104,12 +104,13 @@ export default function Dashboard() {
           </CardContent>
         </Card> */}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 mmd:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 mmd:grid-cols-2 2xl:grid-cols-3 gap-6">
         <WeightChart logs={logs} />
         <StepsChart logs={logs} />
         <SleepChart logs={logs} />
         <ExercisesChart logs={logs} />
         <CaloriesSourceChart logs={logs} />
+        {/* <WaterChart logs={logs} /> */}
       </div>
       <ExerciseTable exercises={log.exercises} />
     </div>

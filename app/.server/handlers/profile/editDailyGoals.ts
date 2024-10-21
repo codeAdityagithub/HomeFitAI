@@ -28,7 +28,9 @@ export async function editDailyGoals(input: {
       where: { userId: data.userId },
       data: {
         dailyGoals: {
-          [data.goal]: data.value,
+          update: {
+            [data.goal]: data.value,
+          },
         },
       },
     });

@@ -30,7 +30,10 @@ export async function editTodaysLog(input: z.infer<typeof schema>) {
       data: { [data.type]: data.value },
     });
 
-    return json({ message: "Log updated successfully." });
+    return json({
+      message: "Log updated successfully.",
+      updatedStat: data.type,
+    });
   } catch (error) {
     console.log(error);
     return json({ error: "Failed to update log." }, { status: 500 });

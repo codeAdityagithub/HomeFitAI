@@ -105,7 +105,7 @@ const DashboardProfile = () => {
               </p>
             </div>
           </div>
-          <div className="w-full grid grid-cols-1 xs:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
+          <div className="w-full grid grid-cols-1 ssm:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
             <EditUserStats
               stat="age"
               init={stats.age}
@@ -136,7 +136,7 @@ const DashboardProfile = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <div className="w-full grid grid-cols-1 xs:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
+          <div className="w-full grid grid-cols-1 ssm:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
             <EditUserGoals
               goal="steps"
               init={stats.dailyGoals.steps}

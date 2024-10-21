@@ -4,6 +4,9 @@ import { editTodaysLog } from "@/.server/handlers/dashboard/editTodaysLog";
 import { getStatsandLogs } from "@/.server/handlers/getStatsandLogs";
 import AchievementDialog from "@/components/dashboard/AchievementDialog";
 import Sidebar from "@/components/dashboard/sidebar";
+import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/hooks/use-toast";
 import { commitSession, getSession } from "@/services/session.server";
 import { requireUser } from "@/utils/auth/auth.server";
 import {
@@ -21,7 +24,8 @@ import type {
   ClientLoaderFunctionArgs,
   ShouldRevalidateFunction,
 } from "@remix-run/react";
-import { json, Outlet, useLoaderData } from "@remix-run/react";
+import { json, Link, Outlet, useLoaderData } from "@remix-run/react";
+import { useEffect } from "react";
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
@@ -30,8 +34,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // console.log(stats);
   const session = await getSession(request.headers.get("Cookie"));
   const achievement: LoaderAchievement = session.get("achievement") || null;
+  const dailyGoal: { title: string; description: string } =
+    session.get("goalAchieved") || null;
   return json(
-    { stats, log, achievement },
+    { stats, log, achievement, dailyGoal },
     {
       headers: { "Set-Cookie": await commitSession(session) },
     }
@@ -98,10 +104,29 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 };
 
 const DashboardLayout = () => {
-  const { achievement } = useLoaderData<typeof loader>();
+  const { achievement, dailyGoal } = useLoaderData<typeof loader>();
+  const { toast } = useToast();
+  useEffect(() => {
+    if (dailyGoal) {
+      toast({
+        title: dailyGoal.title,
+        description: dailyGoal.description,
+        action: (
+          <Button
+            className="text-sm"
+            size="sm"
+          >
+            <Link to="/dashboard">View Progress</Link>
+          </Button>
+        ),
+        variant: "success",
+      });
+    }
+  }, [dailyGoal]);
 
   return (
     <div className="flex flex-col-reverse md:flex-row min-h-[500px]">
+      <Toaster />
       <Sidebar />
       <AchievementDialog achievement={achievement} />
       <main className="flex-1 w-full h-full min-h-[calc(100lvh-56px)] md:min-h-screen bg-background text-foreground pb-16 p-6 md:p-4 lg:p-6">

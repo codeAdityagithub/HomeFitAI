@@ -14,10 +14,10 @@ import {
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
-import { Area, AreaChart, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, Label, ReferenceLine, XAxis, YAxis } from "recharts";
 
 function SleepChart({ logs }: { logs: SerializeFrom<Log>[] }) {
-  const { log } = useDashboardLayoutData();
+  const { log, stats } = useDashboardLayoutData();
   const avgSleep = Number(
     (logs.reduce((sum, log) => sum + log.sleep, 0) / logs.length).toFixed(1)
   );
@@ -120,6 +120,27 @@ function SleepChart({ logs }: { logs: SerializeFrom<Log>[] }) {
                 </div>
               )}
             />
+            <ReferenceLine
+              y={stats.dailyGoals.sleep}
+              stroke="hsl(var(--muted-foreground))"
+              strokeDasharray="3 3"
+              strokeWidth={1}
+            >
+              <Label
+                position="insideBottomLeft"
+                value="Daily Sleep Goal"
+                offset={10}
+                fill="hsl(var(--foreground))"
+              />
+              <Label
+                position="insideTopLeft"
+                value={stats.dailyGoals.sleep}
+                className="text-base"
+                fill="hsl(var(--foreground))"
+                offset={10}
+                startOffset={100}
+              />
+            </ReferenceLine>
           </AreaChart>
         </ChartContainer>
       </CardContent>

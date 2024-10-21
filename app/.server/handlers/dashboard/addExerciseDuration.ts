@@ -71,7 +71,10 @@ export async function addExercseDuration(input: z.infer<typeof schema>) {
       },
     });
 
-    return json({ message: "Calories updated successfully." });
+    return json({
+      message: "Calories updated successfully.",
+      updatedStat: "totalCalories",
+    });
   } catch (error) {
     console.log(error);
     return json({ error: "Failed to update log." }, { status: 500 });
