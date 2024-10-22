@@ -55,6 +55,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
   return json({ error: "Invalid Method", ok: false }, { status: 405 });
 };
+
 export { clientAction, clientLoader } from "@/utils/routeCache.client";
 
 const PlaylistPage = () => {
@@ -73,6 +74,7 @@ const PlaylistPage = () => {
   const navigation = useNavigation();
   const actionData = useActionData<typeof action>();
   const navigate = useNavigate();
+
   const deletePlaylist = () => {
     submit(
       {},
@@ -81,6 +83,7 @@ const PlaylistPage = () => {
       }
     );
   };
+
   useEffect(() => {
     // @ts-expect-error
     if (actionData && actionData.ok && actionData.message) {
@@ -92,6 +95,7 @@ const PlaylistPage = () => {
       navigate("/dashboard/playlists", { replace: true });
     }
   }, [actionData]);
+
   return (
     <div className="flex flex-col gap-4 w-fit mx-auto max-w-3xl">
       <div className="relative min-w-full">

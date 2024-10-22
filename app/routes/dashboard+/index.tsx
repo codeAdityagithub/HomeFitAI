@@ -17,6 +17,7 @@ import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
 import type { LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
@@ -40,8 +41,11 @@ export { clientLoader } from "@/utils/routeCache.client";
 
 export default function Dashboard() {
   const { logs: prev, user } = useLoaderData<typeof loader>();
-  const { log, stats } = useDashboardLayoutData();
+
+  const { log } = useDashboardLayoutData();
+
   const logs = [log, ...prev];
+
   return (
     <div className="h-full space-y-6">
       <div className="grid grid-cols-4 gap-6">

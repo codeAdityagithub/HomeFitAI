@@ -44,6 +44,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   );
 };
 export type LoaderAchievement = Omit<Achievement, "createdAt"> | null;
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
@@ -105,7 +106,9 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 
 const DashboardLayout = () => {
   const { achievement, dailyGoal } = useLoaderData<typeof loader>();
+
   const { toast } = useToast();
+
   useEffect(() => {
     if (dailyGoal) {
       toast({

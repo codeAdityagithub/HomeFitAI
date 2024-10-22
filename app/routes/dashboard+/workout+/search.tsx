@@ -5,6 +5,7 @@ import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
   const query = new URL(request.url).searchParams.get("query")?.trim();
@@ -24,6 +25,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return { filtered, query };
 };
+
 const WorkoutSearchPage = () => {
   const { filtered, query } = useLoaderData<typeof loader>();
 

@@ -1,7 +1,6 @@
 import Detection from "@/components/workout/Detection";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises, { Exercise } from "@/utils/exercises/exercises.server";
-import { importFunction } from "@/utils/tensorflow/imports";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import {
   ClientLoaderFunctionArgs,
@@ -24,6 +23,7 @@ import {
 import DetectionHeader from "@/components/workout/DetectionHeader";
 import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
 import StaticDetection from "@/components/workout/StaticDetection";
+import useDynamicExerciseFunction from "@/hooks/useDynamicExerciseFunction";
 import useServiceWorker from "@/hooks/useServiceWorker";
 import {
   ExerciseGoalSchema,
@@ -33,7 +33,6 @@ import { deleteKey } from "@/utils/routeCache.client";
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 import invariant from "tiny-invariant";
 
 export type ExerciseDetectionLoader = {
@@ -120,21 +119,7 @@ export const clientLoader = async ({
 const DetectWorkoutPage = () => {
   const { exercise } = useLoaderData<typeof loader>();
   useServiceWorker();
-
-  const [func, setFunc] = useState<any>();
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const funcName = exercise.id;
-    async function loadFunction() {
-      setLoading(true);
-      const fetchedFunction = await importFunction(funcName);
-
-      setLoading(false);
-      setFunc(() => fetchedFunction);
-    }
-    loadFunction();
-  }, []);
-
+  const { func, loading } = useDynamicExerciseFunction(exercise.id);
   return (
     <div className="max-w-4xl mx-auto md:p-4">
       {loading ? (

@@ -12,6 +12,7 @@ import {
 import Detection from "@/components/workout/Detection";
 import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
 import StaticDetection from "@/components/workout/StaticDetection";
+import useDynamicExerciseFunction from "@/hooks/useDynamicExerciseFunction";
 import useServiceWorker from "@/hooks/useServiceWorker";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
@@ -100,6 +101,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     url,
   };
 };
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUser(request, { failureRedirect: "/login" });
   const { sets, logId, exerciseId, duration } = await request.json();
@@ -142,20 +144,7 @@ const PlaylistPlayPage = () => {
   const { exercise, index, pId, url, playlist } =
     useLoaderData<typeof loader>();
   useServiceWorker();
-
-  const [func, setFunc] = useState<any>();
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const funcName = exercise.id;
-    async function loadFunction() {
-      setLoading(true);
-      const fetchedFunction = await importFunction(funcName);
-
-      setLoading(false);
-      setFunc(() => fetchedFunction);
-    }
-    loadFunction();
-  }, [exercise]);
+  const { func, loading } = useDynamicExerciseFunction(exercise.id);
 
   return (
     <div className="w-full max-w-md mmd:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto md:p-4">

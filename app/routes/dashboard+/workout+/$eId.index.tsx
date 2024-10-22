@@ -30,16 +30,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   return { exercise: exerciseWithVideo };
 };
 
-// const icons = {
-//   calories: <Flame size={30} />,
-//   equipment: {
-//     rope: <TbJumpRope size={30} />,
-//     "body weight": <PersonStanding size={30} />,
-//     dumbbell: <Dumbbell size={30} />,
-//     band: <Ribbon size={30} />,
-//   },
-// };
-
 const ExercisePage = () => {
   const { exercise } = useLoaderData<typeof loader>();
   // console.log(exercise);

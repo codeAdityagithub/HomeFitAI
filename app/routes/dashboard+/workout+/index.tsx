@@ -70,8 +70,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   >;
 
   return json(
-    { exercises: filtered, popularPlaylists: playlists, images }
-    // { headers: { "Cache-Control": "public, max-age=600" } }
+    { exercises: filtered, popularPlaylists: playlists, images },
+    { headers: { "Cache-Control": "public, max-age=600" } }
   );
 };
 
