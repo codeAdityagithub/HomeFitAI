@@ -20,6 +20,11 @@ export function convertToFeetInches(cm: number): {
   return { feet, inch };
 }
 
+export function getFormattedHeight(cm: number): string {
+  const { feet, inch } = convertToFeetInches(cm);
+  return `${feet}' ${inch}''`;
+}
+
 export function convertToLbs(kg: number) {
   return Number((kg * 2.20462).toFixed(2));
 }

@@ -1,8 +1,4 @@
-import {
-  createUserDetails,
-  resolver,
-  schema,
-} from "@/.server/handlers/auth/details";
+import { createUserDetails } from "@/.server/handlers/auth/details";
 import Selector from "@/components/details/Selector";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,9 +18,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn, convertToCm, convertToFeetInches } from "@/lib/utils";
+import {
+  cn,
+  convertToCm,
+  convertToFeetInches,
+  convertToLbs,
+} from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
+import { constants, resolver, schema } from "@/utils/detailsPage/zodConstants";
 import { Gender, Unit } from "@prisma/client";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { ActionFunctionArgs, redirect } from "@remix-run/node"; // or cloudflare/deno
@@ -155,7 +157,7 @@ export default function LoginForm() {
   const unit = form.unit;
   return (
     <div className="flex-1 flex items-center justify-center p-6">
-      <Card className="min-w-[300px] sm:w-[400px] md:w-[320px] lg:w-[450px] bg-white/60 backdrop-blur-sm">
+      <Card className="min-w-[300px] sm:w-[400px] md:w-[320px] lg:w-[450px] bg-secondary/60 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-center">
             {currentStep === 0
@@ -179,10 +181,7 @@ export default function LoginForm() {
                 setHeight(convertToFeetInches(form.height));
 
                 setWeight(
-                  Math.min(
-                    Math.min(Math.round(form.weight * 2.20462 * 2) / 2),
-                    441
-                  )
+                  Math.min(Math.round(form.weight * 2.20462 * 2) / 2, 441)
                 );
               }
             }}
@@ -224,7 +223,8 @@ export default function LoginForm() {
                         type="number"
                         placeholder="Your age in years"
                         id="age"
-                        // min={5}
+                        min={constants.MIN_AGE}
+                        max={constants.MAX_AGE}
                         onChange={(e) => {
                           setValue("age", Number(e.target.value));
                         }}
@@ -255,8 +255,8 @@ export default function LoginForm() {
                           type="number"
                           placeholder="Your Height in cm"
                           id="height"
-                          min={50}
-                          max={272}
+                          min={constants.MIN_HEIGHT}
+                          max={constants.MAX_HEIGHT}
                           step={0.5}
                           value={form.height || ""}
                           onChange={(e) => {
@@ -334,7 +334,8 @@ export default function LoginForm() {
                         <Input
                           type="number"
                           id="weight"
-                          min={0}
+                          min={constants.MIN_WEIGHT}
+                          max={constants.MAX_WEIGHT}
                           step={0.5}
                           placeholder="Weight in Kg"
                           value={form.weight || ""}
@@ -346,7 +347,8 @@ export default function LoginForm() {
                         <Input
                           type="number"
                           id="weight"
-                          min={0}
+                          min={Math.round(convertToLbs(constants.MIN_WEIGHT))}
+                          max={Math.round(convertToLbs(constants.MAX_WEIGHT))}
                           step={0.5}
                           placeholder="Weight in pounds"
                           value={weight || ""}
