@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { PLAYLIST_CONSTANTS } from "@/lib/constants";
 import { getImageFromVideoId } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
@@ -59,15 +60,15 @@ const CreatePlaylist = () => {
   const { toast } = useToast();
 
   const addOrIncrement = (id: string) => {
-    if (selected_ref.current.size >= 15) {
+    if (selected_ref.current.size >= PLAYLIST_CONSTANTS.exercises.max) {
       toast({
-        title: "Playlist must have at most 15 exercises",
+        title: `You can only select ${PLAYLIST_CONSTANTS.exercises.max} exercises`,
         variant: "destructive",
       });
       return;
     }
     if (selected_ref.current.has(id)) {
-      if (selected_ref.current.get(id)! >= 6) return;
+      if (selected_ref.current.get(id)! >= PLAYLIST_CONSTANTS.sets.max) return;
 
       selected_ref.current.set(id, selected_ref.current.get(id)! + 1);
     } else {
@@ -99,9 +100,9 @@ const CreatePlaylist = () => {
   const navigation = useNavigation();
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (selected_ref.current.size < 5) {
+    if (selected_ref.current.size < PLAYLIST_CONSTANTS.exercises.min) {
       toast({
-        title: "Playlist must have at least 5 exercises",
+        title: `Playlist must have atleast ${PLAYLIST_CONSTANTS.exercises.min} exercises`,
         variant: "destructive",
       });
       return;

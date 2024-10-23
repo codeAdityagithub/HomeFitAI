@@ -6,6 +6,7 @@ import { Unit } from "@prisma/client";
 import { convertToCm, convertToFeetInches } from "@/lib/utils";
 import CountUp from "react-countup";
 import useLongPress from "@/hooks/useLongPress";
+import { constants } from "@/utils/detailsPage/zodConstants";
 
 const EditHeightForm = ({ init, unit }: { init: number; unit: Unit }) => {
   const fetcher = useFetcher();
@@ -13,7 +14,7 @@ const EditHeightForm = ({ init, unit }: { init: number; unit: Unit }) => {
   const [other, setOther] = useState(convertToFeetInches(init));
   const otherInit = useMemo(() => convertToFeetInches(init), [init]);
   const min = 100,
-    max = 251;
+    max = constants.MAX_HEIGHT;
   const disabled =
     fetcher.state !== "idle" ||
     (unit === "kgcm"

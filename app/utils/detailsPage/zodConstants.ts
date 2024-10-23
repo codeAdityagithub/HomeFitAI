@@ -1,16 +1,10 @@
+import { STATS_CONSTANTS } from "@/lib/constants";
 import { getFormattedHeight, convertToLbs } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DateTime } from "luxon";
 import { z } from "zod";
 
-export const constants = {
-  MIN_AGE: 5,
-  MAX_AGE: 100,
-  MIN_HEIGHT: 50,
-  MAX_HEIGHT: 250,
-  MIN_WEIGHT: 30,
-  MAX_WEIGHT: 200,
-};
+export const constants = STATS_CONSTANTS;
 
 export const schema = z
   .object({

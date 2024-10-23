@@ -1,4 +1,5 @@
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { LOG_CONSTANTS } from "@/lib/constants";
 import { stepsToCal } from "@/utils/general";
 import { DailyGoals, Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
@@ -18,8 +19,8 @@ const elems = [
     ),
     text: "Water Intake",
     unit: "glasses",
-    min: 0,
-    max: 20,
+    min: LOG_CONSTANTS.waterIntake.min,
+    max: LOG_CONSTANTS.waterIntake.max,
     step: 1,
   },
   {
@@ -32,8 +33,8 @@ const elems = [
     ),
     text: "Sleep",
     unit: "hours",
-    min: 0,
-    max: 16,
+    min: LOG_CONSTANTS.sleep.min,
+    max: LOG_CONSTANTS.sleep.max,
     step: 0.5,
   },
   {
@@ -46,8 +47,8 @@ const elems = [
     ),
     text: "Steps",
     unit: "steps",
-    min: 0,
-    max: 25000,
+    min: LOG_CONSTANTS.steps.min,
+    max: LOG_CONSTANTS.steps.max,
     step: 500,
   },
   {

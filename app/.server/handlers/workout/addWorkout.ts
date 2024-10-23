@@ -1,3 +1,4 @@
+import { LOG_CONSTANTS } from "@/lib/constants";
 import { commitSession, getSession } from "@/services/session.server";
 import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
@@ -12,12 +13,18 @@ const schema = z.object({
   sets: z
     .array(
       z.object({
-        reps: z.number().min(1).max(50),
-        avgRepTime: z.number().min(0).max(50),
+        reps: z
+          .number()
+          .min(LOG_CONSTANTS.exercise.reps.min)
+          .max(LOG_CONSTANTS.exercise.reps.max),
+        avgRepTime: z
+          .number()
+          .min(0)
+          .max(LOG_CONSTANTS.exercise.max_avgreptime),
       })
     )
     .max(1),
-  duration: z.number().min(0).max(300),
+  duration: z.number().min(0).max(LOG_CONSTANTS.exercise.max_duration),
   exerciseId: z.string(),
   cookie: z.string(),
 });

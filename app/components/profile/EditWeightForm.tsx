@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Unit } from "@prisma/client";
 import { convertToKg, convertToLbs } from "@/lib/utils";
 import useLongPress from "@/hooks/useLongPress";
+import { constants } from "@/utils/detailsPage/zodConstants";
 
 const EditWeightForm = ({
   init,
@@ -18,8 +19,8 @@ const EditWeightForm = ({
   const fetcher = useFetcher();
   const [value, setValue] = useState(init);
   const [other, setOther] = useState(convertToLbs(init));
-  const min = 30,
-    max = 200;
+  const min = constants.MIN_AGE,
+    max = constants.MAX_AGE;
   const disabled = fetcher.state !== "idle" || value === init;
 
   function decrement() {

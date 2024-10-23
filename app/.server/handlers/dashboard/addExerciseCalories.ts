@@ -1,4 +1,5 @@
 import { getDurationFromSets } from "@/.server/utils";
+import { LOG_CONSTANTS } from "@/lib/constants";
 import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { caloriePerMin } from "@/utils/general";
@@ -11,7 +12,10 @@ const schema = z.object({
   value: z
     .array(
       z.object({
-        reps: z.number().min(1).max(50),
+        reps: z
+          .number()
+          .min(LOG_CONSTANTS.exercise.reps.min)
+          .max(LOG_CONSTANTS.exercise.reps.max),
         intensity: z.enum(["explosive", "controlled"]),
       })
     )

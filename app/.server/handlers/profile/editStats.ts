@@ -1,3 +1,4 @@
+import { STATS_CONSTANTS } from "@/lib/constants";
 import db from "@/utils/db.server";
 import { json } from "@remix-run/node";
 import { z } from "zod";
@@ -11,13 +12,24 @@ const schema = z
   .refine(({ stat, value }) => {
     switch (stat) {
       case "age":
-        return value >= 5 && value <= 100;
+        return (
+          value >= STATS_CONSTANTS.MIN_AGE && value <= STATS_CONSTANTS.MAX_AGE
+        );
       case "height":
-        return value >= 100 && value <= 251;
+        return (
+          value >= STATS_CONSTANTS.MIN_HEIGHT &&
+          value <= STATS_CONSTANTS.MAX_HEIGHT
+        );
       case "weight":
-        return value >= 30 && value <= 200;
+        return (
+          value >= STATS_CONSTANTS.MIN_WEIGHT &&
+          value <= STATS_CONSTANTS.MAX_WEIGHT
+        );
       case "goalWeight":
-        return value >= 30 && value <= 200;
+        return (
+          value >= STATS_CONSTANTS.MIN_WEIGHT &&
+          value <= STATS_CONSTANTS.MAX_WEIGHT
+        );
       default:
         return false;
     }

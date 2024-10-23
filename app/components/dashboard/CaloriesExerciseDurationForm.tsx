@@ -2,6 +2,7 @@ import { useFetcher } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import { LOG_CONSTANTS } from "@/lib/constants";
 
 const CaloriesExerciseDurationForm = ({
   logId,
@@ -16,8 +17,8 @@ const CaloriesExerciseDurationForm = ({
   const [value, setValue] = useState(1);
 
   const disabled = fetcher.state !== "idle";
-  const min = 0.5,
-    max = 15;
+  const min = LOG_CONSTANTS.exercise.reps.min,
+    max = LOG_CONSTANTS.exercise.reps.max;
   function onClick(adjustment: number) {
     setValue(Math.max(min, Math.min(max, value + adjustment)));
   }

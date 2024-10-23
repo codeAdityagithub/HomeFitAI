@@ -1,5 +1,6 @@
 import { getImageFromVideoId } from "@/lib/utils";
 import db from "@/utils/db.server";
+import exercises from "@/utils/exercises/exercises.server";
 import { PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
 
 export const getAllPlaylists = async (userId: string) => {

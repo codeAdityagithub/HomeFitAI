@@ -1,7 +1,12 @@
+import { LOG_CONSTANTS } from "@/lib/constants";
+import { capitalizeFirstLetter } from "@/utils/general";
+import { useFetcher } from "@remix-run/react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ChangeEvent, useState } from "react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
@@ -9,10 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { capitalizeFirstLetter } from "@/utils/general";
-import { Checkbox } from "../ui/checkbox";
-import { useFetcher } from "@remix-run/react";
 
 function CaloriesExerciseSelectForm({
   exerciseId,
@@ -27,6 +28,8 @@ function CaloriesExerciseSelectForm({
   const [currentSet, setCurrentSet] = useState(0);
   const fetcher = useFetcher<any>({ key: "totalCalories-fetcher" });
 
+  const min = LOG_CONSTANTS.exercise.reps.min,
+    max = LOG_CONSTANTS.exercise.reps.max;
   const handleNumberOfSetsChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newNumber = Math.max(1, Math.min(6, parseInt(e.target.value, 10)));
     setNumberOfSets(newNumber);
@@ -50,7 +53,7 @@ function CaloriesExerciseSelectForm({
       );
       setSets(newSets);
     } else {
-      const newReps = Math.max(1, Math.min(50, parseInt(value, 10)));
+      const newReps = Math.max(min, Math.min(max, parseInt(value, 10)));
 
       const newSets = sets.map((set, i) =>
         i === index ? { ...set, reps: newReps } : set

@@ -1,3 +1,4 @@
+import { LOG_CONSTANTS } from "@/lib/constants";
 import { ExerciseGoals } from "@/utils/exercises/types";
 import { useEffect, useMemo, useState } from "react";
 import useLongPress from "./useLongPress";
@@ -14,8 +15,8 @@ const constraints: Record<
   }
 > = {
   Reps: {
-    min: 3,
-    max: 50,
+    min: LOG_CONSTANTS.exercise.reps.min,
+    max: LOG_CONSTANTS.exercise.reps.max,
     unit: "Reps",
     step: 1,
     title: "Number of Reps",
@@ -23,7 +24,7 @@ const constraints: Record<
   },
   Timed: {
     min: 10,
-    max: 300,
+    max: LOG_CONSTANTS.exercise.max_duration,
     unit: "Seconds",
     step: 5,
     title: "Timed Sets",
@@ -31,7 +32,7 @@ const constraints: Record<
   },
   TUT: {
     min: 1,
-    max: 10,
+    max: LOG_CONSTANTS.exercise.max_TUT,
     unit: "Seconds",
     step: 1,
     title: "Time Under Tension",

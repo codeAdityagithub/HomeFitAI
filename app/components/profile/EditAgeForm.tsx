@@ -1,13 +1,14 @@
+import { constants } from "@/utils/detailsPage/zodConstants";
 import { useFetcher } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
-import { Button } from "../ui/button";
 import { useState } from "react";
+import { Button } from "../ui/button";
 
 const EditAgeForm = ({ init }: { init: number }) => {
   const fetcher = useFetcher();
   const [value, setValue] = useState(init);
-  const min = 5,
-    max = 100;
+  const min = constants.MIN_AGE,
+    max = constants.MAX_AGE;
 
   const disabled = fetcher.state !== "idle" || value === init;
 

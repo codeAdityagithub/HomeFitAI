@@ -1,3 +1,4 @@
+import { LOG_CONSTANTS } from "@/lib/constants";
 import db from "@/utils/db.server";
 import { json } from "@remix-run/node";
 import { z } from "zod";
@@ -12,11 +13,18 @@ const schema = z
   .refine(({ type, value }) => {
     switch (type) {
       case "sleep":
-        return value >= 0 && value <= 16;
+        return (
+          value >= LOG_CONSTANTS.sleep.min && value <= LOG_CONSTANTS.sleep.max
+        );
       case "steps":
-        return value >= 0 && value <= 25000;
+        return (
+          value >= LOG_CONSTANTS.steps.min && value <= LOG_CONSTANTS.steps.max
+        );
       case "waterIntake":
-        return value >= 0 && value <= 20;
+        return (
+          value >= LOG_CONSTANTS.waterIntake.min &&
+          value <= LOG_CONSTANTS.waterIntake.max
+        );
       default:
         return false;
     }

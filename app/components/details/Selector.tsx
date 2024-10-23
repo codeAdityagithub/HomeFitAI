@@ -3,7 +3,6 @@ import { Minus, Plus } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "../ui/button";
 
-import useLongPress from "@/hooks/useLongPress";
 import CountUp from "react-countup";
 function WeightInput({
   unit,
@@ -21,17 +20,40 @@ function WeightInput({
     unit === "kgcm" ? form.goalWeight : goalWeight
   );
   const diff = currentValue - (unit === "kgcm" ? form.weight : weight);
-
-  const incrementCurrentValue = () => {
-    setCurrentValue((prev: any) => prev + 0.5);
+  const startDecrement = () => {
+    if (decrementIntervalRef.current !== null) return;
+    decrementIntervalRef.current = setInterval(() => {
+      setCurrentValue((prev: any) => prev - 0.5);
+    }, 150); // Decrease every 100ms
   };
 
-  const decrementCurrentValue = () => {
-    setCurrentValue((prev: any) => prev - 0.5);
+  const startIncrement = () => {
+    if (incrementIntervalRef.current !== null) return;
+
+    incrementIntervalRef.current = setInterval(() => {
+      setCurrentValue((prev: any) => prev + 0.5);
+    }, 150); // Increase every 100ms
   };
 
-  const decrementProps = useLongPress({ callback: decrementCurrentValue });
-  const incrementProps = useLongPress({ callback: incrementCurrentValue });
+  const stopDecrement = () => {
+    if (decrementIntervalRef.current !== null) {
+      clearInterval(decrementIntervalRef.current);
+      if (unit === "kgcm") {
+        setValue("goalWeight", currentValue - 0.5);
+      } else setGoalWeight(currentValue - 0.5);
+      decrementIntervalRef.current = null;
+    }
+  };
+
+  const stopIncrement = () => {
+    if (incrementIntervalRef.current !== null) {
+      clearInterval(incrementIntervalRef.current);
+      if (unit === "kgcm") {
+        setValue("goalWeight", currentValue + 0.5);
+      } else setGoalWeight(currentValue + 0.5);
+      incrementIntervalRef.current = null;
+    }
+  };
 
   return (
     <div>
@@ -48,7 +70,12 @@ function WeightInput({
           type="button"
           className="h-9 w-9"
           size="icon"
-          {...decrementProps}
+          onClick={() => setCurrentValue((prev: any) => prev - 0.5)}
+          onMouseDown={startDecrement}
+          onMouseUp={stopDecrement}
+          onMouseLeave={stopDecrement}
+          onTouchStart={startDecrement} // For touch devices
+          onTouchEnd={stopDecrement}
           disabled={disabled}
         >
           <Minus className="h-5 w-5" />
@@ -69,7 +96,12 @@ function WeightInput({
           type="button"
           className="h-9 w-9"
           size="icon"
-          {...incrementProps}
+          onClick={() => setCurrentValue((prev: any) => prev + 0.5)}
+          onMouseDown={startIncrement}
+          onMouseUp={stopIncrement}
+          onMouseLeave={stopIncrement}
+          onTouchStart={startIncrement} // For touch devices
+          onTouchEnd={stopIncrement}
           disabled={disabled}
         >
           <Plus className="h-5 w-5" />

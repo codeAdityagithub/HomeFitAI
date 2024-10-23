@@ -16,3 +16,48 @@ export const DAILY_GOALS_LIMITS = {
     max: 1000,
   },
 };
+
+export const LOG_CONSTANTS = {
+  sleep: {
+    min: 0,
+    max: 16,
+  },
+  steps: {
+    min: 0,
+    max: 25000,
+  },
+  waterIntake: {
+    min: 0,
+    max: 20,
+  },
+  exercise: {
+    max_duration: 300,
+    max_avgreptime: 50,
+    reps: {
+      min: 1,
+      max: 50,
+    },
+    max_TUT: 10,
+  },
+};
+
+export const PLAYLIST_CONSTANTS = {
+  exercises: {
+    min: 5,
+    max: 15,
+  },
+  sets: {
+    min: 0,
+    max: 6,
+  },
+  max_playlists: 4,
+};
+
+export const STATS_CONSTANTS = {
+  MIN_AGE: 5,
+  MAX_AGE: 100,
+  MIN_HEIGHT: 50,
+  MAX_HEIGHT: 250,
+  MIN_WEIGHT: 30,
+  MAX_WEIGHT: 200,
+};

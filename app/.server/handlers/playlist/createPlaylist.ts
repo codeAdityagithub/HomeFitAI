@@ -1,3 +1,4 @@
+import { PLAYLIST_CONSTANTS } from "@/lib/constants";
 import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { json, redirect } from "@remix-run/node";
@@ -11,11 +12,23 @@ const playlistSchema = z.object({
     .array(
       z.object({
         eId: z.string(),
-        sets: z.number().min(0).max(16, "Cannot have more than 6 sets"),
+        sets: z
+          .number()
+          .min(PLAYLIST_CONSTANTS.sets.min)
+          .max(
+            PLAYLIST_CONSTANTS.sets.max,
+            `Cannot have more than ${PLAYLIST_CONSTANTS.sets.max} sets`
+          ),
       })
     )
-    .min(5, "Please select at least 5 exercises")
-    .max(15, "Cannot have more than 15 exercises")
+    .min(
+      PLAYLIST_CONSTANTS.exercises.min,
+      `Please select at least ${PLAYLIST_CONSTANTS.exercises.min} exercises`
+    )
+    .max(
+      PLAYLIST_CONSTANTS.exercises.max,
+      `Cannot have more than ${PLAYLIST_CONSTANTS.exercises.max} exercises`
+    )
     .refine(
       (exs) => exs.every((e) => exercises.some((ex) => ex.id === e.eId)),
       "Invalid exercise selected"
@@ -29,9 +42,11 @@ export const createPlaylist = async (props: z.infer<typeof playlistSchema>) => {
 
   try {
     const count = await db.playlist.count({ where: { userId: data.userId } });
-    if (count >= 4)
+    if (count >= PLAYLIST_CONSTANTS.max_playlists)
       return json(
-        { error: "Cannot have more than 4 playlists" },
+        {
+          error: `Cannot have more than ${PLAYLIST_CONSTANTS.max_playlists} playlists`,
+        },
         { status: 403 }
       );
     const p = await db.playlist.create({
