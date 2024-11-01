@@ -93,7 +93,7 @@ const WorkoutPage = () => {
   } = useExercises(exercises);
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 p-4 ">
       <WorkoutSearch exercises={exercises} />
       <div>
         <div className="flex items-end gap-4 mb-4">

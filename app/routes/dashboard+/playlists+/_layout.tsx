@@ -3,10 +3,9 @@ import { Outlet } from "@remix-run/react";
 
 const PlaylistLayout = () => {
   return (
-    <>
-      <Toaster />
+    <div className="p-4">
       <Outlet />
-    </>
+    </div>
   );
 };
 export default PlaylistLayout;

@@ -1,4 +1,5 @@
-const SocialPage = () => {
-  return <div>SocialPage</div>;
+import { redirect } from "@remix-run/node";
+
+export const loader = () => {
+  return redirect("challenges");
 };
-export default SocialPage;

@@ -79,7 +79,7 @@ const DashboardProfile = () => {
   const { stats } = useDashboardLayoutData();
   // console.log(user._count.logs);
   return (
-    <div className="h-full space-y-6">
+    <div className="h-full space-y-6 p-4">
       {/* Profile info */}
       <Card className="flex flex-col gap-2 bg-secondary/50">
         <CardHeader className="flex flex-col relative items-center">

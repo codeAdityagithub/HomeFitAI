@@ -47,7 +47,7 @@ export default function Dashboard() {
   const logs = [log, ...prev];
 
   return (
-    <div className="h-full space-y-6">
+    <div className="h-full space-y-6 p-4">
       <div className="grid grid-cols-4 gap-6">
         <Card className="col-span-4 flex flex-col gap-2 bg-secondary/50">
           <CardHeader className="flex flex-col relative items-center">

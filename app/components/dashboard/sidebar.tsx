@@ -158,7 +158,7 @@ export default function Sidebar() {
 
 const BottomNav = () => {
   return (
-    <div className="w-full fixed -bottom-[1px] bg-background text-foreground z-50 block md:hidden p-1">
+    <div className="w-full fixed -bottom-[1px] bg-background text-foreground z-[90] block md:hidden p-1">
       <div className="flex *:flex-1 items-end gap-1 h-9 xs:h-10 overflow-visible">
         {BottomLinks.map((link) => (
           <NavLink
