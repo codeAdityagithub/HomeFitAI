@@ -10,8 +10,8 @@ const SocialLayout = () => {
     );
   };
   return (
-    <section className="flex flex-col gap-4 rounded-md items-start bg-muted">
-      <div className="flex flex-col p-4 ssm:flex-row items-start ssm:gap-4 sticky z-50 top-0">
+    <section className="flex flex-col rounded-md items-start bg-muted">
+      <div className="flex flex-col px-4 pt-4 ssm:flex-row items-start ssm:gap-4 sticky z-50 top-0">
         <h2 className="text-xl ssm:text-2xl font-bold border-none ssm:border-b text-foreground/80 ssm:border-foreground/80">
           Home<span className="text-primary">Fit</span> Social
         </h2>

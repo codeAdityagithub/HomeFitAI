@@ -128,7 +128,7 @@ const DashboardLayout = () => {
   }, [dailyGoal]);
 
   return (
-    <div className="flex flex-col-reverse md:flex-row min-h-[500px]">
+    <div className="flex flex-col-reverse md:flex-row gap-2 min-h-[500px]">
       <Toaster />
       <Sidebar />
       <AchievementDialog achievement={achievement} />

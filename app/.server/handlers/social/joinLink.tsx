@@ -8,11 +8,11 @@ const SECRET = process.env.JOINLINK_SECRET;
 invariant(SECRET, "JOINLINK_SECRET not provided");
 
 export function createJoinLink(groupId: string): string {
-  return jwt.sign(groupId, SECRET!, { expiresIn: EXPIRES });
+  return jwt.sign({ groupId }, SECRET!, { expiresIn: EXPIRES });
 }
 export function verifyToken(token: string): string | null {
   try {
-    const groupId = jwt.verify(token, SECRET!) as string;
+    const { groupId } = jwt.verify(token, SECRET!) as any;
     return groupId as string;
   } catch (error) {
     return null;
@@ -20,7 +20,7 @@ export function verifyToken(token: string): string | null {
 }
 export async function verifyTokenAndJoin(token: string, userId: string) {
   try {
-    const groupId = jwt.verify(token, SECRET!) as string;
+    const { groupId } = jwt.verify(token, SECRET!) as any;
     console.log(groupId);
 
     const group = await db.group.findUnique({

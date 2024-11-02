@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 export const groupBy = <Input>(array: Input[], key: keyof Input) => {
   return array.reduce((acc, item) => {
     const k = item[key];
@@ -55,4 +56,15 @@ export function convertMinutesToText(decimalMinutes: number) {
 
 export function isObjectId(id: string) {
   return /^[a-fA-F0-9]{24}$/.test(id);
+}
+
+export function JWTExpired(token: string | null) {
+  if (!token) return true;
+
+  const decoded = jwtDecode(token);
+  if (!decoded.exp) return true;
+
+  const exp = decoded.exp;
+  const diff = exp * 1000 - Date.now();
+  return diff <= 0;
 }

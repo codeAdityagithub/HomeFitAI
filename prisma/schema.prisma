@@ -152,6 +152,7 @@ model Group {
   creatorId String   @unique @db.ObjectId
   name      String
   members   GroupMember[]
+  activeToken     String?
   createdAt DateTime @default(now())
   messages  GroupMessage[]
 }
