@@ -44,7 +44,7 @@ const GroupMemberCard = ({
       title={member.name + " Profile"}
       description=""
     >
-      <div className="px-4 sm:px-0">
+      <div className="px-4 md:px-0">
         <GroupMemberInfoCard member={member} />
       </div>
     </ResponsiveDialog>
@@ -58,11 +58,11 @@ const GroupMembers = ({
   creatorId: string;
 }) => {
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div className="flex flex-col items-start gap-2 w-full">
       <h2 className="text-lg font-semibold">
         Group Members ( {members.length} )
       </h2>
-      <div className="grid grid-cols-1 ssm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 items-stretch gap-2 w-full">
+      <div className="grid grid-cols-1 ssm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 items-stretch gap-2 w-full max-h-[60vh] overflow-y-auto overflow-x-hidden ver_scroll">
         {members.map((m) => (
           <GroupMemberCard
             key={m.id}

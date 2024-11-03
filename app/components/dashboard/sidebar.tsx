@@ -58,7 +58,7 @@ const BottomLinks = [
   },
   {
     to: "profile",
-    name: "Profile",
+    name: "Settings",
     icon: (
       <IoPersonOutline
         className="text-2xl min-w-6 min-h-6"
@@ -131,7 +131,7 @@ export default function Sidebar() {
               className="text-lg"
               strokeWidth={1.5}
             />
-            <span className="text-sm">Profile</span>
+            <span className="text-sm">Settings</span>
           </div>
         </NavLink>
         <ThemeToggle />

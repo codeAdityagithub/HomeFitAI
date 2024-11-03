@@ -42,7 +42,7 @@ export default function ResponsiveDialog({
         onOpenChange={setOpen}
       >
         <DialogTrigger asChild>{trigger}</DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] z-[100]">
+        <DialogContent className="sm:max-w-[425px] z-[100] max-h-[80vh] overflow-auto ver_scroll">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>
@@ -59,7 +59,7 @@ export default function ResponsiveDialog({
       onOpenChange={setOpen}
     >
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-      <DrawerContent className="z-[100]">
+      <DrawerContent className="z-[100] ver_scroll">
         <DrawerHeader className="text-left">
           <DrawerTitle>{title}</DrawerTitle>
           <DrawerDescription>{description}</DrawerDescription>
@@ -67,7 +67,7 @@ export default function ResponsiveDialog({
         {children}
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <Button variant="secondary">Cancel</Button>
+            <Button variant="secondary">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

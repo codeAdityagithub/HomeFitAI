@@ -45,6 +45,9 @@ const Achievements = ({
           </div>
         </ResponsiveDialog>
       ))}
+      {achievements.length === 0 && (
+        <p className="text-muted-foreground">No achievements yet</p>
+      )}
     </div>
   );
 };

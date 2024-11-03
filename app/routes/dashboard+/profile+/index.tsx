@@ -1,5 +1,7 @@
 import { editDailyGoals } from "@/.server/handlers/profile/editDailyGoals";
 import { editStats } from "@/.server/handlers/profile/editStats";
+import LogoutButton from "@/components/dashboard/Logout";
+import ThemeToggle from "@/components/dashboard/themeButton";
 import Achievements from "@/components/profile/Achievements";
 import EditUserGoals from "@/components/profile/EditUserGoals";
 import EditUserStats from "@/components/profile/EditUserStats";
@@ -82,10 +84,18 @@ const DashboardProfile = () => {
     <div className="h-full space-y-6 p-4">
       {/* Profile info */}
       <Card className="flex flex-col gap-2 bg-secondary/50">
-        <CardHeader className="flex flex-col relative items-center">
-          <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
+        <CardHeader className="flex flex-row gap-4 pb-2 pt-4 relative items-center">
+          <CardTitle className="border-l-4 border-accent text-left w-full pl-4 mt-2">
             My Profile
           </CardTitle>
+          <ThemeToggle
+            className="w-fit"
+            iconOnly
+          />
+          <LogoutButton
+            className="w-fit"
+            iconOnly
+          />
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <div className="flex items-center gap-4">

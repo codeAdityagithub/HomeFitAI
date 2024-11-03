@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 import { useFetcher } from "@remix-run/react";
-import { MoonIcon, SunIcon } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { ReactNode } from "react";
 import { Button } from "../ui/button";
 
-const ThemeToggle = ({
+const LogoutButton = ({
   children,
   className,
   iconOnly,
@@ -18,7 +18,7 @@ const ThemeToggle = ({
   return (
     <fetcher.Form
       method="POST"
-      action="/api/changeTheme"
+      action="/logout"
       className={cn("w-full", className ?? "")}
     >
       {children ? (
@@ -28,19 +28,18 @@ const ThemeToggle = ({
           variant="ghost"
           size={iconOnly ? "icon" : "sm"}
           className={cn(
-            "font-normal",
+            "font-normal hover:bg-primary hover:text-primary-foreground",
             iconOnly ? "w-8 h-8" : "w-full justify-start gap-2"
           )}
         >
-          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className={cn(iconOnly ? "hidden" : "dark:hidden")}>Light</span>
-          <span className={cn(iconOnly ? "hidden" : "hidden dark:inline")}>
-            Dark
-          </span>
+          <LogOut
+            strokeWidth={1.5}
+            size={20}
+          />
+          <span className={cn(iconOnly ? "hidden" : "")}>Logout</span>
         </Button>
       )}
     </fetcher.Form>
   );
 };
-export default ThemeToggle;
+export default LogoutButton;

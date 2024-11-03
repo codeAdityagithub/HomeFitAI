@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 function useFetch<T>(url: string) {
   const [data, setData] = useState<T | null>(null);
@@ -14,6 +14,7 @@ function useFetch<T>(url: string) {
 
       try {
         const response = await axios.get(url, {});
+        // await new Promise((resolve) => setTimeout(resolve, 1000));
         setData(response.data);
       } catch (err) {
         setError(err);
