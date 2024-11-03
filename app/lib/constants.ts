@@ -61,3 +61,5 @@ export const STATS_CONSTANTS = {
   MIN_WEIGHT: 30,
   MAX_WEIGHT: 200,
 };
+
+export const MAX_GROUP_MEMBERS = 10;

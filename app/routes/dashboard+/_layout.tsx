@@ -132,7 +132,7 @@ const DashboardLayout = () => {
       <Toaster />
       <Sidebar />
       <AchievementDialog achievement={achievement} />
-      <main className="flex-1 w-full h-full min-h-[calc(100lvh-8px)] md:min-h-screen bg-background text-foreground pb-12 md:pb-0">
+      <main className="flex-1 w-full h-full min-h-[calc(100lvh-8px)] md:min-h-screen bg-background text-foreground pb-12 md:pb-0 relative">
         <Outlet />
       </main>
     </div>

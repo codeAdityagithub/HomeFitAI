@@ -23,7 +23,7 @@ const JoinGroupPage = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-86px)] w-full px-4 flex flex-col items-center justify-center gap-6 rounded-lg relative overflow-hidden">
+    <div className="h-full w-full px-4 flex flex-col items-center justify-center gap-6 rounded-lg relative overflow-hidden">
       {/* Subtle Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-tl from-primary/50 via-accent/20 to-transparent blur-2xl opacity-25"></div>
 

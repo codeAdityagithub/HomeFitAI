@@ -3,6 +3,16 @@ import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
 import { redirect } from "@remix-run/node";
 
+export type GroupInfoLoader = {
+  name: string;
+  creator: {
+    name: string;
+    image: string | null;
+    id: string;
+  };
+  members: number;
+};
+
 export default async function (request: Request) {
   const user = await requireUser(request, { failureRedirect: "/login" });
 
@@ -18,7 +28,7 @@ export default async function (request: Request) {
 
   const groupId = verifyToken(token);
   if (!groupId)
-    return { error: "Invalid Token, Group Id missing", group: null };
+    return { error: "Invalid Token, Token has expired", group: null };
 
   const group = await db.group.findUnique({
     where: { id: groupId },
@@ -26,5 +36,14 @@ export default async function (request: Request) {
   });
 
   if (!group) return { error: "Invalid Token, Group Not Found", group: null };
-  return { group, error: null };
+
+  const creator = group.members.find((m) => m.id === group.creatorId)!;
+
+  const group_trimmed: GroupInfoLoader = {
+    name: group.name,
+    creator: creator,
+    members: group.members.length,
+  };
+
+  return { group: group_trimmed, error: null };
 }

@@ -51,6 +51,7 @@ const CreateJoinLink = ({ activeToken }: { activeToken: string | null }) => {
         <Button
           size="icon"
           title="Copy Join Link"
+          variant="outline"
           onClick={copytoClipboard}
         >
           <Copy />
@@ -67,6 +68,7 @@ const CreateJoinLink = ({ activeToken }: { activeToken: string | null }) => {
           disabled={fetcher.state === "submitting"}
           variant="outline"
           className="gap-2"
+          size="sm"
         >
           <BadgePlus />
           New Join Link

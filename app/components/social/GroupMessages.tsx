@@ -7,7 +7,7 @@ const GroupMessages = ({
   messages: SerializeFrom<GroupMessage>[];
 }) => {
   return (
-    <div className="flex flex-col w-full items-start col-span-2">
+    <div className="flex flex-col w-full items-start col-span-1 md:col-span-2">
       <h2 className="text-lg font-semibold">
         Group Messages ( {messages.length} )
       </h2>

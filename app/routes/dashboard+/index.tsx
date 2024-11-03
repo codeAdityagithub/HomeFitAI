@@ -27,7 +27,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   date.setDate(date.getDate() - 1);
 
   const logs = await db.log.findMany({
-    where: { date: { lt: date } },
+    where: { date: { lt: date }, userId: user.id },
     orderBy: { date: "desc" },
     take: 6,
   });
