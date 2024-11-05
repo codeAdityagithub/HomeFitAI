@@ -1,6 +1,7 @@
 import { useToast } from "@/hooks/use-toast";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import useLongPress from "@/hooks/useLongPress";
+import { DashboardAction } from "@/routes/dashboard+/_layout";
 import { stepsToCal } from "@/utils/general";
 import { useFetcher } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
@@ -28,7 +29,7 @@ const EditLogForm = ({
   step: number;
   unit: string;
 }) => {
-  const fetcher = useFetcher<any>();
+  const fetcher = useFetcher<DashboardAction>();
   const [value, setValue] = useState(init);
   const { stats, log } = useDashboardLayoutData();
   const { toast } = useToast();
@@ -64,8 +65,9 @@ const EditLogForm = ({
   useEffect(() => {
     let description = "";
     if (
-      fetcher.data &&
-      fetcher.data.updatedStat &&
+      // @ts-expect-error
+      fetcher.data?.updatedStat &&
+      // @ts-expect-error
       fetcher.data.updatedStat === type &&
       curval.current < stats.dailyGoals[goalType[type]] &&
       log[type] >= stats.dailyGoals[goalType[type]]
@@ -80,6 +82,7 @@ const EditLogForm = ({
       });
     }
     if (
+      // @ts-expect-error
       fetcher.data?.updatedStat === "steps" &&
       prev_cal_val.current < stats.dailyGoals.calories &&
       log.totalCalories + stepsToCal(stats.height, stats.weight, log.steps) >=

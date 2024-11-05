@@ -1,4 +1,3 @@
-import { useUser } from "@/hooks/userContext";
 import { cn } from "@/lib/utils";
 import { GroupMember } from "@prisma/client";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
@@ -12,23 +11,21 @@ const GroupMemberCard = ({
   member: GroupMember;
   isCreator: boolean;
 }) => {
-  const user = useUser();
-
   return (
     <ResponsiveDialog
       trigger={
         <div
           className={cn(
-            "flex items-center w-full cursor-pointer gap-4 p-3 rounded-md border border-foreground/10 relative",
+            "flex items-center w-full cursor-pointer gap-4 p-3 rounded-md border border-foreground/10 relative ",
             isCreator
-              ? "bg-gradient-to-br from-accent/80 to-accent/20 text-accent-foreground"
+              ? "bg-gradient-to-br from-accent/80 to-accent/20 text-foreground"
               : ""
           )}
         >
           <div
             className={cn(
               isCreator
-                ? "absolute -top-0.5 -right-0.5 px-1 pb-0.5 bg-background text-foreground z-20 rounded-tr text-xs"
+                ? "absolute -top-0.5 -right-0.5 p-1 bg-background text-foreground z-20 rounded-tr text-xs"
                 : "hidden"
             )}
           >

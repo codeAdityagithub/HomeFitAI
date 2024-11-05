@@ -26,6 +26,7 @@ const LogoutButton = ({
       ) : (
         <Button
           variant="ghost"
+          title="Logout"
           size={iconOnly ? "icon" : "sm"}
           className={cn(
             "font-normal hover:bg-primary hover:text-primary-foreground",

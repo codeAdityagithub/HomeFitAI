@@ -17,6 +17,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return await createGroup(request);
 };
 
+export { clientLoader } from "@/utils/routeCache.client";
 export type SocialAction = typeof action;
 
 const GroupPage = () => {

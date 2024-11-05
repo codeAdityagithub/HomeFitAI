@@ -111,46 +111,7 @@ const GroupMemberInfoCard = ({ member }: { member: GroupMember }) => {
                 size="sm"
               />
             ))}
-            {data.profile.achievements.map((a) => (
-              <StylishDivNoGradient
-                key={a.title}
-                icon={a.type && AchievementIcons[a.type]}
-                text={"achieved " + new Date(a.createdAt).toLocaleDateString()}
-                unit=""
-                value={a.title}
-                size="sm"
-              />
-            ))}
-            {data.profile.achievements.map((a) => (
-              <StylishDivNoGradient
-                key={a.title}
-                icon={a.type && AchievementIcons[a.type]}
-                text={"achieved " + new Date(a.createdAt).toLocaleDateString()}
-                unit=""
-                value={a.title}
-                size="sm"
-              />
-            ))}
-            {data.profile.achievements.map((a) => (
-              <StylishDivNoGradient
-                key={a.title}
-                icon={a.type && AchievementIcons[a.type]}
-                text={"achieved " + new Date(a.createdAt).toLocaleDateString()}
-                unit=""
-                value={a.title}
-                size="sm"
-              />
-            ))}
-            {data.profile.achievements.map((a) => (
-              <StylishDivNoGradient
-                key={a.title}
-                icon={a.type && AchievementIcons[a.type]}
-                text={"achieved " + new Date(a.createdAt).toLocaleDateString()}
-                unit=""
-                value={a.title}
-                size="sm"
-              />
-            ))}
+
             {data.profile.achievements.length === 0 && (
               <p className="text-muted-foreground">No Achievements to show</p>
             )}

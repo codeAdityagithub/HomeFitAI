@@ -96,10 +96,12 @@ enum AchievementType {
 }
 
 type Achievement {
+  id          String        @default(cuid())
   title       String
   description String
   type        AchievementType
   createdAt   DateTime        @default(now())
+  shared      Boolean        @default(false)
 }
 
 enum Unit {
@@ -187,6 +189,6 @@ enum GroupMessageContentType {
 }
 type GroupMessageContent {
   type   GroupMessageContentType
-  title  String
+  title  String  
   description String
 }

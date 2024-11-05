@@ -70,7 +70,7 @@ const CreateJoinLink = ({ activeToken }: { activeToken: string | null }) => {
           className="gap-2"
           size="sm"
         >
-          <BadgePlus />
+          <BadgePlus size={20} />
           New Join Link
         </Button>
       </fetcher.Form>

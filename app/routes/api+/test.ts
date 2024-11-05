@@ -1,4 +1,3 @@
-import db from "@/utils/db.server";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -12,5 +11,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   //     },
   //   })
   // );
+  // const user = await requireUser(request, { failureRedirect: "/login" });
+
   return "done";
 };

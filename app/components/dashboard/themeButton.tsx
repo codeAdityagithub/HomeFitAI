@@ -26,6 +26,7 @@ const ThemeToggle = ({
       ) : (
         <Button
           variant="ghost"
+          title="Toggle theme"
           size={iconOnly ? "icon" : "sm"}
           className={cn(
             "font-normal",

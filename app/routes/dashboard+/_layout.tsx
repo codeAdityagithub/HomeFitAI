@@ -26,6 +26,7 @@ import type {
 } from "@remix-run/react";
 import { json, Link, Outlet, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
@@ -84,6 +85,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export type DashboardLayoutData = SerializeFrom<typeof loader>;
+export type DashboardAction = typeof action;
 
 export const clientLoader = async ({
   request,

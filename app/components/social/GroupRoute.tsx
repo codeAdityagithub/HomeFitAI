@@ -12,7 +12,7 @@ const GroupRoute = ({ group }: { group: SerializeFrom<Group> }) => {
         <CreateJoinLink activeToken={group.activeToken} />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full justify-items-stretch">
-        <div className="">Active Challenges</div>
+        <h2 className="text-lg font-semibold">Group Challenges/Goals</h2>
         <GroupMembers
           members={group.members}
           creatorId={group.creatorId}
