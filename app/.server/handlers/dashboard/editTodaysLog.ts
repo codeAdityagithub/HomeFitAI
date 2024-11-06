@@ -29,15 +29,25 @@ const schema = z
         return false;
     }
   });
+
 export async function editTodaysLog(input: z.infer<typeof schema>) {
   const { data, error } = schema.safeParse(input);
   if (error) return json({ error: error.message }, { status: 403 });
   try {
-    await db.log.update({
+    const updatedLog = await db.log.update({
       where: { userId: data.userId, id: data.logId },
       data: { [data.type]: data.value },
     });
+    // const stats = await db.stats.findUnique({
+    //   where: { userId: data.userId },
+    //   select: { dailyGoals: true },
+    // });
 
+    // if (!stats) return json({ error: "Invalid User." }, { status: 401 });
+
+    // switch (data.type) {
+    //   case "sleep":
+    //     if (stats.dailyGoals.sleep < updatedLog.sleep)
     return json({
       message: "Log updated successfully.",
       updatedStat: data.type,

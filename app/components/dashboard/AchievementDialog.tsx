@@ -1,5 +1,8 @@
+import { useToast } from "@/hooks/use-toast";
 import { AchievementIcons } from "@/lib/utils";
+import { ShareAchievementAction } from "@/routes/api+/achievement.share";
 import { LoaderAchievement } from "@/routes/dashboard+/_layout";
+import { useFetcher } from "@remix-run/react";
 import React, { useEffect } from "react";
 import { Button } from "../ui/button";
 import {
@@ -18,10 +21,20 @@ const AchievementDialog = ({
   const [open, setOpen] = React.useState(false);
   useEffect(() => {
     if (achievement) {
-      //   console.log(achievement);
       setOpen(true);
     }
   }, [achievement]);
+
+  const fetcher = useFetcher<ShareAchievementAction>();
+  const { toast } = useToast();
+  useEffect(() => {
+    if (fetcher.data?.error) {
+      toast({
+        description: fetcher.data.error,
+        variant: "destructive",
+      });
+    }
+  }, [fetcher.data]);
 
   return (
     <Dialog
@@ -42,12 +55,22 @@ const AchievementDialog = ({
               {achievement?.title}
             </h2>
             <p className="text-muted-foreground">{achievement?.description}</p>
-            <Button
-              size="sm"
-              variant="secondary"
-            >
-              Share in Social
-            </Button>
+            {achievement && !achievement.shared && (
+              <fetcher.Form
+                action="/api/achievement/share"
+                method="POST"
+              >
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  name="achievementId"
+                  value={achievement.id}
+                  disabled={fetcher.state !== "idle"}
+                >
+                  Share in Group
+                </Button>
+              </fetcher.Form>
+            )}
           </div>
         </div>
       </DialogContent>

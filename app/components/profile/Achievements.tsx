@@ -13,6 +13,7 @@ const Achievements = ({
 }: {
   achievements: SerializeFrom<Achievement>[];
 }) => {
+  // console.log(achievements);
   const fetcher = useFetcher<ShareAchievementAction>();
   const { toast } = useToast();
   useEffect(() => {

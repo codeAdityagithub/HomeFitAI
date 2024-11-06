@@ -32,21 +32,25 @@ export async function addExerciseCalories(input: z.infer<typeof schema>) {
     if (!exercise)
       return json({ error: "Invalid Exercise Id." }, { status: 404 });
 
-    const stat = await db.stats.findUnique({
-      where: { userId: data.userId },
-      select: { weight: true },
-    });
+    const [stat, log] = await Promise.all([
+      db.stats.findUnique({
+        where: { userId: data.userId },
+        select: { weight: true },
+      }),
+      db.log.findUnique({
+        where: { userId: data.userId, id: data.logId },
+        select: { exercises: true },
+      }),
+    ]);
+
     if (!stat) return json({ error: "Invalid User." }, { status: 401 });
+    if (!log) return json({ error: "Log not found" }, { status: 404 });
+
     const { duration, sets } = getDurationFromSets(data.value);
 
     const calories = Math.round(
       Number(caloriePerMin(exercise.met, stat.weight)) * duration
     );
-    const log = await db.log.findUnique({
-      where: { userId: data.userId, id: data.logId },
-      select: { exercises: true },
-    });
-    if (!log) return json({ error: "Log not found" }, { status: 404 });
 
     let newExercises = log.exercises;
     const index = newExercises.findIndex((e) => e.name === exercise.name);

@@ -1,16 +1,28 @@
 import { useUser } from "@/hooks/userContext";
 import { cn } from "@/lib/utils";
 import { formatTime } from "@/utils/general";
-import { GroupMember, GroupMessage, ReactionType } from "@prisma/client";
+import {
+  GroupMember,
+  GroupMessage,
+  GroupMessageContentType,
+  ReactionType,
+} from "@prisma/client";
+import { AvatarImage } from "@radix-ui/react-avatar";
 import { SerializeFrom } from "@remix-run/node";
+import { SquareUserRound } from "lucide-react";
 import { useMemo } from "react";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 
 const reactionIcons: Record<ReactionType, string> = {
   LIKE: "👍",
   HEART: "❤️",
   CELEBRATE: "🎉",
 };
-
+const text: Record<GroupMessageContentType, string> = {
+  ACHIEVEMENT: "Achievement Unlocked",
+  CHALLENGE: "Challenge Completed",
+  DAILY_GOAL: "Daily Goal Completed",
+};
 const GroupMessageCard = ({
   message,
   image,
@@ -26,28 +38,41 @@ const GroupMessageCard = ({
   return (
     <div
       className={cn(
-        "p-2 rounded shadow-sm w-full ssm:max-w-sm md:max-w-md space-y-2",
+        "p-2 rounded w-full ssm:max-w-sm md:max-w-md space-y-2",
         isMyMessage ? "ml-auto" : ""
       )}
     >
-      <div className="flex items-center gap-2">
-        <img
-          src={image ?? ""}
-          alt="Sender"
-          className="w-7 h-7 rounded-lg object-cover"
-        />
-        <div className="flex flex-col">
-          <p className="text-xs">{name}</p>
-          <span className="text-xs text-foreground/60">
-            Sent {formatTime(message.sentAt)}
+      <div
+        className={cn(
+          "flex items-center gap-2",
+          isMyMessage ? "flex-row-reverse" : ""
+        )}
+      >
+        <Avatar className="w-7 h-7 rounded-md">
+          <AvatarImage
+            src={image ?? ""}
+            alt="Sender"
+          />
+          <AvatarFallback className="rounded">
+            <SquareUserRound />
+          </AvatarFallback>
+        </Avatar>
+
+        <div className={cn("flex flex-col", isMyMessage ? "items-end" : "")}>
+          <p className="text-xs">{isMyMessage ? "You" : name}</p>
+          <span className="text-[0.7rem] leading-3 text-foreground/60">
+            {formatTime(message.sentAt)}
           </span>
         </div>
       </div>
-      <div className="flex-1 bg-secondary p-2 rounded">
-        <div className="text-secondary-foreground font-semibold">
+      <div className="flex-1 bg-secondary p-2 rounded drop-shadow-sm">
+        <p className="text-secondary-foreground/80">
+          {text[message.content.type]}
+        </p>
+        <div className="text-secondary-foreground font-semibold text-lg">
           {message.content.title}
         </div>
-        <p className="text-sm text-foreground/80">
+        <p className="text-sm text-foreground/90">
           {message.content.description}
         </p>
 
@@ -90,7 +115,7 @@ const GroupMessages = ({
       <h2 className="text-lg font-semibold">
         Group Activity ( {messages.length} )
       </h2>
-      <div className="bg-background h-full w-full rounded-md space-y-4 p-4 ">
+      <div className="bg-background h-full w-full rounded-md space-y-4 p-4 flex flex-col-reverse">
         {messages.map((m, i) => (
           <GroupMessageCard
             key={m.id}
