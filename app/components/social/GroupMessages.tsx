@@ -5,40 +5,73 @@ import {
   GroupMember,
   GroupMessage,
   GroupMessageContentType,
+  GroupMessageReaction,
   ReactionType,
 } from "@prisma/client";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { SerializeFrom } from "@remix-run/node";
-import { SquareUserRound } from "lucide-react";
-import { useMemo } from "react";
+import { Heart, PartyPopper, SquareUserRound, ThumbsUp } from "lucide-react";
+import { ReactNode, useCallback, useMemo } from "react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import AddMessageReaction from "./AddMessageReaction";
+import DisplayMessageReaction from "./DisplayMessageReactions";
 
-const reactionIcons: Record<ReactionType, string> = {
-  LIKE: "👍",
-  HEART: "❤️",
-  CELEBRATE: "🎉",
+export const reactionIcons: Record<ReactionType, ReactNode> = {
+  LIKE: (
+    <ThumbsUp
+      className="text-yellow-400"
+      fill="#fd2"
+      size={20}
+    />
+  ),
+  HEART: (
+    <Heart
+      className="text-red-500"
+      fill="#f00"
+      size={20}
+    />
+  ),
+  CELEBRATE: (
+    <PartyPopper
+      className="text-violet-500"
+      fill="#fff"
+      size={20}
+    />
+  ),
 };
 const text: Record<GroupMessageContentType, string> = {
   ACHIEVEMENT: "Achievement Unlocked",
   CHALLENGE: "Challenge Completed",
   DAILY_GOAL: "Daily Goal Completed",
 };
+
 const GroupMessageCard = ({
   message,
   image,
   name,
+  getName,
 }: {
   message: SerializeFrom<GroupMessage>;
   image: string | null;
   name: string;
+  getName: (id: string) => string;
 }) => {
   const user = useUser()!;
   const isMyMessage = user?.id === message.from;
+  // console.log(message.reactions);
+
+  const reactions = useMemo(() => {
+    return message.reactions.reduce((acc, r) => {
+      if (!acc[r.type]) acc[r.type] = [r];
+      else acc[r.type].push(r);
+      return acc;
+    }, {} as Record<ReactionType, GroupMessageReaction[]>);
+  }, [message]);
 
   return (
     <div
       className={cn(
-        "p-2 rounded w-full ssm:max-w-sm md:max-w-md space-y-2",
+        "p-2 rounded w-[90%] ssm:max-w-sm md:max-w-md space-y-2",
         isMyMessage ? "ml-auto" : ""
       )}
     >
@@ -65,7 +98,14 @@ const GroupMessageCard = ({
           </span>
         </div>
       </div>
-      <div className="flex-1 bg-secondary p-2 rounded drop-shadow-sm">
+      <div className="flex-1 bg-secondary p-2 rounded drop-shadow-sm relative">
+        <AddMessageReaction
+          isMyMessage={isMyMessage}
+          messageId={message.id}
+          currentReaction={
+            message.reactions.find((r) => r.from === user.id)?.type
+          }
+        />
         <p className="text-secondary-foreground/80">
           {text[message.content.type]}
         </p>
@@ -76,15 +116,17 @@ const GroupMessageCard = ({
           {message.content.description}
         </p>
 
-        <div className="mt-2 flex space-x-2">
-          {message.reactions.map((reaction, index) => (
-            <span
-              key={index}
-              className="text-gray-600"
-            >
-              {reactionIcons[reaction.type]}
-            </span>
-          ))}
+        <div
+          className={cn(
+            "mt-2 space-x-2 flex w-fit",
+            isMyMessage ? "ml-auto" : ""
+          )}
+        >
+          <DisplayMessageReaction
+            reactions={reactions}
+            getName={getName}
+            messageId={message.id}
+          />
         </div>
       </div>
     </div>
@@ -109,7 +151,10 @@ const GroupMessages = ({
       }, {} as Record<string, { image: string | null; name: string }>),
     [members]
   );
-
+  const getName = useCallback(
+    (id: string) => memberInfo[id].name,
+    [memberInfo]
+  );
   return (
     <div className="flex flex-col gap-2 w-full h-full items-start col-span-1 md:col-span-2">
       <h2 className="text-lg font-semibold">
@@ -122,6 +167,7 @@ const GroupMessages = ({
             message={m}
             image={memberInfo[m.from].image}
             name={memberInfo[m.from].name}
+            getName={getName}
           />
         ))}
       </div>
