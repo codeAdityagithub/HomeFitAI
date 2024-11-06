@@ -52,7 +52,7 @@ export default function CaloriesSourceChart({
   const chartData = useMemo(() => {
     return logs
       .map((log, ind) => {
-        const caloriesFromSteps = Math.round(
+        const caloriesFromSteps = Math.floor(
           stepsToCal(stats.height, stats.weight, log.steps)
         );
         const totalCalories =

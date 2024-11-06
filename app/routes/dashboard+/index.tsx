@@ -45,7 +45,7 @@ export default function Dashboard() {
   const { log } = useDashboardLayoutData();
 
   const logs = [log, ...prev];
-
+  console.log(logs);
   return (
     <div className="h-full space-y-6 p-4">
       <div className="grid grid-cols-4 gap-6">
