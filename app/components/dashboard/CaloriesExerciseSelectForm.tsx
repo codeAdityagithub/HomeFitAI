@@ -7,13 +7,6 @@ import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 
 function CaloriesExerciseSelectForm({
   exerciseId,
@@ -128,24 +121,35 @@ function CaloriesExerciseSelectForm({
             </Label>
             <Label className="flex flex-col gap-2">
               Intensity:
-              <Select
+              <select
                 name="intensity"
                 value={sets[currentSet].intensity}
-                onValueChange={(e) =>
+                onChange={(e) =>
                   handleSetChange(currentSet, {
                     // @ts-expect-error
-                    target: { name: "intensity", value: e },
+                    target: { name: "intensity", value: e.target.value },
                   })
                 }
+                className="w-full bg-transparent h-full p-2 rounded-md border"
               >
-                <SelectTrigger>
+                {/* <SelectTrigger id="intensity">
                   <SelectValue placeholder="Set Intensity" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="explosive">Explosive</SelectItem>
-                  <SelectItem value="controlled">Controlled</SelectItem>
-                </SelectContent>
-              </Select>
+                </SelectTrigger> */}
+                {/* <SelectContent> */}
+                <option
+                  className="bg-background "
+                  value="explosive"
+                >
+                  Explosive
+                </option>
+                <option
+                  className="bg-background "
+                  value="controlled"
+                >
+                  Controlled
+                </option>
+                {/* </SelectContent> */}
+              </select>
             </Label>
           </div>
           {currentSet === 0 && (

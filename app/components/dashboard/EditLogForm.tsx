@@ -85,7 +85,8 @@ const EditLogForm = ({
       // @ts-expect-error
       fetcher.data?.updatedStat === "steps" &&
       prev_cal_val.current < stats.dailyGoals.calories &&
-      log.totalCalories + stepsToCal(stats.height, stats.weight, log.steps) >=
+      log.totalCalories +
+        Math.floor(stepsToCal(stats.height, stats.weight, log.steps)) >=
         stats.dailyGoals.calories
     ) {
       description += `\nCongratulations 🎉! You have reached your daily goal for Total Calories of ${stats.dailyGoals.calories} Kcal.`;

@@ -1,8 +1,9 @@
 import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
-import { caloriePerMin } from "@/utils/general";
+import { caloriePerMin, stepsToCal } from "@/utils/general";
 import { json } from "@remix-run/node";
 import { z } from "zod";
+import { dailyGoalText } from "./editTodaysLog";
 
 const schema = z.object({
   userId: z.string(),
@@ -24,7 +25,12 @@ export async function addExercseDuration(input: z.infer<typeof schema>) {
     const [stat, log] = await Promise.all([
       db.stats.findUnique({
         where: { userId: data.userId },
-        select: { weight: true },
+        select: {
+          weight: true,
+          dailyGoals: true,
+          height: true,
+          user: { select: { groupId: true } },
+        },
       }),
       db.log.findUnique({
         where: { userId: data.userId, id: data.logId },
@@ -61,7 +67,7 @@ export async function addExercseDuration(input: z.infer<typeof schema>) {
       });
     }
 
-    await db.log.update({
+    const updatedLog = await db.log.update({
       where: { userId: data.userId, id: data.logId },
       data: {
         totalCalories: { increment: calories },
@@ -70,6 +76,71 @@ export async function addExercseDuration(input: z.infer<typeof schema>) {
         },
       },
     });
+
+    if (
+      stat.user.groupId &&
+      stat.dailyGoals.calories <=
+        updatedLog.totalCalories +
+          Math.floor(stepsToCal(stat.height, stat.weight, updatedLog.steps))
+    ) {
+      // update group message as dailyGoal Achieved
+      const group = await db.group.findUnique({
+        where: { id: stat.user.groupId },
+        select: { messages: true },
+      });
+      if (!group)
+        return json(
+          { error: "Group not found", updatedStat: "totalCalories" },
+          { status: 200 }
+        );
+
+      const alreadyMessage = group.messages.find(
+        (m) =>
+          m.from === data.userId &&
+          m.content.type === "DAILY_GOAL" &&
+          m.content.title === dailyGoalText.totalCalories.title
+      );
+
+      if (!alreadyMessage) {
+        // there doesnt exists a message already for daily goal
+        await db.group.update({
+          where: { id: stat.user.groupId },
+          data: {
+            messages: {
+              push: {
+                from: data.userId,
+                content: {
+                  type: "DAILY_GOAL",
+                  title: dailyGoalText.totalCalories.title,
+                  description: `Congratulations! You have successfully met your daily goal of Total Calories Burned of ${stat.dailyGoals.calories} Kcal`,
+                },
+              },
+            },
+          },
+        });
+      } else {
+        await db.group.update({
+          where: { id: stat.user.groupId },
+          data: {
+            messages: {
+              push: {
+                from: data.userId,
+                content: {
+                  type: "DAILY_GOAL",
+                  title: dailyGoalText.totalCalories.title,
+                  description: `Congratulations! You have successfully met your daily goal of Total Calories Burned of ${stat.dailyGoals.calories} Kcal`,
+                },
+              },
+              deleteMany: {
+                where: {
+                  id: alreadyMessage.id,
+                },
+              },
+            },
+          },
+        });
+      }
+    }
 
     return json({
       message: "Calories updated successfully.",

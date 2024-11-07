@@ -43,12 +43,13 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
       fetcher.data.updatedStat &&
       fetcher.data.updatedStat === "totalCalories" &&
       curval.current < stats.dailyGoals.calories &&
-      log.totalCalories + stepsToCal(stats.height, stats.weight, log.steps) >=
+      log.totalCalories +
+        Math.floor(stepsToCal(stats.height, stats.weight, log.steps)) >=
         stats.dailyGoals.calories
     ) {
       toast({
         title: "Daily Goal reached.",
-        description: `You have reached your daily goal for Total Calories of ${stats.dailyGoals.calories} Kcal.`,
+        description: `Congratulations! You have reached your daily goal for Total Calories of ${stats.dailyGoals.calories} Kcal.`,
         variant: "success",
       });
     }

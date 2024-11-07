@@ -90,7 +90,7 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
   //   }
   // }, [stepsachieved, sleepachieved, waterachieved, calachieved]);
   return (
-    <div className="w-full grid grid-cols-1 ssm:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
+    <div className="w-full grid grid-cols-1 ssm:grid-cols-2 xl:grid-cols-4 items-stretch gap-4">
       {elems.map((e) => (
         <ResponsiveDialog
           key={e.type + "dialog"}
@@ -107,7 +107,7 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
                 <h2 className="text-xl xs:text-2xl font-bold">
                   {e.type === "totalCalories"
                     ? log[e.type] +
-                      Math.round(
+                      Math.floor(
                         stepsToCal(stats.height, stats.weight, log.steps)
                       )
                     : // @ts-expect-error
