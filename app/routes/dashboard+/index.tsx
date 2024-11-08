@@ -1,4 +1,5 @@
 import CaloriesSourceChart from "@/components/dashboard/charts/CaloriesSourceChart";
+import ExerciseDurationChart from "@/components/dashboard/charts/ExerciseDurationChart";
 import ExercisesChart from "@/components/dashboard/charts/ExercisesChart";
 import SleepChart from "@/components/dashboard/charts/SleepChart";
 import StepsChart from "@/components/dashboard/charts/StepsChart";
@@ -17,6 +18,7 @@ import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
 import type { LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { IoMdFlame } from "react-icons/io";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
@@ -42,21 +44,34 @@ export { clientLoader } from "@/utils/routeCache.client";
 export default function Dashboard() {
   const { logs: prev, user } = useLoaderData<typeof loader>();
 
-  const { log } = useDashboardLayoutData();
+  const { log, stats } = useDashboardLayoutData();
 
   const logs = [log, ...prev];
   return (
     <div className="h-full space-y-6 p-4">
       <div className="grid grid-cols-4 gap-6">
         <Card className="col-span-4 flex flex-col gap-2 bg-secondary/50">
-          <CardHeader className="flex flex-col relative items-center">
-            <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
-              Hello <span className="text-primary">{user.username}!</span>👋
-            </CardTitle>
-            <CardDescription className="text-left w-full">
-              Ready to crush today's goals and take a step closer to your
-              fitness journey?
-            </CardDescription>
+          <CardHeader className="flex flex-row relative items-start justify-between">
+            <div className="flex flex-col relative items-center">
+              <CardTitle className="border-l-4 border-accent text-left w-full pl-2">
+                Hello <span className="text-primary">{user.username}!</span>👋
+              </CardTitle>
+              <CardDescription className="text-left w-full">
+                Let's crush today's goals and move forward on your journey!
+              </CardDescription>
+            </div>
+            <div
+              className="relative"
+              title="Current Login Streak"
+            >
+              <IoMdFlame
+                size={40}
+                className="text-primary fill-primary"
+              />
+              <span className="absolute top-2.5 left-4 font-mono text-lg font-bold">
+                {stats.currentStreak}
+              </span>
+            </div>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <TodaysLogs log={log} />
@@ -113,7 +128,7 @@ export default function Dashboard() {
         <SleepChart logs={logs} />
         <ExercisesChart logs={logs} />
         <CaloriesSourceChart logs={logs} />
-        {/* <WaterChart logs={logs} /> */}
+        <ExerciseDurationChart logs={logs} />
       </div>
       <ExerciseTable exercises={log.exercises} />
     </div>

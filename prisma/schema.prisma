@@ -122,6 +122,7 @@ model Stats {
   currentStreak Int             @default(0)
   goalWeight    Float
   totalCalories Int             @default(0) //total till now
+  totalSteps    Int             @default(0)
   bestStreak    Int             @default(0)
   exercises     ExerciseStats[]
   dailyGoals    DailyGoals

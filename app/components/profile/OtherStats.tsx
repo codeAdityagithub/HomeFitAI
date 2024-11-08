@@ -1,6 +1,12 @@
 import { Stats } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
-import { CalendarRange, Crown, Flame, SquareActivity } from "lucide-react";
+import {
+  CalendarRange,
+  Crown,
+  Flame,
+  Footprints,
+  SquareActivity,
+} from "lucide-react";
 
 const elems = [
   {
@@ -38,6 +44,16 @@ const elems = [
     text: "Total Workouts",
     type: "totalLogs",
   },
+  {
+    icon: (
+      <Footprints
+        className="text-violet-600"
+        size={30}
+      />
+    ),
+    text: "Total Steps",
+    type: "totalSteps",
+  },
 ];
 
 const OtherStats = ({
@@ -48,7 +64,7 @@ const OtherStats = ({
   totalLogs: number;
 }) => {
   return (
-    <div className="w-full grid grid-cols-1 ssm:grid-cols-2 llg:grid-cols-4 items-stretch gap-4">
+    <div className="w-full grid grid-cols-1 ssm:grid-cols-2 xl:grid-cols-4 place-content-start gap-4">
       {elems.map((e) => (
         <div
           key={e.text}

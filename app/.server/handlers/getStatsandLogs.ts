@@ -75,6 +75,7 @@ export async function getStatsandLogs(user: AuthUser) {
             where: { id: stats.id },
             data: {
               totalCalories: { increment: prevLog.totalCalories },
+              totalSteps: { increment: prevLog.steps },
               currentStreak: currentStreak,
               bestStreak: bestStreak,
             },
