@@ -171,17 +171,15 @@ export async function editTodaysLog(input: z.infer<typeof schema>) {
 
       if (newMessages.length > 0) {
         // there doesnt exists a message already for daily goal
-
+        const updatedMessages = [
+          ...group.messages.filter((m) => !deleteIds.includes(m.id)),
+          ...newMessages,
+        ];
         await db.group.update({
           where: { id: stats.user.groupId },
           data: {
             messages: {
-              push: newMessages,
-              deleteMany: {
-                where: {
-                  id: { in: deleteIds },
-                },
-              },
+              set: updatedMessages,
             },
           },
         });

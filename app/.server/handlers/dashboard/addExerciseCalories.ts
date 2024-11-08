@@ -3,6 +3,7 @@ import { LOG_CONSTANTS } from "@/lib/constants";
 import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { caloriePerMin, stepsToCal } from "@/utils/general";
+import { GroupMessageContentType } from "@prisma/client";
 import { json } from "@remix-run/node";
 import { z } from "zod";
 import { dailyGoalText } from "./editTodaysLog";
@@ -132,23 +133,23 @@ export async function addExerciseCalories(input: z.infer<typeof schema>) {
           },
         });
       } else {
+        const updatedMessages = [
+          ...group.messages.filter((m) => m.id !== alreadyMessage.id),
+          {
+            from: data.userId,
+            content: {
+              type: "DAILY_GOAL" as GroupMessageContentType,
+              title: dailyGoalText.totalCalories.title,
+              description: `Congratulations! You have successfully met your daily goal of Total Calories Burned of ${stat.dailyGoals.calories} Kcal`,
+            },
+          },
+        ];
+
         await db.group.update({
           where: { id: stat.user.groupId },
           data: {
             messages: {
-              push: {
-                from: data.userId,
-                content: {
-                  type: "DAILY_GOAL",
-                  title: dailyGoalText.totalCalories.title,
-                  description: `Congratulations! You have successfully met your daily goal of Total Calories Burned of ${stat.dailyGoals.calories} Kcal`,
-                },
-              },
-              deleteMany: {
-                where: {
-                  id: alreadyMessage.id,
-                },
-              },
+              set: updatedMessages,
             },
           },
         });

@@ -36,9 +36,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const isUserPlaylist = isObjectId(pId);
 
   if (isUserPlaylist) {
-    return await getUserPlaylist(pId, user.id);
+    return { ...(await getUserPlaylist(pId, user.id)), isDefault: false };
   } else {
-    return await getDefaultPlaylist(pId);
+    return { ...(await getDefaultPlaylist(pId)), isDefault: true };
   }
 };
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -65,6 +65,7 @@ const PlaylistPage = () => {
     expectedDuration,
     calorieMultiplier,
     description,
+    isDefault,
   } = useLoaderData<typeof loader>();
   const { stats } = useDashboardLayoutData();
   const expectedCalories = Math.round(calorieMultiplier * stats.weight);
@@ -159,11 +160,13 @@ const PlaylistPage = () => {
           />
         ))}
       </ul>
-      <DeleteButtonwDialog
-        action={deletePlaylist}
-        disabled={navigation.state !== "idle"}
-        label="Playlist"
-      />
+      {!isDefault && (
+        <DeleteButtonwDialog
+          action={deletePlaylist}
+          disabled={navigation.state !== "idle"}
+          label="Playlist"
+        />
+      )}
     </div>
   );
 };

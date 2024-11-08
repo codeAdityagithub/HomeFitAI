@@ -4,7 +4,9 @@ import {
 } from "@/.server/handlers/social/joinLink";
 import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
+import { cacheClientAction } from "@/utils/routeCache.client";
 import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ClientActionFunctionArgs } from "@remix-run/react";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUser(request, { failureRedirect: "/login" });
@@ -40,6 +42,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       { status: 500 }
     );
   }
+};
+
+export const clientAction = async ({
+  request,
+  serverAction,
+}: ClientActionFunctionArgs) => {
+  const url = new URL(request.url);
+  url.pathname = "/dashboard/social/group";
+  return cacheClientAction([url.toString()], serverAction);
 };
 
 export type CreateJoinLinkAction = typeof action;

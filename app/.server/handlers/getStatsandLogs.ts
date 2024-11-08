@@ -1,16 +1,16 @@
 import { AuthUser } from "@/services/auth.server";
 import db from "@/utils/db.server";
+import { stepsToCal } from "@/utils/general";
 import { Stats } from "@prisma/client";
 import { redirect } from "@remix-run/node";
 import { DateTime } from "luxon";
 import { getDayDiff } from "../utils";
-import { stepsToCal } from "@/utils/general";
 export async function getStatsandLogs(user: AuthUser) {
   let stats = await db.stats.findUnique({ where: { userId: user.id } });
 
   if (!stats || !user.timezone)
     throw redirect(
-      `/details?error=${"Fill in the details to access the dasboard."}`
+      `/details?error=${"Fill in the details to access the dashboard."}`
     );
   const todaysDate = DateTime.now().setZone(user.timezone);
 
@@ -65,7 +65,7 @@ export async function getStatsandLogs(user: AuthUser) {
 
           // Update streaks
           if (diff > 1) {
-            currentStreak = 0; // Streak break
+            currentStreak = 1; // Streak break
           } else if (diff === 1) {
             currentStreak++;
           }
