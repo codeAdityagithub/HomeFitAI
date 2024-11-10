@@ -31,12 +31,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
   });
-  const { stats, log } = await getStatsandLogs(user);
+  const { stats, log, achievement: Achievement } = await getStatsandLogs(user);
   // console.log(stats);
   const session = await getSession(request.headers.get("Cookie"));
-  const achievement: LoaderAchievement = session.get("achievement") || null;
+
+  const achievement: LoaderAchievement =
+    session.get("achievement") || Achievement || null;
+
   const dailyGoal: { title: string; description: string } =
     session.get("goalAchieved") || null;
+
   return json(
     { stats, log, achievement, dailyGoal },
     {

@@ -63,3 +63,21 @@ export const STATS_CONSTANTS = {
 };
 
 export const MAX_GROUP_MEMBERS = 10;
+
+export const STREAK_ACHIEVEMENTS = {
+  7: {
+    title: "Consistency Champ",
+    description:
+      "One week of showing up! You've logged in for 7 days straight, building a powerful foundation for your fitness journey. Keep up the momentum!",
+  },
+  15: {
+    title: "Commitment Keeper",
+    description:
+      "You've logged in for 15 days straight! Your unwavering commitment to health and fitness is inspiring. Keep up the incredible work, and you'll be a true hero of the fitness community.",
+  },
+  30: {
+    title: "Dedication Master",
+    description:
+      "A full month of consistency! With 30 days of logging in, you're building lasting habits and making real progress toward your goals. Keep it up!",
+  },
+};

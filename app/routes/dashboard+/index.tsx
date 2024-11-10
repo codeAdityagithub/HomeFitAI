@@ -5,6 +5,7 @@ import SleepChart from "@/components/dashboard/charts/SleepChart";
 import StepsChart from "@/components/dashboard/charts/StepsChart";
 import WeightChart from "@/components/dashboard/charts/WeightChart";
 import ExerciseTable from "@/components/dashboard/ExerciseTable";
+import PastExerciseTable from "@/components/dashboard/PastExerciseLogTable";
 import TodaysLogs from "@/components/dashboard/TodaysLogs";
 import {
   Card,
@@ -68,7 +69,7 @@ export default function Dashboard() {
                 size={40}
                 className="text-primary fill-primary"
               />
-              <span className="absolute top-2.5 left-4 font-mono text-lg font-bold">
+              <span className="absolute text-primary-foreground top-2.5 left-4 font-mono text-lg font-bold ">
                 {stats.currentStreak}
               </span>
             </div>
@@ -131,6 +132,7 @@ export default function Dashboard() {
         <ExerciseDurationChart logs={logs} />
       </div>
       <ExerciseTable exercises={log.exercises} />
+      <PastExerciseTable logs={logs} />
     </div>
   );
 }

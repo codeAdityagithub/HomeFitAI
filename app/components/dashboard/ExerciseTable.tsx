@@ -41,7 +41,7 @@ function ExerciseTable({
     <Card className="flex flex-col gap-2 bg-secondary/50">
       <CardHeader className="flex flex-row flex-wrap gap-2 items-center justify-between pb-2">
         <CardTitle className="border-l-4 border-accent text-left pl-4">
-          Exercise Statistics
+          Today's Exercise Statistics
         </CardTitle>
         <div className="relative flex items-center gap-4">
           <Input

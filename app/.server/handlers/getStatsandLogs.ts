@@ -1,10 +1,12 @@
+import { STREAK_ACHIEVEMENTS } from "@/lib/constants";
 import { AuthUser } from "@/services/auth.server";
 import db from "@/utils/db.server";
 import { stepsToCal } from "@/utils/general";
-import { Stats } from "@prisma/client";
+import { Achievement, Stats } from "@prisma/client";
 import { redirect } from "@remix-run/node";
 import { DateTime } from "luxon";
 import { getDayDiff } from "../utils";
+
 export async function getStatsandLogs(user: AuthUser) {
   let stats = await db.stats.findUnique({ where: { userId: user.id } });
 
@@ -27,6 +29,7 @@ export async function getStatsandLogs(user: AuthUser) {
     });
 
     let updatedStats: Stats | null = null;
+    let achievement: Achievement | undefined;
 
     if (!log) {
       const { newLog, newStats } = await db.$transaction(async (tx) => {
@@ -71,6 +74,47 @@ export async function getStatsandLogs(user: AuthUser) {
           }
           bestStreak = Math.max(bestStreak, currentStreak);
 
+          // give achievements for long streaks
+          if (
+            currentStreak === bestStreak &&
+            Object.keys(STREAK_ACHIEVEMENTS).includes(String(bestStreak))
+          ) {
+            const dbuser = await tx.user.findUnique({
+              where: { id: user.id },
+              select: { achievements: true },
+            });
+
+            if (
+              dbuser &&
+              !dbuser.achievements.find(
+                // @ts-expect-error
+                (a) => a.title === STREAK_ACHIEVEMENTS[bestStreak].title
+              )
+            ) {
+              const res = await tx.user.update({
+                where: { id: user.id },
+                data: {
+                  achievements: {
+                    push: {
+                      type: "STREAK",
+                      // @ts-expect-error
+                      title: STREAK_ACHIEVEMENTS[bestStreak].title,
+                      // @ts-expect-error
+                      description: STREAK_ACHIEVEMENTS[bestStreak].description,
+                    },
+                  },
+                },
+                select: {
+                  achievements: true,
+                },
+              });
+              achievement = res.achievements.find(
+                // @ts-expect-error
+                (a) => a.title === STREAK_ACHIEVEMENTS[bestStreak].title
+              );
+            }
+          }
+
           const updatedStats = await tx.stats.update({
             where: { id: stats.id },
             data: {
@@ -93,7 +137,7 @@ export async function getStatsandLogs(user: AuthUser) {
       updatedStats = newStats;
     }
 
-    return { stats: updatedStats ? updatedStats : stats, log };
+    return { stats: updatedStats ? updatedStats : stats, log, achievement };
   } catch (error) {
     console.log("Stats log error", error);
     throw new Error("Something went wrong while fetching stats and logs.");
