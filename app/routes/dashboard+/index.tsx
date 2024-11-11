@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { cn } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
 import type { LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
@@ -52,8 +53,8 @@ export default function Dashboard() {
     <div className="h-full space-y-6 p-4">
       <div className="grid grid-cols-4 gap-6">
         <Card className="col-span-4 flex flex-col gap-2 bg-secondary/50">
-          <CardHeader className="flex flex-row relative items-start justify-between">
-            <div className="flex flex-col relative items-center">
+          <CardHeader className="flex flex-row relative items-start justify-between pt-0">
+            <div className="flex flex-col relative items-center mt-6">
               <CardTitle className="border-l-4 border-accent text-left w-full pl-2">
                 Hello <span className="text-primary">{user.username}!</span>👋
               </CardTitle>
@@ -62,14 +63,19 @@ export default function Dashboard() {
               </CardDescription>
             </div>
             <div
-              className="relative"
+              className="relative pt-4"
               title="Current Login Streak"
             >
               <IoMdFlame
-                size={40}
+                size={50}
                 className="text-primary fill-primary"
               />
-              <span className="absolute text-primary-foreground top-2.5 left-4 font-mono text-lg font-bold ">
+              <span
+                className={cn(
+                  "absolute text-primary-foreground top-8 font-mono text-xl font-bold",
+                  stats.currentStreak >= 10 ? "left-3.5" : "left-5"
+                )}
+              >
                 {stats.currentStreak}
               </span>
             </div>

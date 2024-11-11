@@ -2,8 +2,9 @@ import { useToast } from "@/hooks/use-toast";
 import { AchievementIcons } from "@/lib/utils";
 import { ShareAchievementAction } from "@/routes/api+/achievement.share";
 import { LoaderAchievement } from "@/routes/dashboard+/_layout";
+import { SerializeFrom } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -14,16 +15,19 @@ import {
 } from "../ui/dialog";
 
 const AchievementDialog = ({
-  achievement,
+  achievements,
 }: {
-  achievement: LoaderAchievement;
+  achievements: SerializeFrom<LoaderAchievement>[];
 }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   useEffect(() => {
-    if (achievement) {
+    if (achievements.length > 0) {
       setOpen(true);
     }
-  }, [achievement]);
+  }, [achievements]);
+  // console.log(achievements);
+  const [current, setCurrent] = useState(0);
+  const achievement = achievements[current];
 
   const fetcher = useFetcher<ShareAchievementAction>();
   const { toast } = useToast();
@@ -39,7 +43,17 @@ const AchievementDialog = ({
   return (
     <Dialog
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(open) => {
+        if (open) {
+          setCurrent(0);
+        } else if (current < achievements.length - 1) {
+          setCurrent((prev) => prev + 1);
+          setOpen(false);
+          setTimeout(() => setOpen(true), 150);
+        } else {
+          setOpen(false);
+        }
+      }}
     >
       <DialogTrigger className="hidden"></DialogTrigger>
       <DialogContent className="p-0 border-none sm:max-w-[425px] gradient-border">

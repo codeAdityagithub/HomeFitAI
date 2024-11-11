@@ -31,24 +31,25 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
   });
-  const { stats, log, achievement: Achievement } = await getStatsandLogs(user);
+  const { stats, log, newAchievements } = await getStatsandLogs(user);
   // console.log(stats);
   const session = await getSession(request.headers.get("Cookie"));
 
-  const achievement: LoaderAchievement =
-    session.get("achievement") || Achievement || null;
-
+  const achievement: LoaderAchievement = session.get("achievement") || null;
+  if (achievement) {
+    newAchievements.push(achievement);
+  }
   const dailyGoal: { title: string; description: string } =
     session.get("goalAchieved") || null;
 
   return json(
-    { stats, log, achievement, dailyGoal },
+    { stats, log, dailyGoal, newAchievements },
     {
       headers: { "Set-Cookie": await commitSession(session) },
     }
   );
 };
-export type LoaderAchievement = Omit<Achievement, "createdAt"> | null;
+export type LoaderAchievement = Achievement | null;
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUser(request, {
@@ -111,7 +112,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 };
 
 const DashboardLayout = () => {
-  const { achievement, dailyGoal } = useLoaderData<typeof loader>();
+  const { dailyGoal, newAchievements } = useLoaderData<typeof loader>();
 
   const { toast } = useToast();
 
@@ -137,7 +138,7 @@ const DashboardLayout = () => {
     <div className="flex flex-col-reverse md:flex-row gap-2 min-h-[500px]">
       <Toaster />
       <Sidebar />
-      <AchievementDialog achievement={achievement} />
+      <AchievementDialog achievements={newAchievements} />
       <main className="flex-1 w-full h-full min-h-[calc(100lvh-8px)] md:min-h-screen bg-background text-foreground pb-12 md:pb-0 relative">
         <Outlet />
       </main>

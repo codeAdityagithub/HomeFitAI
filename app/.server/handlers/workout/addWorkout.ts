@@ -118,6 +118,8 @@ export async function addWorkout(input: z.infer<typeof schema>) {
         type: AchievementType.FIRST_WORKOUT,
         title: "First Workout",
         description: "Completed your first workout detection",
+        shared: false,
+        createdAt: Date.now(),
       });
 
       sessionModified = true;

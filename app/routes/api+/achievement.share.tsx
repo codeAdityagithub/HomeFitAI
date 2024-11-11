@@ -17,14 +17,28 @@ export async function action({ request }: ActionFunctionArgs) {
 
   try {
     await db.$transaction(async (tx) => {
+      const dbuser = await tx.user.findUnique({
+        where: { id: user.id, groupId: { not: { equals: null } } },
+        select: {
+          groupId: true,
+          achievements: true,
+        },
+      });
+
+      if (
+        !dbuser ||
+        !dbuser.groupId ||
+        dbuser.achievements.length === 0 ||
+        dbuser.achievements.find(
+          (a) => a.id === achievementId && a.shared === true
+        )
+      ) {
+        throw new Error("Achievement Doesn't exist of is already shared.");
+      }
+
       const updatedUser = await tx.user.update({
         where: {
           id: user.id,
-          groupId: {
-            not: {
-              equals: null,
-            },
-          },
         },
         data: {
           achievements: {
@@ -40,11 +54,9 @@ export async function action({ request }: ActionFunctionArgs) {
           },
         },
         select: {
-          groupId: true,
           achievements: true,
         },
       });
-      if (!updatedUser.groupId) throw new Error("No group Id");
 
       const achievement = updatedUser.achievements.find(
         (achievement) =>
@@ -55,7 +67,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
       await tx.group.update({
         where: {
-          id: updatedUser.groupId,
+          id: dbuser.groupId,
         },
         data: {
           messages: {
@@ -83,8 +95,8 @@ export const clientAction = async ({
   request,
 }: ClientActionFunctionArgs) => {
   const url = new URL(request.url);
-  url.pathname = "/dashboard/profile";
-  deleteKey(url.toString());
+  // url.pathname = "/dashboard/profile";
+  // deleteKey(url.toString());
   url.pathname = "/dashboard/social/group";
   deleteKey(url.toString());
   return await serverAction();

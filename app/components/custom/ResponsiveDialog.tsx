@@ -42,7 +42,7 @@ export default function ResponsiveDialog({
         onOpenChange={setOpen}
       >
         <DialogTrigger asChild>{trigger}</DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] z-[100] max-h-[80vh] overflow-auto ver_scroll">
+        <DialogContent className="md:max-w-[425px] lg:max-w-[500px] z-[100] max-h-[80vh] overflow-auto ver_scroll">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>

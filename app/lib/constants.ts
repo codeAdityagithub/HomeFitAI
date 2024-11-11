@@ -81,3 +81,25 @@ export const STREAK_ACHIEVEMENTS = {
       "A full month of consistency! With 30 days of logging in, you're building lasting habits and making real progress toward your goals. Keep it up!",
   },
 };
+
+export const MILESTONE_ACHIEVEMENTS = {
+  totalCalories: {
+    5000: {
+      title: "Calorie Crusher",
+      description:
+        "Amazing job! You've torched 5,000 calories. Keep up the incredible work!",
+    },
+    10000: {
+      title: "Burn Master",
+      description:
+        "Phenomenal! You've burned a whopping 10,000 calories. Your dedication is truly inspiring!",
+    },
+  },
+  totalSteps: {
+    100000: {
+      title: "Trailblazer",
+      description:
+        "100,000 steps and counting! Your commitment to staying active is truly inspiring. Keep blazing that trail!",
+    },
+  },
+};
