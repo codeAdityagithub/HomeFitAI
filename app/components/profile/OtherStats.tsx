@@ -42,7 +42,7 @@ const elems = [
   {
     icon: <CalendarRange size={30} />,
     text: "Total Workouts",
-    type: "totalLogs",
+    type: "totalWorkouts",
   },
   {
     icon: (
@@ -58,10 +58,10 @@ const elems = [
 
 const OtherStats = ({
   stats,
-  totalLogs,
+  totalWorkoutDays,
 }: {
   stats: SerializeFrom<Stats>;
-  totalLogs: number;
+  totalWorkoutDays: number;
 }) => {
   return (
     <div className="w-full grid grid-cols-1 ssm:grid-cols-2 xl:grid-cols-4 place-content-start gap-4">
@@ -73,8 +73,8 @@ const OtherStats = ({
           <span>{e.icon}</span>
           <div className="flex flex-col items-start">
             <h2 className="text-xl xs:text-2xl font-bold">
-              {e.type === "totalLogs"
-                ? totalLogs
+              {e.type === "totalWorkouts"
+                ? totalWorkoutDays
                 : // @ts-expect-error
                   stats[e.type]}
               {e.type === "currentStreak" || e.type === "bestStreak" ? (

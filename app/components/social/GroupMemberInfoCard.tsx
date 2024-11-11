@@ -2,13 +2,25 @@ import useFetch from "@/hooks/useFetch";
 import { AchievementIcons } from "@/lib/utils";
 import { MemberInfoApiRes } from "@/routes/api+/memberInfo";
 import { GroupMember } from "@prisma/client";
-import { Crown, Flame, SquareActivity } from "lucide-react";
+import { Crown, Flame, Footprints, SquareActivity } from "lucide-react";
+import { ReactNode } from "react";
 import StylishDivNoGradient from "../custom/StylishDivNoGradient";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
 
-const info = {
-  currentStreak: {
+const memberStats: {
+  stat:
+    | "currentStreak"
+    | "bestStreak"
+    | "totalCalories"
+    | "totalSteps"
+    | "totalWorkoutDays";
+  icon: ReactNode;
+  text: string;
+  unit: string;
+}[] = [
+  {
+    stat: "currentStreak",
     icon: (
       <Flame
         className="text-primary"
@@ -18,7 +30,8 @@ const info = {
     text: "Current Streak",
     unit: "days",
   },
-  bestStreak: {
+  {
+    stat: "bestStreak",
     icon: (
       <Crown
         className="text-[#FFD700]"
@@ -28,7 +41,8 @@ const info = {
     text: "Best Streak",
     unit: "days",
   },
-  totalCalories: {
+  {
+    stat: "totalCalories",
     icon: (
       <SquareActivity
         className="text-orange-500"
@@ -38,13 +52,36 @@ const info = {
     text: "Calories Burned",
     unit: "Kcal",
   },
-};
+  {
+    stat: "totalSteps",
+    icon: (
+      <Footprints
+        size={30}
+        className="text-violet-500"
+      />
+    ),
+    text: "Total Steps",
+    unit: "steps",
+  },
+  {
+    stat: "totalWorkoutDays",
+    icon: (
+      <SquareActivity
+        size={30}
+        className="text-violet-500"
+      />
+    ),
+    text: "Total Workout Days",
+    unit: "days",
+  },
+];
+
 const GroupMemberInfoCard = ({ member }: { member: GroupMember }) => {
   const { data, error, loading } = useFetch<MemberInfoApiRes>(
     `/api/memberInfo?memberId=${member.id}`
   );
   return (
-    <div className="space-y-4 max-h-[70vh] overflow-auto">
+    <div className="space-y-4">
       <div className="flex items-center w-full gap-4 p-3 rounded-md border border-foreground/10 relative">
         <Avatar className="border border-foreground/10 w-20 h-20">
           <AvatarImage src={member.image ?? ""} />
@@ -77,26 +114,16 @@ const GroupMemberInfoCard = ({ member }: { member: GroupMember }) => {
             <h2 className="col-span-1 ssm:col-span-2 text-lg font-semibold">
               Stats
             </h2>
-            <StylishDivNoGradient
-              icon={info.currentStreak.icon}
-              text={info.currentStreak.text}
-              unit={info.currentStreak.unit}
-              value={data.profile.stats.currentStreak}
-            />
-
-            <StylishDivNoGradient
-              icon={info.bestStreak.icon}
-              text={info.bestStreak.text}
-              unit={info.bestStreak.unit}
-              value={data.profile.stats.bestStreak}
-            />
-
-            <StylishDivNoGradient
-              icon={info.totalCalories.icon}
-              text={info.totalCalories.text}
-              unit={info.totalCalories.unit}
-              value={data.profile.stats.totalCalories}
-            />
+            {memberStats.map((s) => (
+              <StylishDivNoGradient
+                key={s.stat}
+                icon={s.icon}
+                text={s.text}
+                unit={s.unit}
+                value={data.profile.stats[s.stat]}
+                size="sm"
+              />
+            ))}
             <h2 className="col-span-1 ssm:col-span-2 text-lg font-semibold">
               Achievements
             </h2>

@@ -80,6 +80,9 @@ export async function getStatsandLogs(user: AuthUser) {
             data: {
               totalCalories: { increment: prevLog.totalCalories },
               totalSteps: { increment: prevLog.steps },
+              totalWorkoutDays: {
+                increment: prevLog.exercises.length > 0 ? 1 : 0,
+              },
               currentStreak: currentStreak,
               bestStreak: bestStreak,
             },

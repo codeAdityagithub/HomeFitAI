@@ -40,6 +40,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
             bestStreak: true,
             totalCalories: true,
             createdAt: true,
+            totalSteps: true,
+            totalWorkoutDays: true,
           },
         },
       },
@@ -64,7 +66,12 @@ export type MemberInfoApiRes = {
   profile: {
     stats: Pick<
       Stats,
-      "bestStreak" | "currentStreak" | "totalCalories" | "createdAt"
+      | "bestStreak"
+      | "currentStreak"
+      | "totalCalories"
+      | "createdAt"
+      | "totalSteps"
+      | "totalWorkoutDays"
     >;
     achievements: Achievement[];
   };

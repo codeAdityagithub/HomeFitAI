@@ -1,11 +1,10 @@
-import { Form, Link, NavLink } from "@remix-run/react";
-import { LayoutList, LogOut, MessageSquareHeart } from "lucide-react";
+import { Link, NavLink } from "@remix-run/react";
+import { LayoutList, MessageSquareHeart, Settings } from "lucide-react";
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { LiaDumbbellSolid } from "react-icons/lia";
 
 import { cn } from "@/lib/utils";
-import { IoPersonOutline } from "react-icons/io5";
-import { Button } from "../ui/button";
+import LogoutButton from "./Logout";
 import ThemeToggle from "./themeButton";
 
 const Links = [
@@ -41,7 +40,7 @@ const BottomLinks = [
     name: "Overview",
     icon: (
       <HiOutlineSquares2X2
-        className="text-2xl min-w-6 min-h-6"
+        size={20}
         strokeWidth={1.5}
       />
     ),
@@ -49,19 +48,25 @@ const BottomLinks = [
   {
     to: "workout",
     name: "Workout",
-    icon: <LiaDumbbellSolid className="text-2xl min-w-6 min-h-6" />,
+    icon: <LiaDumbbellSolid size={20} />,
   },
   {
     to: "social",
     name: "Social",
-    icon: <MessageSquareHeart strokeWidth={1.5} />,
+    icon: (
+      <MessageSquareHeart
+        size={20}
+        strokeWidth={1.5}
+        className="translate-y-0.5"
+      />
+    ),
   },
   {
     to: "profile",
-    name: "Settings",
+    name: "Profile",
     icon: (
-      <IoPersonOutline
-        className="text-2xl min-w-6 min-h-6"
+      <Settings
+        size={20}
         strokeWidth={1.5}
       />
     ),
@@ -126,31 +131,16 @@ export default function Sidebar() {
             )
           }
         >
-          <div className="w-full flex items-center py-2 px-4 gap-2">
-            <IoPersonOutline
-              className="text-lg"
+          <div className="w-full flex items-center py-2 px-3 gap-2">
+            <Settings
+              size={23}
               strokeWidth={1.5}
             />
-            <span className="text-sm">Settings</span>
+            <span className="text-sm">Profile</span>
           </div>
         </NavLink>
         <ThemeToggle />
-        <Form
-          method="POST"
-          action="/logout"
-          className="w-full"
-        >
-          <Button
-            className="w-full justify-start gap-2 font-normal hover:bg-primary mt-0.5"
-            variant="ghost"
-          >
-            <LogOut
-              strokeWidth={1.5}
-              size={20}
-            />
-            Logout
-          </Button>
-        </Form>
+        <LogoutButton />
       </div>
     </>
   );

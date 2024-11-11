@@ -28,11 +28,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
   const dbuser = await db.user.findUnique({
     where: { id: user.id },
-    include: {
-      _count: {
-        select: { logs: { where: { exercises: { isEmpty: false } } } },
-      },
-    },
   });
 
   if (!dbuser) return await authenticator.logout(request, { redirectTo: "/" });
@@ -176,7 +171,7 @@ const DashboardProfile = () => {
         <CardContent className="flex flex-col gap-4">
           <OtherStats
             stats={stats}
-            totalLogs={user._count.logs}
+            totalWorkoutDays={stats.totalWorkoutDays}
           />
         </CardContent>
       </Card>

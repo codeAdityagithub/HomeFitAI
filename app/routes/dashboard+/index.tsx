@@ -66,13 +66,14 @@ export default function Dashboard() {
               className="relative pt-4"
               title="Current Login Streak"
             >
+              <div className="absolute inset-0 top-4 bg-primary/60 rounded-full animate-pulse blur-md" />
               <IoMdFlame
                 size={50}
-                className="text-primary fill-primary"
+                className="fill-primary"
               />
               <span
                 className={cn(
-                  "absolute text-primary-foreground top-8 font-mono text-xl font-bold",
+                  "absolute text-primary-foreground top-8 font-mono text-xl font-bold ",
                   stats.currentStreak >= 10 ? "left-3.5" : "left-5"
                 )}
               >

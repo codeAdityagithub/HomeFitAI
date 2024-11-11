@@ -51,39 +51,24 @@ export const addAchievements = async ({
       });
     }
   }
-  if (
-    stats.totalCalories >= 5000 &&
-    !userAchievements.find(
-      (a) => a.title === MILESTONE_ACHIEVEMENTS.totalCalories[5000].title
-    )
-  ) {
-    achievementsToAdd.push({
-      type: "MILESTONE_REACHED",
-      ...MILESTONE_ACHIEVEMENTS.totalCalories[5000],
+
+  for (const [statType, milestones] of Object.entries(MILESTONE_ACHIEVEMENTS)) {
+    // @ts-expect-error
+    const currentStatValue = stats[statType];
+
+    milestones.forEach(({ value, title, description }) => {
+      const alreadyAchieved = userAchievements.some((a) => a.title === title);
+
+      if (currentStatValue >= value && !alreadyAchieved) {
+        achievementsToAdd.push({
+          type: "MILESTONE_REACHED",
+          title,
+          description,
+        });
+      }
     });
   }
-  if (
-    stats.totalCalories >= 10000 &&
-    !userAchievements.find(
-      (a) => a.title === MILESTONE_ACHIEVEMENTS.totalCalories[10000].title
-    )
-  ) {
-    achievementsToAdd.push({
-      type: "MILESTONE_REACHED",
-      ...MILESTONE_ACHIEVEMENTS.totalCalories[10000],
-    });
-  }
-  if (
-    stats.totalSteps >= 100000 &&
-    !userAchievements.find(
-      (a) => a.title === MILESTONE_ACHIEVEMENTS.totalSteps[100000].title
-    )
-  ) {
-    achievementsToAdd.push({
-      type: "MILESTONE_REACHED",
-      ...MILESTONE_ACHIEVEMENTS.totalSteps[100000],
-    });
-  }
+
   if (achievementsToAdd.length > 0) {
     const updatedUser = await tx.user.update({
       where: { id: user.id },

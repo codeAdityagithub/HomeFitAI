@@ -82,24 +82,62 @@ export const STREAK_ACHIEVEMENTS = {
   },
 };
 
-export const MILESTONE_ACHIEVEMENTS = {
-  totalCalories: {
-    5000: {
+export const MILESTONE_ACHIEVEMENTS: Record<
+  "totalCalories" | "totalSteps" | "totalWorkoutDays",
+  { title: string; description: string; value: number }[]
+> = {
+  totalCalories: [
+    {
+      value: 5000,
       title: "Calorie Crusher",
       description:
         "Amazing job! You've torched 5,000 calories. Keep up the incredible work!",
     },
-    10000: {
+    {
+      value: 10000,
       title: "Burn Master",
       description:
         "Phenomenal! You've burned a whopping 10,000 calories. Your dedication is truly inspiring!",
     },
-  },
-  totalSteps: {
-    100000: {
+  ],
+  totalSteps: [
+    {
+      value: 100000,
       title: "Trailblazer",
       description:
         "100,000 steps and counting! Your commitment to staying active is truly inspiring. Keep blazing that trail!",
     },
-  },
+    {
+      value: 250000,
+      title: "Quarter-Million Mover",
+      description:
+        "You've reached 250,000 steps! Incredible determination—keep going and make every step count!",
+    },
+  ],
+  totalWorkoutDays: [
+    {
+      value: 10,
+      title: "Double Digits",
+      description:
+        "10 workout days down! You're building a solid routine. Keep pushing forward!",
+    },
+    {
+      value: 50,
+      title: "Fitness Enthusiast",
+      description:
+        "50 workout days! You've proven your commitment. Let's keep going strong!",
+    },
+    {
+      value: 100,
+      title: "Century Mark",
+      description:
+        "100 workout days! You've shown immense commitment to your fitness goals. Let's keep the streak going!",
+    },
+    {
+      value: 365,
+      title: "Year of Fitness",
+      description:
+        "One year of workouts! You've committed an entire year to your health and fitness. Incredible dedication!",
+    },
+  ],
 };
