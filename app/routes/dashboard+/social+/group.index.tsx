@@ -23,7 +23,7 @@ export { clientLoader } from "@/utils/routeCache.client";
 export type SocialAction = typeof action;
 
 const GroupPage = () => {
-  const { group } = useLoaderData<typeof loader>();
+  const { group, membersInfo } = useLoaderData<typeof loader>();
   if (!group) return <CreateGroupPage />;
   const revalidator = useRevalidator();
 
@@ -36,6 +36,11 @@ const GroupPage = () => {
 
     return () => clearInterval(interval);
   }, []);
-  return <GroupRoute group={group} />;
+  return (
+    <GroupRoute
+      group={group}
+      membersInfo={membersInfo}
+    />
+  );
 };
 export default GroupPage;

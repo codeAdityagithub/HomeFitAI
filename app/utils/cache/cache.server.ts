@@ -1,6 +1,4 @@
-import { singleton } from "./singleton.server";
-
-const cache = singleton("Cache", ()=>new Map());
+import { deleteCache, getCache, setCache } from "./redis.server";
 
 type Options<TArgs extends any[]> = {
   revalidateAfter?: number;
@@ -19,29 +17,26 @@ export function stable_cache<TArgs extends any[], TResult>(
   const { revalidateAfter, tags } = options;
 
   return async (...args: TArgs): Promise<TResult> => {
-    const cacheKey = `cache:${tags(args).join(":")}`;
+    const cacheKey = `hfit:${tags(args).join(":")}`;
 
     // Check cache first
-    const cachedResult = await cache.get(cacheKey);
-    if (
-      cachedResult &&
-      (!revalidateAfter ||
-        Date.now() - cachedResult.date < revalidateAfter * 1000)
-    ) {
+    const cachedResult = await getCache(cacheKey);
+    if (cachedResult) {
       // If the result is still valid, return it
-      return cachedResult.res as TResult;
+      return cachedResult as TResult;
     }
 
     // If not in cache, call the original function
     const result = await callbackFn(...args);
 
     // Store the result in cache with an expiration time
-    cache.set(cacheKey, { res: result, date: Date.now() });
+    // cache.set(cacheKey, { res: result, date: Date.now() });
+    setCache(cacheKey, result, revalidateAfter);
     return result;
   };
 }
 
 export function invalidateTag(tags: string[]) {
-  const cacheKey = `cache:${tags.join(":")}`;
-  cache.delete(cacheKey);
+  const cacheKey = `hfit:${tags.join(":")}`;
+  deleteCache(cacheKey);
 }

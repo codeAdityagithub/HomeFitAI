@@ -158,7 +158,7 @@ const GroupMessages = ({
   return (
     <div className="flex flex-col gap-2 w-full h-full items-start col-span-1 md:col-span-2">
       <h2 className="text-lg font-semibold">
-        Group Activity ( {messages.length} )
+        Group Announcements ( {messages.length} )
       </h2>
       <div className="bg-background h-full w-full rounded-md space-y-4 p-4 flex flex-col-reverse">
         {messages.map((m, i) => (

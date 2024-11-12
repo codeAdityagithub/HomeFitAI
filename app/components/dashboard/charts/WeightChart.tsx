@@ -1,14 +1,6 @@
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Line,
-  LineChart,
-  Rectangle,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -27,7 +19,6 @@ import { convertToLbs } from "@/lib/utils";
 import { Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import { Button } from "@/components/ui/button";
 import { SquareArrowOutUpRight } from "lucide-react";
 
 const getWeightGainMessage = (diff: number, time: number) => {
@@ -47,7 +38,7 @@ function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const { stats } = useDashboardLayoutData();
   const diff = stats.weight - logs[logs.length - 1].weight;
   return (
-    <Card className="flex flex-col bg-secondary/50 lg:max-w-md">
+    <Card className="flex flex-col bg-secondary/50">
       <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2 relative [&>div]:flex-1">
         <Link
           className="absolute top-2 right-2"
