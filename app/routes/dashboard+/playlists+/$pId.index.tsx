@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { requireUser } from "@/utils/auth/auth.server";
 import { isObjectId } from "@/utils/general";
+import { deleteKey } from "@/utils/routeCache.client";
 import {
   ActionFunctionArgs,
   json,
@@ -56,7 +57,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   return json({ error: "Invalid Method", ok: false }, { status: 405 });
 };
 
-export { clientAction, clientLoader } from "@/utils/routeCache.client";
+export { clientLoader } from "@/utils/routeCache.client";
 
 const PlaylistPage = () => {
   const {
@@ -77,6 +78,8 @@ const PlaylistPage = () => {
   const navigate = useNavigate();
 
   const deletePlaylist = () => {
+    deleteKey("/dashboard/playlists");
+    deleteKey(window.location.pathname);
     submit(
       {},
       {

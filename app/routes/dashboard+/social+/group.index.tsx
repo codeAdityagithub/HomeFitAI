@@ -30,7 +30,7 @@ const GroupPage = () => {
   // Revalidate the data every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      deleteKey(window.location.href);
+      deleteKey(window.location.pathname);
       revalidator.revalidate();
     }, 15000);
 

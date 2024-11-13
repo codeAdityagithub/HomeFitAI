@@ -73,22 +73,7 @@ export const goalType: Record<string, keyof DailyGoals> = {
 
 const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
   const { stats } = useDashboardLayoutData();
-  // const { toast } = useToast();
-  // const stepsachieved = log.steps >= stats.dailyGoals.steps;
-  // const sleepachieved = log.sleep >= stats.dailyGoals.sleep;
-  // const waterachieved = log.waterIntake >= stats.dailyGoals.water;
-  // const calachieved = log.totalCalories >= stats.dailyGoals.calories;
 
-  // useEffect(() => {
-  //   if (stepsachieved || sleepachieved || waterachieved || calachieved) {
-  //     console.log("hi");
-  //     toast({
-  //       title: "Daily Goal Achieved",
-  //       description: `You have reached your daily goal. Keep up the good work!`,
-  //       variant: "success",
-  //     });
-  //   }
-  // }, [stepsachieved, sleepachieved, waterachieved, calachieved]);
   return (
     <div className="w-full grid grid-cols-1 ssm:grid-cols-2 xl:grid-cols-4 items-stretch gap-4">
       {elems.map((e) => (

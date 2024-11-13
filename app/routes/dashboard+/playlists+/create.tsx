@@ -11,8 +11,10 @@ import { getImageFromVideoId } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { groupBy } from "@/utils/general";
+import { deleteKey } from "@/utils/routeCache.client";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import {
+  ClientActionFunctionArgs,
   useActionData,
   useLoaderData,
   useNavigation,
@@ -37,6 +39,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return { exercises: filtered };
 };
 
+export { clientLoader } from "@/utils/routeCache.client";
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUser(request, {
     failureRedirect: "/login",
@@ -49,6 +53,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     exercises,
     userId: user.id,
   });
+};
+
+export const clientAction = async ({
+  serverAction,
+  request,
+}: ClientActionFunctionArgs) => {
+  deleteKey("/dashboard/playlists");
+  return await serverAction();
 };
 
 const CreatePlaylist = () => {

@@ -94,11 +94,7 @@ export const clientAction = async ({
   serverAction,
   request,
 }: ClientActionFunctionArgs) => {
-  const url = new URL(request.url);
-  // url.pathname = "/dashboard/profile";
-  // deleteKey(url.toString());
-  url.pathname = "/dashboard/social/group";
-  deleteKey(url.toString());
+  deleteKey("/dashboard/social/group");
   return await serverAction();
 };
 

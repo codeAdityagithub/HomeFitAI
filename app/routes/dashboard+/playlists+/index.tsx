@@ -14,7 +14,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return await getAllPlaylists(user.id);
 };
 
-// export { clientLoader } from "@/utils/routeCache.client";
+export { clientLoader } from "@/utils/routeCache.client";
 
 const PlaylistPage = () => {
   const { images, playlists, users_playlists } = useLoaderData<typeof loader>();

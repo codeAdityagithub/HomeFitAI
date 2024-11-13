@@ -48,9 +48,7 @@ export const clientAction = async ({
   request,
   serverAction,
 }: ClientActionFunctionArgs) => {
-  const url = new URL(request.url);
-  url.pathname = "/dashboard/social/group";
-  return cacheClientAction([url.toString()], serverAction);
+  return cacheClientAction(["/dashboard/social/group"], serverAction);
 };
 
 export type CreateJoinLinkAction = typeof action;
