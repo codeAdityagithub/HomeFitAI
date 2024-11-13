@@ -116,22 +116,22 @@ export const ExerciseGoalText: Record<ExerciseGoals, string> = {
 };
 
 export enum ExerciseStartPosition {
-  jump_rope = ExercisePosition.Top, // TODO
-  mountain_climber_cross_body = ExercisePosition.Top, // TODO
-  burpee = ExercisePosition.Bottom, // TODO
+  jump_rope = ExercisePosition.Top,
+  mountain_climber_cross_body = ExercisePosition.Top,
+  burpee = ExercisePosition.Bottom,
   bulgarian_split_squats = ExercisePosition.Top,
   dynamic_chest_stretch = ExercisePosition.Top,
   dumbbell_single_leg_deadlift = ExercisePosition.Top,
-  plank = ExercisePosition.Top, // TODO
-  russian_twist = ExercisePosition.Top, // TODO
+  plank = ExercisePosition.Top,
+  russian_twist = ExercisePosition.Top,
   situp = ExercisePosition.Bottom,
   hanging_knee_raise = ExercisePosition.Top,
   hanging_straight_leg_raise = ExercisePosition.Top,
   seated_knee_tucks = ExercisePosition.Top,
-  incline_side_plank = ExercisePosition.Top, // TODO
-  side_plank = ExercisePosition.Top, // TODO
+  incline_side_plank = ExercisePosition.Top,
+  side_plank = ExercisePosition.Top,
   jump_squat = ExercisePosition.Top,
-  squat = ExercisePosition.Bottom,
+  squat = ExercisePosition.Top,
   dumbbell_front_squat = ExercisePosition.Bottom,
   clap_push_up = ExercisePosition.Top,
   band_alternating_biceps_curl = ExercisePosition.Bottom,
@@ -194,5 +194,5 @@ export enum ExerciseStartPosition {
   single_arm_pushup = ExercisePosition.Top,
   ring_pushup = ExercisePosition.Top,
   single_leg_squat_pistol = ExercisePosition.Top,
-  jumping_jacks = ExercisePosition.Top, // TODO
+  jumping_jacks = ExercisePosition.Top,
 }

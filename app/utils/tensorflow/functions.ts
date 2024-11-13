@@ -47,14 +47,3 @@ export function angle(keypoints: Keypoint[], i: number, j: number, k: number) {
     return angleDegrees;
   }
 }
-
-export const squating: PositionFunction = (
-  keypoints: Keypoint[]
-  // sendSuggestions
-) => {
-  const left_hip_angle = angle(keypoints, 6, 12, 14); // for squats
-  const right_hip_angle = angle(keypoints, 5, 11, 13);
-  if (left_hip_angle > 160 && right_hip_angle > 160) return { _pos: 0 };
-  else if (left_hip_angle < 60 && right_hip_angle < 60) return { _pos: 2 };
-  return { _pos: 1 };
-};

@@ -75,8 +75,10 @@ export const getAllPlaylists = async (userId: string) => {
   const images = Object.keys(PLAYLISTS)
     .map((p) => ({
       [p]: getImageFromVideoId(
-        // @ts-expect-error
-        exercises.find((e) => e.id === PLAYLISTS[p][0].id).videoId
+        exercises.find((e) => {
+          // @ts-expect-error
+          return e.id === PLAYLISTS[p as PlaylistId].at(-4).id;
+        })!.videoId
       ),
     }))
     .reduce((acc, obj) => ({ ...acc, ...obj }), {}) as Record<

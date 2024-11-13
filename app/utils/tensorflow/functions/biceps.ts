@@ -1,11 +1,7 @@
-import { curlsSuggestions } from "@/lib/exerciseSuggestions";
 import { Keypoint } from "@tensorflow-models/pose-detection";
 import { angle, PositionFunction } from "../functions";
 
-export const band_biceps_curl: PositionFunction = (
-  keypoints: Keypoint[],
-  sendSuggestions
-) => {
+const curl: PositionFunction = (keypoints: Keypoint[], sendSuggestions) => {
   const right_elbow_angle = angle(keypoints, 6, 8, 10);
   const left_elbow_angle = angle(keypoints, 5, 7, 9);
   const _pos =
@@ -21,3 +17,5 @@ export const band_biceps_curl: PositionFunction = (
   // }
   return { _pos, _suggestion };
 };
+
+export default curl;
