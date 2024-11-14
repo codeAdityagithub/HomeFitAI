@@ -293,7 +293,10 @@ function Detection({ name, pos_function, start_pos }: Props) {
         } else if (error.name === "NotFoundError") {
           alert("Cannot find a camera on your device.");
         } else {
-          console.log("An error occurred: ", error.message??"Cannot load detector at this moment.");
+          console.log(
+            "An error occurred: ",
+            error.message ?? "Cannot load detector at this moment."
+          );
         }
       }
     };
