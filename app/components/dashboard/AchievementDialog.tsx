@@ -79,6 +79,7 @@ const AchievementDialog = ({
                   variant="secondary"
                   name="achievementId"
                   value={achievement.id}
+                  onClick={() => setOpen(false)}
                   disabled={fetcher.state !== "idle"}
                 >
                   Share in Group

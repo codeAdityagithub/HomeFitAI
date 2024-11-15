@@ -22,7 +22,19 @@ const exerciseToFile: Partial<
   band_stiff_leg_deadlift: {
     module: "./functions/deadlift",
   },
+  dumbbell_single_leg_deadlift: {
+    module: "./functions/deadlift_alter",
+  },
   standing_split_squats: {
+    module: "./functions/alternating_lunge",
+  },
+  bodyweight_lunge: {
+    module: "./functions/alternating_lunge",
+  },
+  band_single_leg_split_squat: {
+    module: "./functions/alternating_lunge",
+  },
+  dumbbell_rear_lunge: {
     module: "./functions/alternating_lunge",
   },
   dumbbell_standing_calf_raise: {
@@ -34,6 +46,9 @@ const exerciseToFile: Partial<
   kneeling_pushup: {
     module: "./functions/pushup",
   },
+  pushup: {
+    module: "./functions/pushup",
+  },
   incline_pushup: {
     module: "./functions/pushup",
   },
@@ -41,6 +56,9 @@ const exerciseToFile: Partial<
     module: "./functions/pushup",
   },
   band_shoulder_press: {
+    module: "./functions/ohp",
+  },
+  dumbbell_standing_overhead_press: {
     module: "./functions/ohp",
   },
   band_lateral_raise: {
@@ -66,6 +84,45 @@ const exerciseToFile: Partial<
   },
   band_assisted_pullup: {
     module: "./functions/pullup",
+  },
+  bodyweight_standing_row_with_towel: {
+    module: "./functions/row",
+  },
+  suspended_row: {
+    module: "./functions/row",
+  },
+  // dumbbell_bent_over_row: {
+  //   module: "./functions/bent_row",
+  // },
+  band_closegrip_pulldown: {
+    module: "./functions/pulldown",
+  },
+  mountain_climber_cross_body: {
+    module: "./functions/mountain_climber",
+  },
+  russian_twist: {
+    module: "./functions/russian_twist",
+  },
+  band_triceps_extension: {
+    module: "./functions/triceps_ext",
+  },
+  low_glute_bridge_on_floor: {
+    module: "./functions/glute_bridge",
+  },
+  glute_bridge_on_bench: {
+    module: "./functions/glute_bridge",
+  },
+  // band_reverse_fly: {
+  //   module: "./functions/reverse_fly",
+  // },
+  hanging_knee_raise: {
+    module: "./functions/knee_raise",
+  },
+  seated_knee_tucks: {
+    module: "./functions/knee_tucks",
+  },
+  situp: {
+    module: "./functions/situp",
   },
 };
 
