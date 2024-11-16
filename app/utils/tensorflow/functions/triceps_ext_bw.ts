@@ -4,24 +4,17 @@ import { angle, PositionFunction } from "../functions";
 const func: PositionFunction = (keypoints: Keypoint[], sendSuggestions) => {
   const right_elbow_angle = angle(keypoints, 6, 8, 10);
   const left_elbow_angle = angle(keypoints, 5, 7, 9);
-  const elbow_y =
-    (keypoints[8].score ?? 0) > (keypoints[7].score ?? 0)
-      ? keypoints[8].y
-      : keypoints[7].y;
-  const diff = keypoints[0].y - elbow_y + 10;
-
-  //   console.log(diff);
   const _pos =
-    left_elbow_angle < 100 && right_elbow_angle < 100 && diff > 0
+    left_elbow_angle < 110 && right_elbow_angle < 110
       ? 2
-      : left_elbow_angle > 150 && right_elbow_angle > 150 && diff <= 0
+      : left_elbow_angle > 160 && right_elbow_angle > 160
       ? 0
       : 1;
-
   let _suggestion = undefined;
-  // if (sendSuggestions) {
-  //   _suggestion = funcsSuggestions.INCOMPLETE;
-  // }
+  if (sendSuggestions) {
+    // const body_angle = angle(keypoints, 8, 6, 12);
+    // if (body_angle < 140) _suggestion = "Keep Your Arms Overhead";
+  }
   return { _pos, _suggestion };
 };
 

@@ -1,16 +1,19 @@
 import { Keypoint } from "@tensorflow-models/pose-detection";
-import { angle, PositionFunction } from "../functions";
+import { PositionFunction } from "../functions";
 
 const func: PositionFunction = (keypoints: Keypoint[], sendSuggestions) => {
-  const left_angle = angle(keypoints, 8, 6, 12);
-  const right_angle = angle(keypoints, 7, 5, 11);
+  const right_hipY = keypoints[12].y,
+    midY_left = keypoints[11].y,
+    left_hand_y = keypoints[10].y,
+    right_hand_y = keypoints[9].y;
+
   const _pos =
-    left_angle < 40 && right_angle < 40
+    left_hand_y < midY_left - 15 && right_hand_y < right_hipY - 15
       ? 0
-      : left_angle > 80 && right_angle > 80
+      : left_hand_y > midY_left + 30 && right_hand_y > right_hipY + 30
       ? 2
       : 1;
-
+  console.log(_pos);
   let _suggestion = undefined;
   // if (sendSuggestions) {
   //   _suggestion = curlsSuggestions.INCOMPLETE;

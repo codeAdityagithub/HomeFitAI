@@ -13,15 +13,18 @@ export type PositionFunctionUnilateral = (
   keypoints: Keypoint[],
   sendSuggestions: boolean
 ) => { _posleft: 0 | 1 | 2; _posright: 0 | 1 | 2; _suggestion?: string };
-// function dist(x1: number, y1: number, x2: number, y2: number) {
-//   const deltaX = x2 - x1;
-//   const deltaY = y2 - y1;
 
-//   // Using the Pythagorean theorem to calculate Euclidean distance
-//   const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+export function dist(k1: Keypoint, k2: Keypoint) {
+  const { x: x1, y: y1 } = k1;
+  const { x: x2, y: y2 } = k2;
+  const deltaX = x2 - x1;
+  const deltaY = y2 - y1;
 
-//   return distance;
-// }
+  // Using the Pythagorean theorem to calculate Euclidean distance
+  const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+
+  return distance;
+}
 
 export function angle(keypoints: Keypoint[], i: number, j: number, k: number) {
   const { x: x1, y: y1 } = keypoints[i];

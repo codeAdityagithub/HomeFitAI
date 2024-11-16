@@ -5,7 +5,7 @@ const func: PositionFunction = (keypoints: Keypoint[], sendSuggestions) => {
   const left_sh_angle = angle(keypoints, 7, 5, 11);
   const right_sh_angle = angle(keypoints, 8, 6, 12);
   const _pos =
-    left_sh_angle < 50 && right_sh_angle < 50
+    left_sh_angle < 35 && right_sh_angle < 35
       ? 2
       : left_sh_angle > 90 && right_sh_angle > 90
       ? 0
