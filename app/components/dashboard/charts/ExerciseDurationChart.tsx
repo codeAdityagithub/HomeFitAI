@@ -7,6 +7,7 @@ import {
   XAxis,
 } from "recharts";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,8 +21,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { Popover, PopoverContent } from "@/components/ui/popover";
 import { Log } from "@prisma/client";
+import { PopoverTrigger } from "@radix-ui/react-popover";
 import { SerializeFrom } from "@remix-run/node";
+import { Info } from "lucide-react";
 import { useMemo } from "react";
 
 export default function ExerciseDurationChart({
@@ -33,11 +37,15 @@ export default function ExerciseDurationChart({
     let totalDuration = 0;
     const chartData = logs
       .map((log, ind) => {
-        const duration = log.exercises.reduce((a, b) => a + b.duration, 0);
+        const duration = log.exercises.reduce(
+          (a, b) => a + b.duration + b.sets.length * 3,
+          0
+        );
+
         totalDuration += duration;
         return {
           date: log.date,
-          duration: duration,
+          duration: Number(duration.toFixed(1)),
           exercises: log.exercises.length,
         };
       })
@@ -51,7 +59,26 @@ export default function ExerciseDurationChart({
   return (
     <Card className="lg:max-w-md bg-secondary/50">
       <CardHeader className="space-y-0 pb-2">
-        <CardTitle>Exercise Duration</CardTitle>
+        <CardTitle className="w-full flex justify-between">
+          Exercise Duration
+          <Popover>
+            <PopoverTrigger
+              className="ml-auto"
+              asChild
+            >
+              <Button
+                size="icon"
+                className="w-7 h-7"
+                variant="ghost"
+              >
+                <Info size={20} />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="text-xs">
+              This Assumes a 3 min rest between sets
+            </PopoverContent>
+          </Popover>
+        </CardTitle>
         <CardDescription>
           Exercise duration over the past 7 sessions
         </CardDescription>

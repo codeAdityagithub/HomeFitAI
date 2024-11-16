@@ -19,8 +19,8 @@ import { SerializeFrom } from "@remix-run/node";
 import { useMemo } from "react";
 
 const chartConfig = {
-  exercises: {
-    label: "Exercises",
+  sets: {
+    label: "Sets",
     color: "hsl(var(--primary))",
   },
 } satisfies ChartConfig;
@@ -32,20 +32,24 @@ export default function ExercisesChart({
 }) {
   const chartData = useMemo(() => {
     const exercises = logs.reduce(
-      (acc, log) => acc.concat(log.exercises.map((e) => e.target)),
-      [] as string[]
+      (acc, log) =>
+        acc.concat(
+          log.exercises.map((e) => ({ target: e.target, sets: e.sets.length }))
+        ),
+      [] as { target: string; sets: number }[]
     );
     const count = exercises.reduce((acc, e) => {
-      if (!acc[e]) {
-        acc[e] = 1;
+      if (!acc[e.target]) {
+        acc[e.target] = e.sets;
       } else {
-        acc[e]++;
+        acc[e.target] += e.sets;
       }
       return acc;
-    }, {} as any);
+    }, {} as { [target: string]: number });
+
     return Object.entries(count).map(([target, count]) => ({
       target,
-      exercises: count,
+      sets: count,
     }));
   }, [logs]);
 
@@ -75,8 +79,8 @@ export default function ExercisesChart({
             />
             <PolarAngleAxis dataKey="target" />
             <Radar
-              dataKey="exercises"
-              fill="var(--color-exercises)"
+              dataKey="sets"
+              fill="var(--color-sets)"
               fillOpacity={0.6}
               dot={{
                 r: 4,
