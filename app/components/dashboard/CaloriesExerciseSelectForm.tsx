@@ -1,4 +1,5 @@
 import { LOG_CONSTANTS } from "@/lib/constants";
+import { ExerciseEquipment } from "@/utils/exercises/exercises.server";
 import { capitalizeFirstLetter } from "@/utils/general";
 import { useFetcher } from "@remix-run/react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -11,13 +12,19 @@ import { Label } from "../ui/label";
 function CaloriesExerciseSelectForm({
   exerciseId,
   logId,
+  exerciseEquipment,
 }: {
   exerciseId: string;
   logId: string;
+  exerciseEquipment: ExerciseEquipment;
 }) {
+  const isWeighted = exerciseEquipment === "dumbbell";
+
   const [step, setStep] = useState(1);
   const [numberOfSets, setNumberOfSets] = useState(1);
-  const [sets, setSets] = useState([{ reps: 1, intensity: "explosive" }]);
+  const [sets, setSets] = useState([
+    { reps: 1, intensity: "explosive", weight: isWeighted ? 1 : null },
+  ]);
   const [currentSet, setCurrentSet] = useState(0);
   const fetcher = useFetcher<any>({ key: "totalCalories-fetcher" });
 
@@ -31,6 +38,7 @@ function CaloriesExerciseSelectForm({
         Array.from({ length: newNumber }, () => ({
           reps: 1,
           intensity: "explosive",
+          weight: isWeighted ? 1 : null,
         }))
       );
   };
@@ -43,6 +51,16 @@ function CaloriesExerciseSelectForm({
     if (name === "intensity") {
       const newSets = sets.map((set, i) =>
         i === index ? { ...set, intensity: value } : set
+      );
+      setSets(newSets);
+    } else if (name === "weight") {
+      const newWeight = Math.max(
+        1,
+        Math.min(LOG_CONSTANTS.exercise.max_weight, parseInt(value, 10))
+      );
+
+      const newSets = sets.map((set, i) =>
+        i === index ? { ...set, weight: newWeight } : set
       );
       setSets(newSets);
     } else {
@@ -115,8 +133,8 @@ function CaloriesExerciseSelectForm({
                 name="reps"
                 value={sets[currentSet].reps}
                 onChange={(e) => handleSetChange(currentSet, e)}
-                min="1"
-                max={50}
+                min={min}
+                max={max}
               />
             </Label>
             <Label className="flex flex-col gap-2">
@@ -151,6 +169,19 @@ function CaloriesExerciseSelectForm({
                 {/* </SelectContent> */}
               </select>
             </Label>
+            {isWeighted && sets[currentSet].weight !== null && (
+              <Label className="flex flex-col gap-2">
+                Weight (in kgs):
+                <Input
+                  type="number"
+                  name="weight"
+                  value={sets[currentSet].weight}
+                  onChange={(e) => handleSetChange(currentSet, e)}
+                  min="1"
+                  max={LOG_CONSTANTS.exercise.max_weight}
+                />
+              </Label>
+            )}
           </div>
           {currentSet === 0 && (
             <div className="flex items-center space-x-2">
@@ -161,6 +192,7 @@ function CaloriesExerciseSelectForm({
                     ...set,
                     reps: e ? sets[0].reps : 1,
                     intensity: e ? sets[0].intensity : "explosive",
+                    weight: e ? sets[0].weight : null,
                   }));
                   setSets(newSets);
                   if (e) {
@@ -175,7 +207,9 @@ function CaloriesExerciseSelectForm({
                 htmlFor="same"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Same Reps and Intensity for all sets.
+                {isWeighted
+                  ? "Same Reps, Intensity and Weight for all sets?"
+                  : "Same Reps and Intensity for all sets?"}
               </label>
             </div>
           )}
@@ -225,7 +259,7 @@ function CaloriesExerciseSelectForm({
               >
                 <p>
                   Set {i + 1} : {s.reps} {capitalizeFirstLetter(s.intensity)}{" "}
-                  Reps
+                  Rep{s.reps > 1 && "s"} {s.weight ? ` , ${s.weight} kg` : ""}
                 </p>
               </div>
             ))}

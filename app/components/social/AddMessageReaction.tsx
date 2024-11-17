@@ -53,7 +53,7 @@ const AddMessageReaction = ({
       >
         <Button
           size="icon"
-          className="bg-transparent hover:bg-transparent"
+          className="bg-transparent hover:bg-secondary w-8 h-8"
           disabled={fetcher.state !== "idle"}
         >
           <SmilePlus

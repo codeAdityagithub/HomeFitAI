@@ -186,9 +186,9 @@ const exerciseToFile: Partial<
   // dumbbell_fly:{
   //   module: "./functions/fly",
   // }
-  // pike_pushup: {
-  //   module: "./functions/pike",
-  // },
+  pike_pushup: {
+    module: "./functions/pike",
+  },
 };
 
 export async function importFunction(functionName: ExerciseId) {

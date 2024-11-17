@@ -8,7 +8,7 @@ const func: PositionFunction = (keypoints: Keypoint[], sendSuggestions) => {
     (keypoints[8].score ?? 0) > (keypoints[7].score ?? 0)
       ? keypoints[8].y
       : keypoints[7].y;
-  const diff = keypoints[0].y - elbow_y + 10;
+  const diff = keypoints[0].y - elbow_y;
 
   //   console.log(diff);
   const _pos =

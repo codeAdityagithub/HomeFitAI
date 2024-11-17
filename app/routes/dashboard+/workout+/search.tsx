@@ -30,7 +30,7 @@ const WorkoutSearchPage = () => {
   const { filtered, query } = useLoaderData<typeof loader>();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4">
       <div className="flex gap-2">
         <GoBack />
         <h1 className="text-2xl sm:text-3xl font-bold">

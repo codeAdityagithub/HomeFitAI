@@ -7,24 +7,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { splitRepsIntoTwo } from "@/lib/utils";
 import { capitalizeEachWord, convertMinutesToText } from "@/utils/general";
 import { ExerciseLog } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { Input } from "../ui/input";
+import { Info, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "../ui/button";
-import { ArrowUpRight, Info, Plus, Search } from "lucide-react";
-import { Label } from "../ui/label";
-import ExerciseAddTable from "./ExerciseAddTable";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuItem,
 } from "../ui/dropdown-menu";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import ExerciseAddTable from "./ExerciseAddTable";
 
 function ExerciseTable({
   exercises,
@@ -36,7 +37,13 @@ function ExerciseTable({
     const inp = input.toLowerCase();
     return exercises.filter((e) => e.name.includes(inp));
   }, [input, exercises]);
-
+  const getTextFromReps = (reps: number) => {
+    const { left, right } = splitRepsIntoTwo(reps);
+    if (right) {
+      return `L: ${left}, R: ${right}`;
+    }
+    return left;
+  };
   return (
     <Card className="flex flex-col gap-2 bg-secondary/50">
       <CardHeader className="flex flex-row flex-wrap gap-2 items-center justify-between pb-2">
@@ -103,7 +110,8 @@ function ExerciseTable({
                         <DropdownMenuSeparator />
                         {e.sets.map((s, i) => (
                           <DropdownMenuItem key={`set-${i}`}>
-                            Set-{i + 1} : {s.reps} reps (
+                            Set-{i + 1} : {getTextFromReps(s.reps)} reps{" "}
+                            {`${s.weight ? " ," + s.weight + " kg " : ""}`}(
                             {s.avgRepTime <= 1.5 ? "explosive" : "controlled"})
                           </DropdownMenuItem>
                         ))}

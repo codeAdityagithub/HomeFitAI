@@ -1,6 +1,6 @@
 import fs from "fs";
-import { singleton } from "../singleton.server";
 import path from "path";
+import { singleton } from "../singleton.server";
 import { ExerciseId } from "./types";
 
 const exercises = singleton("exercises", () => {
@@ -17,10 +17,11 @@ const exercises = singleton("exercises", () => {
 });
 
 export type ExerciseType = "duration" | "sets";
+export type ExerciseEquipment = "rope" | "body weight" | "dumbbell" | "band";
 export type Exercise = {
   bodyPart: string;
   met: number;
-  equipment: "rope" | "body weight" | "dumbbell" | "band";
+  equipment: ExerciseEquipment;
   movement: "bilateral" | "unilateral" | "static";
   id: ExerciseId;
   name: string;

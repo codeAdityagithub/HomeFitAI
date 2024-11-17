@@ -36,7 +36,10 @@ import { LoaderIcon } from "lucide-react";
 import invariant from "tiny-invariant";
 
 export type ExerciseDetectionLoader = {
-  exercise: Pick<Exercise, "name" | "id" | "videoId" | "movement">;
+  exercise: Pick<
+    Exercise,
+    "name" | "id" | "videoId" | "movement" | "equipment" | "type"
+  >;
 };
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
@@ -77,6 +80,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       videoId: exercise.videoId,
       movement: exercise.movement,
       type: exercise.type,
+      equipment: exercise.equipment,
     },
   };
 };

@@ -21,6 +21,11 @@ const schema = z.object({
           .number()
           .min(0)
           .max(LOG_CONSTANTS.exercise.max_avgreptime),
+        weight: z
+          .number()
+          .min(1)
+          .max(LOG_CONSTANTS.exercise.max_weight)
+          .nullable(),
       })
     )
     .max(1),
@@ -39,7 +44,11 @@ export async function addWorkout(input: z.infer<typeof schema>) {
 
     const exercise = exercises.find((e) => e.id === eId);
 
-    if (!exercise)
+    if (
+      !exercise ||
+      (data.sets.some((s) => s.weight !== null) &&
+        exercise.equipment !== "dumbbell")
+    )
       return json({ error: "Invalid Exercise Id." }, { status: 404 });
 
     const stat = await db.stats.findUnique({
@@ -90,7 +99,7 @@ export async function addWorkout(input: z.infer<typeof schema>) {
         time: new Date(),
       });
     }
-
+    // console.log(data.sets);
     const headers = new Headers();
     const session = await getSession(data.cookie);
     let sessionModified = false;

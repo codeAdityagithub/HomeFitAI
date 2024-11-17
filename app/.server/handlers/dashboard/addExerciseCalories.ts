@@ -19,6 +19,11 @@ const schema = z.object({
           .min(LOG_CONSTANTS.exercise.reps.min)
           .max(LOG_CONSTANTS.exercise.reps.max),
         intensity: z.enum(["explosive", "controlled"]),
+        weight: z
+          .number()
+          .min(1)
+          .max(LOG_CONSTANTS.exercise.max_weight)
+          .nullable(),
       })
     )
     .max(6),
@@ -31,7 +36,11 @@ export async function addExerciseCalories(input: z.infer<typeof schema>) {
   try {
     const eId = data.exerciseId;
     const exercise = exercises.find((e) => e.id === eId);
-    if (!exercise)
+    if (
+      !exercise ||
+      (data.value.some((s) => s.weight !== null) &&
+        exercise.equipment !== "dumbbell")
+    )
       return json({ error: "Invalid Exercise Id." }, { status: 404 });
 
     const [stat, log] = await Promise.all([

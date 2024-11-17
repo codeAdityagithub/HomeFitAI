@@ -112,7 +112,7 @@ const GroupActivities = ({
               <ResponsiveDialog
                 key={`${goal}-trigger`}
                 trigger={
-                  <div className="bg-secondary flex items-center gap-2 p-4 rounded-md cursor-pointer">
+                  <div className="bg-secondary shadow shadow-foreground/10 hover:outline hover:outline-1 hover:outline-accent/30 transition-colors flex items-center gap-2 p-4 rounded-md cursor-pointer">
                     <span>{icon}</span>
                     {text}
                   </div>

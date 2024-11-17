@@ -98,7 +98,7 @@ const GroupMessageCard = ({
           </span>
         </div>
       </div>
-      <div className="flex-1 bg-secondary p-2 rounded drop-shadow-sm relative">
+      <div className="flex-1 bg-secondary p-2 rounded shadow shadow-foreground/10 relative">
         <AddMessageReaction
           isMyMessage={isMyMessage}
           messageId={message.id}
@@ -160,7 +160,7 @@ const GroupMessages = ({
       <h2 className="text-lg font-semibold">
         Group Announcements ( {messages.length} )
       </h2>
-      <div className="bg-background h-full w-full rounded-md space-y-4 p-4 flex flex-col-reverse">
+      <div className="bg-background h-full w-full rounded-md space-y-4 p-4 flex flex-col-reverse mb-12">
         {messages.map((m, i) => (
           <GroupMessageCard
             key={m.id}

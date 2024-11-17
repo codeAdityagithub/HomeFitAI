@@ -9,7 +9,7 @@ const ExerciseCard = ({ e }: { e: DashboardExercise }) => {
       key={e.name}
     >
       <Link
-        to={e.id}
+        to={`/dashboard/workout/${e.id}`}
         prefetch="intent"
       >
         <img

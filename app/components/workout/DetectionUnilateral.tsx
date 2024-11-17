@@ -17,6 +17,7 @@ import DetectionUI from "./DetectionUI";
 
 type Props = {
   name: string;
+
   pos_function: PositionFunctionUnilateral;
   start_pos: 0 | 2;
 };
@@ -177,7 +178,7 @@ export default function DetectionUnilateral({
           if (pos_left.current.length === 2) {
             hasStarted_left.current = true;
             start_left(0.3);
-            console.log("started left");
+            // console.log("started left");
           }
 
           isModified_left.current = true;
@@ -197,7 +198,7 @@ export default function DetectionUnilateral({
           if (pos_right.current.length === 2) {
             hasStarted_right.current = true;
             start_right(0.3);
-            console.log("started right");
+            // console.log("started right");
           }
 
           isModified_right.current = true;

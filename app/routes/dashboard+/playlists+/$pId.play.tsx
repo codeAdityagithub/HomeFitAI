@@ -22,7 +22,6 @@ import {
 } from "@/utils/exercises/types";
 import { isObjectId } from "@/utils/general";
 import { deleteKey } from "@/utils/routeCache.client";
-import { importFunction } from "@/utils/tensorflow/imports";
 import {
   ActionFunctionArgs,
   json,
@@ -38,7 +37,6 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import { LoaderIcon } from "lucide-react";
-import { useEffect, useState } from "react";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const user = await requireUser(request, { failureRedirect: "/login" });
@@ -94,6 +92,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       videoId: exercise.videoId,
       movement: exercise.movement,
       type: exercise.type,
+      equipment: exercise.equipment,
     },
     playlist: allExercises,
     index,

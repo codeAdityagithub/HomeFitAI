@@ -32,6 +32,23 @@ export function convertToKg(lbs: number) {
   return Number((lbs * 0.453592).toFixed(2));
 }
 
+export function combineRepsIntoOne({
+  left,
+  right,
+}: {
+  left: number;
+  right: number;
+}) {
+  return parseFloat(`${left}.${right}`);
+}
+
+export function splitRepsIntoTwo(reps: number) {
+  const left = Math.floor(reps);
+  const right = reps.toString().split(".")[1]; // Get the part after the decimal
+
+  return { left, right: right ? Number(right) : 0 };
+}
+
 export function getImageFromVideoId(videoId: string) {
   return `https://img.youtube.com/vi/${videoId.split("?")[0]}/sddefault.jpg`;
 }

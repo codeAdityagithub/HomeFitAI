@@ -37,6 +37,7 @@ export const LOG_CONSTANTS = {
       min: 1,
       max: 50,
     },
+    max_weight: 80,
     max_TUT: 10,
   },
 };

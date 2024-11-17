@@ -11,7 +11,11 @@ export function getDayDiff(d1: Date, d2: Date) {
 }
 
 export function getDurationFromSets(
-  sets: { reps: number; intensity: "explosive" | "controlled" }[]
+  sets: {
+    reps: number;
+    intensity: "explosive" | "controlled";
+    weight: number | null;
+  }[]
 ): { duration: number; sets: Set[] } {
   let duration = 0;
   const exerciseSets: Set[] = [];
@@ -19,7 +23,11 @@ export function getDurationFromSets(
   for (const set of sets) {
     const repTime = set.intensity === "explosive" ? 1.5 : 3;
     duration += set.reps * repTime;
-    exerciseSets.push({ avgRepTime: repTime, reps: set.reps });
+    exerciseSets.push({
+      avgRepTime: repTime,
+      reps: set.reps,
+      weight: set.weight,
+    });
   }
 
   const durationInMin = Number((duration / 60).toFixed(2));

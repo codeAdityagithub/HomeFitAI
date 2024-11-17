@@ -1,8 +1,10 @@
 import { useToast } from "@/hooks/use-toast";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { ExerciseEquipment } from "@/utils/exercises/exercises.server";
 import { caloriePerMin, capitalizeEachWord, stepsToCal } from "@/utils/general";
 import { resetFetcher } from "@/utils/resetFetcher";
 import { Link, useFetcher } from "@remix-run/react";
+import { ArrowLeft } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -15,6 +17,7 @@ type Exercise = {
   imageUrl: string;
   met: number;
   type: "duration" | "sets";
+  equipment: ExerciseEquipment;
 };
 
 const EditCaloriesForm = ({ logId }: { logId: string }) => {
@@ -122,13 +125,22 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
         </>
       ) : (
         <div>
-          <img
-            src={selected.imageUrl}
-            alt={selected.name}
-            width={100}
-            height={60}
-            className="object-cover w-full aspect-[2/1] rounded-md border"
-          />
+          <div className="relative">
+            <Button
+              size="icon"
+              className="h-6 w-6 rounded-full absolute top-2 left-2"
+              onClick={() => setSelected(null)}
+            >
+              <ArrowLeft size={20} />
+            </Button>
+            <img
+              src={selected.imageUrl}
+              alt={selected.name}
+              width={100}
+              height={60}
+              className="object-cover w-full aspect-[2/1] rounded-md border"
+            />
+          </div>
           <div className="flex">
             <span className="flex-1 font-medium">
               {capitalizeEachWord(selected.name)}
@@ -149,6 +161,7 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
           ) : (
             <CaloriesExerciseSelectForm
               exerciseId={selected.id}
+              exerciseEquipment={selected.equipment}
               logId={logId}
             />
           )}
