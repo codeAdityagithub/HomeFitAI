@@ -10,7 +10,6 @@ import {
   Scripts,
   ScrollRestoration,
   ShouldRevalidateFunction,
-  useLoaderData,
   useNavigate,
   useRouteError,
   useRouteLoaderData,
@@ -23,9 +22,9 @@ import {
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
+import { cn } from "./lib/utils";
 import { getAuthUser } from "./utils/auth/auth.server";
 import { themeCookie } from "./utils/themeCookie.server";
-import { cn } from "./lib/utils";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -71,10 +70,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="ver_scroll min-h-[500px]">
         {children}
         <ScrollRestoration
-          getKey={(location, matches) => {
-            // default behavior
-            return location.pathname;
-          }}
+        // getKey={(location, matches) => {
+        //   // default behavior
+        //   return location.pathname;
+        // }}
         />
         <Scripts />
       </body>

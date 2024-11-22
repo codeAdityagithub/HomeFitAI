@@ -353,7 +353,7 @@
     "id": "clap_push_up",
     "type": "sets",
     "name": "clap push up",
-    "target": "pectorals",
+    "target": "chest",
     "movement": "bilateral",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
@@ -390,7 +390,7 @@
     "id": "band_bench_press",
     "type": "sets",
     "name": "band bench press",
-    "target": "pectorals",
+    "target": "chest",
     "movement": "bilateral",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
@@ -602,7 +602,7 @@
     "type": "sets",
     "id": "dumbbell_bench_press",
     "name": "dumbbell bench press",
-    "target": "pectorals",
+    "target": "chest",
     "movement": "bilateral",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
@@ -621,7 +621,7 @@
     "type": "sets",
     "id": "dumbbell_fly",
     "name": "dumbbell fly",
-    "target": "pectorals",
+    "target": "chest",
     "movement": "bilateral",
     "secondaryMuscles": ["shoulders"],
     "instructions": [
@@ -640,7 +640,7 @@
     "id": "chest_dip",
     "type": "sets",
     "name": "chest dip",
-    "target": "pectorals",
+    "target": "chest",
     "movement": "bilateral",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
@@ -1227,7 +1227,7 @@
     "name": "archer push up",
     "type": "sets",
     "movement": "unilateral",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "shoulders", "core"],
     "instructions": [
       "Start in a push-up position with your hands slightly wider than shoulder-width apart.",
@@ -1266,7 +1266,7 @@
     "name": "deep push up",
     "movement": "bilateral",
     "type": "sets",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Start in a high plank position with your hands slightly wider than shoulder-width apart and your body in a straight line.",
@@ -1284,7 +1284,7 @@
     "name": "wide hand push up",
     "movement": "bilateral",
     "type": "sets",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Start in a high plank position with your hands wider than shoulder-width apart.",
@@ -1303,7 +1303,7 @@
     "name": "decline push-up",
     "movement": "bilateral",
     "type": "sets",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Place your hands on the ground slightly wider than shoulder-width apart, with your feet elevated on a stable surface.",
@@ -1398,7 +1398,7 @@
     "name": "incline push-up",
     "movement": "bilateral",
     "type": "sets",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Place your hands on an elevated surface, such as a bench or step, slightly wider than shoulder-width apart.",
@@ -1417,7 +1417,7 @@
     "name": "kneeling push-up",
     "movement": "bilateral",
     "type": "sets",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "shoulders"],
     "instructions": [
       "Start by kneeling on the ground with your hands shoulder-width apart, fingers pointing forward.",
@@ -1436,7 +1436,7 @@
     "name": "push-up",
     "movement": "bilateral",
     "type": "sets",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "deltoids", "core"],
     "instructions": [
       "Start in a high plank position with your hands slightly wider than shoulder-width apart and your feet together.",
@@ -1454,7 +1454,7 @@
     "name": "push-up (wall)",
     "movement": "bilateral",
     "type": "sets",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "deltoids"],
     "instructions": [
       "Stand facing a wall, about arm's length away.",
@@ -1474,7 +1474,7 @@
     "id": "single_arm_pushup",
     "name": "single arm push-up",
     "movement": "unilateral",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "shoulders", "core"],
     "instructions": [
       "Start in a push-up position with your hands shoulder-width apart and one hand placed slightly wider than the other.",
@@ -1493,7 +1493,7 @@
     "type": "sets",
     "name": "ring push-up",
     "movement": "bilateral",
-    "target": "pectorals",
+    "target": "chest",
     "secondaryMuscles": ["triceps", "shoulders", "core"],
     "instructions": [
       "Find a suspension trainer(rings) and adjust it to an appropriate height.",

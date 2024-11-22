@@ -33,7 +33,7 @@ export const features = [
 ];
 const HomePage = () => {
   return (
-    <div className="py-4 lg:px-16 xl:px-20">
+    <div className="py-4 lg:px-16 xl:px-20 space-y-10">
       {/* hero section */}
       <Hero />
       <Features />

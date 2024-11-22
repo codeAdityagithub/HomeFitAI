@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { splitRepsIntoTwo } from "@/lib/utils";
 import { capitalizeEachWord, convertMinutesToText } from "@/utils/general";
 import { ExerciseLog, Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
@@ -47,6 +48,14 @@ function PastExerciseTable({ logs }: { logs: SerializeFrom<Log>[] }) {
     });
     return obj;
   }, [input, exercisesByDate]);
+  const getTextFromReps = (reps: number) => {
+    const { left, right } = splitRepsIntoTwo(reps);
+    console.log(right);
+    if (right) {
+      return `L: ${left}, R: ${right}`;
+    }
+    return left;
+  };
 
   return (
     <Card className="flex flex-col gap-2 bg-secondary/50">
@@ -128,8 +137,9 @@ function PastExerciseTable({ logs }: { logs: SerializeFrom<Log>[] }) {
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {e.sets.map((s, i) => (
-                              <DropdownMenuItem key={`set-${index}-${i}`}>
-                                Set-{i + 1} : {s.reps} reps (
+                              <DropdownMenuItem key={`set-${i}`}>
+                                Set-{i + 1} : {getTextFromReps(s.reps)} reps{" "}
+                                {`${s.weight ? " ," + s.weight + " kg " : ""}`}(
                                 {s.avgRepTime <= 1.5
                                   ? "explosive"
                                   : "controlled"}

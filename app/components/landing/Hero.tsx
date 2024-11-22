@@ -1,7 +1,7 @@
-import { features } from "@/routes/_landing+/index";
-import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { features } from "@/routes/_landing+/index";
 import { Link } from "@remix-run/react";
+import { Button } from "../ui/button";
 
 const Hero = () => {
   return (
@@ -9,7 +9,7 @@ const Hero = () => {
       id="home"
       className="h-[calc(100vh-88px)] relative flex justify-between gap-4"
     >
-      <div className="absolute inset-0 -z-10 flex items-center overflow-hidden justify-center">
+      <div className="hidden absolute inset-0 -z-10 lg:flex items-center overflow-hidden justify-center">
         {/* <picture>
           <source
             srcSet="HeroDark.png"
@@ -29,12 +29,39 @@ const Hero = () => {
           alt="Hero Image"
         />
       </div>
+      <div className="absolute inset-0 -z-10 flex lg:hidden items-center justify-center">
+        {features.map((feat, ind) => (
+          <div
+            key={feat.title}
+            className={cn(
+              " absolute flex items-center flex-col blur-[1px]",
+              ind === 0 ? "left-24 bottom-20" : "",
+              ind === 1 ? "right-0 sm:right-16 top-1/3" : "",
+              ind === 2 ? "left-8 top-12" : ""
+            )}
+          >
+            <img
+              src={feat.icon}
+              width={100}
+              height={100}
+              alt={feat.title}
+            ></img>
+            {ind === 0
+              ? "Track"
+              : ind === 1
+              ? "AI Powered"
+              : ind === 2
+              ? "Progress"
+              : ""}
+          </div>
+        ))}
+      </div>
       <div className="flex-1 flex flex-col gap-8 justify-center mb-12 min-w-[300px] items-center lg:items-start rounded-lg ">
-        <h1 className="text-5xl outline-text xs:text-6xl font-bold tracking-tighter text-accent lg:text-foreground text-center lg:text-left">
+        <h1 className="text-5xl font-mono outline-text xs:text-6xl font-bold tracking-tight text-foreground text-center lg:text-left">
           Track Your <p className="text-primary"> Active </p>
           Lifestyle
         </h1>
-        <p className="lg:test-base bg-white/20 lg:bg-transparent text-gray-900 p-2 rounded-md backdrop-blur-sm lg:backdrop-blur-0 font-semibold lg:text-secondary-foreground tracking-wide text-center lg:text-left">
+        <p className="test-base p-2 rounded-md font-semibold text-secondary-foreground tracking-wide text-center lg:text-left">
           Track Workout's.
           <span className="block">
             Get Suggestions in{" "}
@@ -70,10 +97,11 @@ const Hero = () => {
             <p className="text-muted-foreground text-sm">
               {feat.description}
               {feat.title === "Real-time Tracking" ? (
-                <span className="text-primary font-semibold block">
+                <>
                   {" "}
-                  using AI
-                </span>
+                  using
+                  <span className="text-primary font-semibold block"> AI</span>
+                </>
               ) : null}
             </p>
           </div>

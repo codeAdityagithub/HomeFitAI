@@ -28,7 +28,7 @@ const Navbar = () => {
   }, [location.hash]);
   return (
     <>
-      <nav className="hidden bg-background/80 backdrop-blur-md lg:flex pt-10 pb-2 gap-8 lg:gap-12 z-50 sticky -top-8 xs:px-10 md:px-12 lg:px-16 xl:px-20 ">
+      <nav className="hidden bg-background/70 backdrop-blur-sm lg:flex pt-10 pb-2 gap-8 lg:gap-12 z-50 sticky -top-8 xs:px-10 md:px-12 lg:px-16 xl:px-20 ">
         <span className="min-w-8 min-h-8 w-8 h-8 aspect-square">
           <img
             src="/logo.png"
@@ -109,7 +109,7 @@ const NavbarSm = ({ hash }: { hash: string }) => {
   const [open, setOpen] = useState(false);
   const user = useUser();
   return (
-    <nav className="lg:hidden bg-background/80 backdrop-blur-md flex pt-6 pb-2 gap-4 z-50 sticky -top-4 px-6 xs:px-10">
+    <nav className="lg:hidden bg-background/50 backdrop-blur-sm flex pt-6 pb-4 gap-4 z-50 sticky -top-2 px-6 xs:px-10">
       <span className="min-w-8 min-h-8 w-8 h-8 aspect-square">
         <img
           src="/logo.png"
@@ -127,12 +127,7 @@ const NavbarSm = ({ hash }: { hash: string }) => {
           className="ml-auto"
           to="/dashboard"
         >
-          <Button
-            className="px-8"
-            variant="primary"
-          >
-            Dashboard
-          </Button>
+          <Button className="px-8 rounded-full">Dashboard</Button>
         </Link>
       ) : (
         <Link
