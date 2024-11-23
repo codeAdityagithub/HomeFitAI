@@ -42,6 +42,12 @@ export const LOG_CONSTANTS = {
   },
 };
 
+export const EXERCISE_GOAL_CONSTANTS = {
+  Reps: { min: 3, max: 50 },
+  Timed: { min: 10, max: 300 },
+  TUT: { min: 1, max: 10 },
+};
+
 export const PLAYLIST_CONSTANTS = {
   exercises: {
     min: 5,

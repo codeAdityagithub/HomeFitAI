@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
 import type { LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { json, useLoaderData } from "@remix-run/react";
 import { IoMdFlame } from "react-icons/io";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -30,13 +30,31 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const date = new Date();
   date.setDate(date.getDate() - 1);
 
-  const logs = await db.log.findMany({
+  let logs = await db.log.findMany({
     where: { date: { lt: date }, userId: user.id },
     orderBy: { date: "desc" },
     take: 6,
   });
 
-  return { logs, user };
+  if (logs[0].date.getDate() !== date.getDate()) {
+    // sleep 1 sec
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    logs = await db.log.findMany({
+      where: { date: { lt: date }, userId: user.id },
+      orderBy: { date: "desc" },
+      take: 6,
+    });
+  }
+
+  return json(
+    { logs, user },
+    {
+      headers: {
+        "Cache-Control": "max-age=3600",
+      },
+    }
+  );
 };
 
 export type DashboardData = SerializeFrom<typeof loader>;

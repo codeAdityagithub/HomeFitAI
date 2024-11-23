@@ -50,7 +50,7 @@ function PastExerciseTable({ logs }: { logs: SerializeFrom<Log>[] }) {
   }, [input, exercisesByDate]);
   const getTextFromReps = (reps: number) => {
     const { left, right } = splitRepsIntoTwo(reps);
-    console.log(right);
+    // console.log(right);
     if (right) {
       return `L: ${left}, R: ${right}`;
     }

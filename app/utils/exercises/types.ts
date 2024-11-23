@@ -1,3 +1,4 @@
+import { EXERCISE_GOAL_CONSTANTS } from "@/lib/constants";
 import { z } from "zod";
 
 export type ExerciseId =
@@ -95,11 +96,20 @@ export const ExerciseGoalSchema = z
   .refine(({ goal, duration }) => {
     switch (goal) {
       case "Reps":
-        return duration <= 50 && duration >= 3;
+        return (
+          duration <= EXERCISE_GOAL_CONSTANTS.Reps.max &&
+          duration >= EXERCISE_GOAL_CONSTANTS.Reps.min
+        );
       case "TUT":
-        return duration <= 10 && duration >= 1;
+        return (
+          duration <= EXERCISE_GOAL_CONSTANTS.TUT.max &&
+          duration >= EXERCISE_GOAL_CONSTANTS.TUT.min
+        );
       case "Timed":
-        return duration <= 300 && duration >= 10;
+        return (
+          duration <= EXERCISE_GOAL_CONSTANTS.Timed.max &&
+          duration >= EXERCISE_GOAL_CONSTANTS.Timed.min
+        );
       case "Free":
         return true;
       default:

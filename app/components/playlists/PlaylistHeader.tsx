@@ -17,6 +17,7 @@ import { GiTimeTrap } from "react-icons/gi";
 import GoBack from "../GoBack";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
 import { Button } from "../ui/button";
+import { DialogClose } from "../ui/dialog";
 
 const goalIcons: Record<ExerciseGoals, { text: string; icon: ReactNode }> = {
   Reps: {
@@ -51,6 +52,7 @@ const PlaylistHeader = ({
   const itemRefs = useRef<HTMLSpanElement[]>(
     Array.from({ length: playlist.length })
   );
+
   const goals =
     exerciseType === "duration"
       ? { Timed: ExerciseGoalText.Timed, Free: ExerciseGoalText.Free }
@@ -67,7 +69,7 @@ const PlaylistHeader = ({
 
   const [s_goal, setGoal] = useState(selectedGoal ?? goal);
   useEffect(() => {
-    console.log(goal);
+    // console.log(goal);
     if (goal && goal !== "Free") {
       setGoal(goal);
     }
@@ -144,7 +146,7 @@ const PlaylistHeader = ({
                     {goalIcons[g as ExerciseGoals].icon}
                   </div>
                 ) : (
-                  <div
+                  <DialogClose
                     key={g}
                     onClick={() =>
                       setSp((prev) => {
@@ -156,7 +158,7 @@ const PlaylistHeader = ({
                   >
                     {goalIcons[g as ExerciseGoals].text}
                     {goalIcons[g as ExerciseGoals].icon}
-                  </div>
+                  </DialogClose>
                 )
               )}
             </div>
@@ -195,19 +197,21 @@ const PlaylistHeader = ({
                 </Button>
               </div>
 
-              <Button
-                variant="accent"
-                onClick={() => {
-                  setSp((prev) => {
-                    prev.set("goal", selectedGoal);
-                    prev.set("duration", value.toString());
-                    return prev;
-                  });
-                }}
-                className="w-full mt-2"
-              >
-                Continue
-              </Button>
+              <DialogClose asChild>
+                <Button
+                  variant="accent"
+                  onClick={() => {
+                    setSp((prev) => {
+                      prev.set("goal", selectedGoal);
+                      prev.set("duration", value.toString());
+                      return prev;
+                    });
+                  }}
+                  className="w-full mt-2"
+                >
+                  Continue
+                </Button>
+              </DialogClose>
             </div>
           )}
         </ResponsiveDialog>

@@ -13,7 +13,7 @@ const func: PositionFunction = (keypoints: Keypoint[], sendSuggestions) => {
       : left_hand_y > midY_left + 30 && right_hand_y > right_hipY + 30
       ? 2
       : 1;
-  console.log(_pos);
+  // console.log(_pos);
   let _suggestion = undefined;
   // if (sendSuggestions) {
   //   _suggestion = curlsSuggestions.INCOMPLETE;
