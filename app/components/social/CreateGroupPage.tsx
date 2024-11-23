@@ -43,7 +43,7 @@ const CreateGroupPage = () => {
             name="groupName"
             className="bg-background sm:w-[300px] px-4 py-2 outline-none focus:ring-1 focus:ring-accent rounded-md shadow-inner transition-all duration-200"
             minLength={3}
-            maxLength={100}
+            maxLength={30}
             required
           />
           <Button

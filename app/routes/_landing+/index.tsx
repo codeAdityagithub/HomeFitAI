@@ -1,7 +1,6 @@
 import Features from "@/components/landing/Features";
+import Footer from "@/components/landing/Footer";
 import Hero from "@/components/landing/Hero";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { LinksFunction } from "@remix-run/node";
 
 export const links: LinksFunction = () => {
@@ -33,11 +32,14 @@ export const features = [
 ];
 const HomePage = () => {
   return (
-    <div className="py-4 lg:px-16 xl:px-20 space-y-10">
-      {/* hero section */}
-      <Hero />
-      <Features />
-    </div>
+    <>
+      <div className="pt-4 pb-1 lg:px-16 xl:px-20 space-y-10">
+        {/* hero section */}
+        <Hero />
+        <Features />
+        <Footer />
+      </div>
+    </>
   );
 };
 export default HomePage;

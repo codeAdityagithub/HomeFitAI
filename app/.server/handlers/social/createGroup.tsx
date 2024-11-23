@@ -12,7 +12,7 @@ export default async function createGroup(request: Request) {
   if (
     !groupName ||
     groupName.toString().length < 3 ||
-    groupName.toString().length > 100
+    groupName.toString().length > 30
   )
     return json(
       {

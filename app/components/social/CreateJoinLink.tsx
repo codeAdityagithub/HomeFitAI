@@ -59,7 +59,7 @@ const CreateJoinLink = ({ activeToken }: { activeToken: string | null }) => {
       </div>
     );
   return (
-    <div>
+    <div title="Create a new join link">
       <fetcher.Form
         method="post"
         action="/api/joinLink"
@@ -71,7 +71,7 @@ const CreateJoinLink = ({ activeToken }: { activeToken: string | null }) => {
           size="sm"
         >
           <BadgePlus size={20} />
-          New Join Link
+          Join Link
         </Button>
       </fetcher.Form>
     </div>
