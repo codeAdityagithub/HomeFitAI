@@ -1,8 +1,6 @@
-import { capitalizeEachWord } from "@/utils/general";
-import GoBack from "../GoBack";
-import { Button } from "../ui/button";
-import { useSearchParams } from "@remix-run/react";
 import { ExerciseGoals, ExerciseGoalText } from "@/utils/exercises/types";
+import { useSearchParams } from "@remix-run/react";
+import { Button } from "../ui/button";
 
 type Props =
   | {
@@ -66,7 +64,6 @@ const DetectionUI = ({
 
   return (
     <div className="w-full">
-      
       <h1 className="text-2xl font-bold text-center">
         Reps :{" "}
         {typeof reps === "number" ? (

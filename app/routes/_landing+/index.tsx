@@ -1,6 +1,7 @@
 import Features from "@/components/landing/Features";
 import Footer from "@/components/landing/Footer";
 import Hero from "@/components/landing/Hero";
+import LandingPageVideo from "@/components/landing/LandingVideo";
 import { LinksFunction } from "@remix-run/node";
 
 export const links: LinksFunction = () => {
@@ -37,6 +38,7 @@ const HomePage = () => {
         {/* hero section */}
         <Hero />
         <Features />
+        <LandingPageVideo />
         <Footer />
       </div>
     </>

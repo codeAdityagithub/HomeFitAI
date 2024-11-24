@@ -12,7 +12,6 @@ import { useSearchParams } from "@remix-run/react";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
 import DetectionForm from "./DetectionForm";
 import DetectionUI from "./DetectionUI";
-import { ExerciseEquipment } from "@/utils/exercises/exercises.server";
 // import { flexing, push_position, squating } from "../utils/functions";
 // import "@tensorflow/tfjs-backend-wasm";
 
