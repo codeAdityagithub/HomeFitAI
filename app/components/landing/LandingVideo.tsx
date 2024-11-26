@@ -18,7 +18,10 @@ const LandingPageVideo = () => {
   };
 
   return (
-    <section>
+    <section
+      id="get-started"
+      className="scroll-mt-16"
+    >
       <h1 className="text-primary text-4xl font-bold drop-shadow-md text-center mb-4 px-4">
         See Real-Time Workout Tracking in Action
       </h1>

@@ -28,27 +28,27 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
 
   const date = new Date();
-  date.setDate(date.getDate() - 1);
+  // date.setDate(date.getDate() - 1);
 
   let logs = await db.log.findMany({
     where: { date: { lt: date }, userId: user.id },
     orderBy: { date: "desc" },
-    take: 6,
+    take: 7,
   });
 
-  if (logs[0].date.getDate() !== date.getDate()) {
+  if (logs[0].date.getDate() !== new Date().getDate()) {
     // sleep 1 sec
     await new Promise((resolve) => setTimeout(resolve, 1500));
-
+    // console.log("error");
     logs = await db.log.findMany({
       where: { date: { lt: date }, userId: user.id },
       orderBy: { date: "desc" },
-      take: 6,
+      take: 7,
     });
   }
 
   return json(
-    { logs, user },
+    { logs: logs.slice(1), user },
     {
       headers: {
         "Cache-Control": "max-age=3600",

@@ -17,7 +17,7 @@ const Links = [
   { to: "", name: "Home" },
   { to: "#features", name: "Features" },
   { to: "#get-started", name: "Get Started" },
-  { to: "#testimonials", name: "Testimonials" },
+  // { to: "#testimonials", name: "Testimonials" },
 ];
 const Navbar = () => {
   const location = useLocation();
