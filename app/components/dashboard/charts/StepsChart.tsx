@@ -123,8 +123,9 @@ function StepsChart({ logs }: { logs: SerializeFrom<Log>[] }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-1">
         <CardDescription>
-          Over the past 7 days, you have walked{" "}
-          <span className="font-medium text-foreground">{avgSteps}</span> steps.
+          Over the past {logs.length} sessions, you have walked{" "}
+          <span className="font-medium text-foreground">{avgSteps}</span> steps
+          on average per day.
         </CardDescription>
         <CardDescription>
           {avgSteps < 5000 &&

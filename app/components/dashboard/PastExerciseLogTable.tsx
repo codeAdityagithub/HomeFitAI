@@ -69,9 +69,9 @@ function PastExerciseTable({ logs }: { logs: SerializeFrom<Log>[] }) {
             value={input}
             className="pl-10"
             onChange={(e) => setInput(e.target.value)}
-            id="searchInput"
+            id="searchInput2"
           />
-          <Label htmlFor="searchInput">
+          <Label htmlFor="searchInput2">
             <Search className="absolute left-2 top-0 h-full text-muted-foreground" />
           </Label>
         </div>

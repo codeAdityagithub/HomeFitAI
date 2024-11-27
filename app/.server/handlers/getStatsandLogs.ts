@@ -42,6 +42,17 @@ export async function getStatsandLogs(user: AuthUser) {
           },
         });
 
+        // delete the logs older than 30 days
+        const thirtyDaysAgo = new Date(
+          date.getTime() - 30 * 24 * 60 * 60 * 1000
+        );
+        await tx.log.deleteMany({
+          where: {
+            date: { lt: thirtyDaysAgo },
+            userId: user.id,
+          },
+        });
+
         // Update yesterday's log and stats
         const updateLogAndStats = async () => {
           const prev = await tx.log.findFirst({

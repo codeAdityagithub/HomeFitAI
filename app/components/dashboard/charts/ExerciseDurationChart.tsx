@@ -28,21 +28,40 @@ import { SerializeFrom } from "@remix-run/node";
 import { Info } from "lucide-react";
 import { useMemo } from "react";
 
+function evaluateExerciseDuration(avgDuration: number) {
+  // Define thresholds (adjust as needed)
+  const adequateThreshold = 20; // Minimum recommended daily duration (in minutes)
+  const excellentThreshold = 60; // Duration indicating high activity (in minutes)
+
+  // Generate a message based on the average duration
+  if (avgDuration >= excellentThreshold) {
+    return "Excellent! You're exercising for a great amount of time daily. Keep it up!";
+  } else if (avgDuration >= adequateThreshold) {
+    return "Good job! You're meeting the recommended daily exercise duration. Stay consistent!";
+  } else {
+    return "You might want to increase your daily exercise duration to at least 30 minutes for better results.";
+  }
+}
+
 export default function ExerciseDurationChart({
   logs,
 }: {
   logs: SerializeFrom<Log>[];
 }) {
-  const { chartData, avgDuration } = useMemo(() => {
-    let totalDuration = 0;
+  const { chartData, avgDuration, avgExercises, totalSession } = useMemo(() => {
+    let totalDuration = 0,
+      totalExercises = 0,
+      totalSession = 0;
     const chartData = logs
       .map((log, ind) => {
         const duration = log.exercises.reduce(
           (a, b) => a + b.duration + b.sets.length * 3,
           0
         );
-
+        totalExercises += log.exercises.length;
+        totalSession += log.exercises.length > 0 ? 1 : 0;
         totalDuration += duration;
+
         return {
           date: log.date,
           duration: Number(duration.toFixed(1)),
@@ -50,9 +69,12 @@ export default function ExerciseDurationChart({
         };
       })
       .reverse();
+
     return {
       chartData,
-      avgDuration: (totalDuration / logs.length).toFixed(1),
+      avgDuration: (totalDuration / totalSession).toFixed(1),
+      avgExercises: Math.round(totalExercises / totalSession),
+      totalSession,
     };
   }, [logs]);
 
@@ -80,7 +102,7 @@ export default function ExerciseDurationChart({
           </Popover>
         </CardTitle>
         <CardDescription>
-          Exercise duration over the past 7 sessions
+          Exercise duration over the past {logs.length} sessions
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -184,9 +206,16 @@ export default function ExerciseDurationChart({
       </CardContent>
       <CardFooter className="flex-col items-start gap-1">
         <CardDescription>
-          Over the past 7 sessions, your average workout duration was{" "}
-          <span className="font-medium text-foreground">{avgDuration}</span>{" "}
+          Over the past {logs.length} sessions, your average workout duration
+          was <span className="font-medium text-foreground">{avgDuration}</span>{" "}
           minutes.
+        </CardDescription>
+        <CardDescription>
+          Average exercises per session was{" "}
+          <span className="font-medium text-foreground">{avgExercises}</span>{" "}
+        </CardDescription>
+        <CardDescription>
+          {evaluateExerciseDuration(Number(avgDuration))}
         </CardDescription>
       </CardFooter>
     </Card>

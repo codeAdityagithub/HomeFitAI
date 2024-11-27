@@ -146,7 +146,7 @@ function SleepChart({ logs }: { logs: SerializeFrom<Log>[] }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-1">
         <CardDescription>
-          Over the past 7 days, your average daily sleep was{" "}
+          Over the past {logs.length} sessions, your average daily sleep was{" "}
           <span className="font-medium text-foreground">{avgSleep}</span> hours.
         </CardDescription>
         <CardDescription>

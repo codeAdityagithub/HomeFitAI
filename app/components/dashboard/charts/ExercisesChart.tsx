@@ -31,6 +31,7 @@ export default function ExercisesChart({
   logs: SerializeFrom<Log>[];
 }) {
   const chartData = useMemo(() => {
+    // get exercise sets from the log
     const exercises = logs.reduce(
       (acc, log) =>
         acc.concat(
@@ -38,6 +39,8 @@ export default function ExercisesChart({
         ),
       [] as { target: string; sets: number }[]
     );
+
+    // aggregate sets by target
     const count = exercises.reduce((acc, e) => {
       if (!acc[e.target]) {
         acc[e.target] = e.sets;
@@ -52,7 +55,11 @@ export default function ExercisesChart({
       sets: count,
     }));
   }, [logs]);
-
+  const mostSetsExercise = useMemo(
+    () => chartData.reduce((a, b) => (a.sets > b.sets ? a : b), chartData[0]),
+    [chartData]
+  );
+  // console.log(mostSetsExercise);
   return (
     <Card className="bg-secondary/50">
       <CardHeader className="items-start pb-4">
@@ -91,9 +98,18 @@ export default function ExercisesChart({
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none text-muted-foreground">
-          You have performed exercises for {chartData.length} different body
-          parts in the past 7 days
+        <p className="leading-4 text-muted-foreground">
+          You have performed exercises for{" "}
+          <span className="text-secondary-foreground font-medium">
+            {chartData.length}
+          </span>{" "}
+          different body parts in the past {logs.length} sessions
+        </p>
+        <div className="w-full flex gap-2 leading-4 text-muted-foreground">
+          Body part with the most sets :{" "}
+          <span className="text-secondary-foreground font-medium capitalize">
+            {mostSetsExercise.target}
+          </span>
         </div>
       </CardFooter>
     </Card>

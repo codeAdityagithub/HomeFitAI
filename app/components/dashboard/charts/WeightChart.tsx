@@ -23,8 +23,9 @@ import { SquareArrowOutUpRight } from "lucide-react";
 
 const getWeightGainMessage = (diff: number, time: number) => {
   const rate = Number((diff / time).toFixed(2));
-
-  if (rate < 0.25) {
+  if (rate === 0) {
+    return "You're succesfully maintaining your weight. Keep focusing on balanced nutrition and exercise.";
+  } else if (rate < 0.25) {
     return "You're gaining weight at a steady, healthy rate. Keep focusing on balanced nutrition and exercise.";
   } else if (rate >= 0.25 && rate < 0.5) {
     return "You're gaining weight at a steady, healthy rate. Keep focusing on balanced nutrition and exercise.";
@@ -160,9 +161,14 @@ function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
       </CardContent>
       <CardFooter className="flex-col items-start gap-1">
         <CardDescription>
-          Over the past 7 days, you have {diff < 0 ? "lost" : "gained"}{" "}
+          Over the past {logs.length} sessions, you have{" "}
+          {diff < 0 ? "lost" : diff > 0 ? "gained" : "maintained"}{" "}
           <span className="font-medium text-foreground">
-            {stats.unit === "kgcm"
+            {diff === 0
+              ? stats.unit === "kgcm"
+                ? stats.weight.toFixed(1)
+                : convertToLbs(stats.weight).toFixed(1)
+              : stats.unit === "kgcm"
               ? diff.toFixed(1)
               : convertToLbs(diff).toFixed(1)}
           </span>{" "}

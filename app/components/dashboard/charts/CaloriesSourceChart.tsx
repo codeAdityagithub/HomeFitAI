@@ -1,12 +1,5 @@
 import { Flame } from "lucide-react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Label,
-  ReferenceLine,
-  XAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
@@ -43,20 +36,41 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+function evaluateCaloriesBurned(avgCalories: number, goalCalories: number) {
+  // Compare average calories burned to goal calories
+  if (avgCalories >= goalCalories) {
+    return `Great job! You've met your daily goal by burning an average of ${avgCalories} calories per day. Keep up the good work!`;
+  } else {
+    return (
+      <span>
+        You're almost there!. Try to reach your daily goal of
+        <span className="font-medium text-secondary-foreground">
+          {" "}
+          {goalCalories}
+        </span>{" "}
+        calories to get even better results!;
+      </span>
+    );
+  }
+}
+
 export default function CaloriesSourceChart({
   logs,
 }: {
   logs: SerializeFrom<Log>[];
 }) {
   const { stats } = useDashboardLayoutData();
-  const chartData = useMemo(() => {
-    return logs
+  const { chartData, totalWeekCalories } = useMemo(() => {
+    let totalWeekCalories = 0;
+
+    const chartData = logs
       .map((log, ind) => {
         const caloriesFromSteps = Math.floor(
           stepsToCal(stats.height, stats.weight, log.steps)
         );
         const totalCalories =
           log.totalCalories + (ind === 0 ? caloriesFromSteps : 0);
+        totalWeekCalories += totalCalories;
         return {
           date: log.date,
           steps: caloriesFromSteps,
@@ -65,6 +79,7 @@ export default function CaloriesSourceChart({
         };
       })
       .reverse();
+    return { chartData, totalWeekCalories };
   }, [logs, stats]);
   const avgCalories = useMemo(
     () =>
@@ -156,7 +171,7 @@ export default function CaloriesSourceChart({
               fill="var(--color-exercise)"
               radius={[4, 4, 0, 0]}
             />
-            <ReferenceLine
+            {/* <ReferenceLine
               y={stats.dailyGoals.calories}
               stroke="hsl(var(--muted-foreground))"
               strokeDasharray="3 3"
@@ -176,24 +191,35 @@ export default function CaloriesSourceChart({
                 offset={10}
                 startOffset={100}
               />
-            </ReferenceLine>
+            </ReferenceLine> */}
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium text-muted-foreground leading-none">
+        <div className="flex gap-2 text-muted-foreground leading-4">
           <p>
             Average Calorie Expenditure was{" "}
-            <span className="text-secondary-foreground">
+            <span className="text-secondary-foreground font-medium">
               {avgCalories} kcal
             </span>{" "}
-            last week.
+            in the past {logs.length} sessions.
           </p>
-          <Flame className="h-4 w-4 text-primary" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing calorie expenditure for the last 7 days
+        <div className="flex gap-2 text-muted-foreground leading-4">
+          <p>
+            Total Calories Burned :{" "}
+            <span className="text-secondary-foreground inline-flex w-fit gap-1 font-medium">
+              {totalWeekCalories} kcal
+              <Flame className="h-4 w-4 text-primary" />
+            </span>
+          </p>
         </div>
+        <p className="text-muted-foreground">
+          {evaluateCaloriesBurned(
+            Number(avgCalories),
+            stats.dailyGoals.calories
+          )}
+        </p>
       </CardFooter>
     </Card>
   );
