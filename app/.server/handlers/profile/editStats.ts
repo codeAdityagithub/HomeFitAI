@@ -1,5 +1,6 @@
 import { STATS_CONSTANTS } from "@/lib/constants";
 import db from "@/utils/db.server";
+import { ratelimitId } from "@/utils/ratelimit/ratelimit.server";
 import { json } from "@remix-run/node";
 import { z } from "zod";
 
@@ -43,6 +44,14 @@ export async function editStats(input: {
   const { data, error } = schema.safeParse(input);
   if (error) return json({ error: "Invalid Values." }, { status: 403 });
   try {
+    const { tries_left } = await ratelimitId("userStat", data.userId, 60, 8);
+
+    if (tries_left === 0)
+      return json(
+        { error: "Too many attempts try again later." },
+        { status: 429 }
+      );
+
     await db.stats.update({
       where: { userId: data.userId },
       data: { [data.stat]: data.value },

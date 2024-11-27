@@ -23,6 +23,10 @@ const chartConfig = {
     label: "Sets",
     color: "hsl(var(--primary))",
   },
+  duration: {
+    label: "Minutes",
+    color: "hsl(var(--accent))",
+  },
 } satisfies ChartConfig;
 
 export default function ExercisesChart({
@@ -35,31 +39,46 @@ export default function ExercisesChart({
     const exercises = logs.reduce(
       (acc, log) =>
         acc.concat(
-          log.exercises.map((e) => ({ target: e.target, sets: e.sets.length }))
+          log.exercises.map((e) => ({
+            target: e.target,
+            sets: e.sets.length,
+            duration: e.target === "cardio" ? e.duration : undefined,
+          }))
         ),
-      [] as { target: string; sets: number }[]
+      [] as { target: string; sets: number; duration?: number }[]
     );
 
     // aggregate sets by target
     const count = exercises.reduce((acc, e) => {
       if (!acc[e.target]) {
-        acc[e.target] = e.sets;
+        if (e.duration) acc[e.target] = e.duration;
+        else acc[e.target] = e.sets;
       } else {
-        acc[e.target] += e.sets;
+        if (e.duration) acc[e.target] += e.duration;
+        else acc[e.target] += e.sets;
       }
       return acc;
     }, {} as { [target: string]: number });
 
-    return Object.entries(count).map(([target, count]) => ({
-      target,
-      sets: count,
-    }));
+    return Object.entries(count).map(([target, count]) => {
+      if (target === "cardio") return { target, duration: count / 2 };
+      return { target, sets: count };
+    });
   }, [logs]);
   const mostSetsExercise = useMemo(
-    () => chartData.reduce((a, b) => (a.sets > b.sets ? a : b), chartData[0]),
+    () =>
+      chartData.reduce(
+        (a, b) =>
+          !a.sets || !b.sets
+            ? { target: "", sets: -1 }
+            : a.sets > b.sets
+            ? a
+            : b,
+        chartData[0]
+      ),
     [chartData]
   );
-  // console.log(mostSetsExercise);
+
   return (
     <Card className="bg-secondary/50">
       <CardHeader className="items-start pb-4">
@@ -78,7 +97,27 @@ export default function ExercisesChart({
           <RadarChart data={chartData}>
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent />}
+              content={
+                <ChartTooltipContent
+                  formatter={(value, name, item, index) => {
+                    // console.log(value);
+                    return (
+                      <>
+                        <div className="flex w-full items-center text-xs text-muted-foreground">
+                          {chartConfig[name as keyof typeof chartConfig]
+                            ?.label || name}
+                          <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
+                            {
+                              // @ts-expect-error
+                              name === "sets" ? value : (value * 2).toFixed(1)
+                            }
+                          </div>
+                        </div>
+                      </>
+                    );
+                  }}
+                />
+              }
             />
             <PolarGrid
               gridType="circle"
@@ -88,6 +127,15 @@ export default function ExercisesChart({
             <Radar
               dataKey="sets"
               fill="var(--color-sets)"
+              fillOpacity={0.6}
+              dot={{
+                r: 4,
+                fillOpacity: 1,
+              }}
+            />
+            <Radar
+              dataKey="duration"
+              fill="var(--color-duration)"
               fillOpacity={0.6}
               dot={{
                 r: 4,

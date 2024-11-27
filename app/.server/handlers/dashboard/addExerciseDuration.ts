@@ -1,6 +1,7 @@
 import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { caloriePerMin, stepsToCal } from "@/utils/general";
+import { ratelimitId } from "@/utils/ratelimit/ratelimit.server";
 import { json } from "@remix-run/node";
 import { z } from "zod";
 import { dailyGoalText } from "./editTodaysLog";
@@ -17,6 +18,13 @@ export async function addExercseDuration(input: z.infer<typeof schema>) {
   const { data, error } = schema.safeParse(input);
   if (error) return json({ error: error.message }, { status: 403 });
   try {
+    const { tries_left } = await ratelimitId("logCalories", data.userId, 60, 5);
+
+    if (tries_left === 0)
+      return json(
+        { error: "Too many attempts try again later." },
+        { status: 429 }
+      );
     const eId = data.exerciseId;
     const exercise = exercises.find((e) => e.id === eId);
     if (!exercise)

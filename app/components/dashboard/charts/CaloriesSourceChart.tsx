@@ -212,6 +212,7 @@ export default function CaloriesSourceChart({
               {totalWeekCalories} kcal
               <Flame className="h-4 w-4 text-primary" />
             </span>
+            in past {logs.length} sessions
           </p>
         </div>
         <p className="text-muted-foreground">

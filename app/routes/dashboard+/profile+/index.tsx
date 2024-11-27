@@ -64,6 +64,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 };
 
+export type ProfileAction = typeof action;
+
 export { clientLoader } from "@/utils/routeCache.client";
 export const clientAction = ({
   serverAction,

@@ -1,8 +1,10 @@
+import { useToast } from "@/hooks/use-toast";
 import useLongPress from "@/hooks/useLongPress";
+import { ProfileAction } from "@/routes/dashboard+/profile+";
 import { DailyGoals } from "@prisma/client";
 import { useFetcher } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import { Button } from "../ui/button";
 
@@ -23,7 +25,7 @@ const EditGoalForm = ({
   text: string;
   unit: string;
 }) => {
-  const fetcher = useFetcher<any>();
+  const fetcher = useFetcher<ProfileAction>();
   const [value, setValue] = useState(init);
   const disabled = fetcher.state !== "idle" || value === init;
 
@@ -55,6 +57,18 @@ const EditGoalForm = ({
   //     });
   //   }
   // }, [fetcher.data]);
+  const { toast } = useToast();
+  useEffect(() => {
+    // @ts-expect-error
+    if (fetcher.data?.error) {
+      toast({
+        // @ts-expect-error
+        description: fetcher.data.error,
+        variant: "destructive",
+      });
+    }
+  }, [fetcher.data]);
+
   return (
     <form
       onSubmit={handleSubmit}

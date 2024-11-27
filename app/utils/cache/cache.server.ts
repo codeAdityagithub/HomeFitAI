@@ -1,4 +1,4 @@
-import { deleteCache, getCache, setCache } from "./redis.server";
+import { deleteCache, getCache, setCache } from "../redis/redis.server";
 
 type Options<TArgs extends any[]> = {
   revalidateAfter?: number;

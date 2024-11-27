@@ -1,18 +1,23 @@
-import { useFetcher, useNavigation } from "@remix-run/react";
-import { Minus, Plus } from "lucide-react";
-import { Button } from "../ui/button";
-import { useEffect, useMemo, useState } from "react";
-import { Unit } from "@prisma/client";
-import { convertToCm, convertToFeetInches } from "@/lib/utils";
-import CountUp from "react-countup";
+import { useToast } from "@/hooks/use-toast";
 import useLongPress from "@/hooks/useLongPress";
+import { convertToCm, convertToFeetInches } from "@/lib/utils";
+import { ProfileAction } from "@/routes/dashboard+/profile+";
 import { constants } from "@/utils/detailsPage/zodConstants";
+import { Unit } from "@prisma/client";
+import { useFetcher } from "@remix-run/react";
+import { Minus, Plus } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import CountUp from "react-countup";
+import { Button } from "../ui/button";
 
 const EditHeightForm = ({ init, unit }: { init: number; unit: Unit }) => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<ProfileAction>();
   const [value, setValue] = useState(init);
   const [other, setOther] = useState(convertToFeetInches(init));
   const otherInit = useMemo(() => convertToFeetInches(init), [init]);
+
+  const { toast } = useToast();
+
   const min = 100,
     max = constants.MAX_HEIGHT;
   const disabled =
@@ -59,6 +64,18 @@ const EditHeightForm = ({ init, unit }: { init: number; unit: Unit }) => {
       }
     );
   }
+
+  useEffect(() => {
+    // @ts-expect-error
+    if (fetcher.data?.error) {
+      toast({
+        // @ts-expect-error
+        description: fetcher.data.error,
+        variant: "destructive",
+      });
+    }
+  }, [fetcher.data]);
+
   return (
     <form
       onSubmit={handleSubmit}

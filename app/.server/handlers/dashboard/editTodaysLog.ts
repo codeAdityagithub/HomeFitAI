@@ -1,6 +1,7 @@
 import { LOG_CONSTANTS } from "@/lib/constants";
 import db from "@/utils/db.server";
 import { stepsToCal } from "@/utils/general";
+import { ratelimitId } from "@/utils/ratelimit/ratelimit.server";
 import { DailyGoals, GroupMessageContent } from "@prisma/client";
 import { json } from "@remix-run/node";
 import { z } from "zod";
@@ -62,6 +63,14 @@ export async function editTodaysLog(input: z.infer<typeof schema>) {
   const { data, error } = schema.safeParse(input);
   if (error) return json({ error: error.message }, { status: 403 });
   try {
+    const { tries_left } = await ratelimitId(data.type, data.userId, 60, 5);
+
+    if (tries_left === 0)
+      return json(
+        { error: "Too many attempts try again later." },
+        { status: 429 }
+      );
+
     const updatedLog = await db.log.update({
       where: { userId: data.userId, id: data.logId },
       data: { [data.type]: data.value },

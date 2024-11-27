@@ -6,6 +6,8 @@ import { Unit } from "@prisma/client";
 import { convertToKg, convertToLbs } from "@/lib/utils";
 import useLongPress from "@/hooks/useLongPress";
 import { constants } from "@/utils/detailsPage/zodConstants";
+import { ProfileAction } from "@/routes/dashboard+/profile+";
+import { useToast } from "@/hooks/use-toast";
 
 const EditWeightForm = ({
   init,
@@ -16,7 +18,7 @@ const EditWeightForm = ({
   unit: Unit;
   type: "Weight" | "Goal Weight";
 }) => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<ProfileAction>();
   const [value, setValue] = useState(init);
   const [other, setOther] = useState(convertToLbs(init));
   const min = constants.MIN_AGE,
@@ -54,6 +56,18 @@ const EditWeightForm = ({
       }
     );
   }
+  const { toast } = useToast();
+  useEffect(() => {
+    // @ts-expect-error
+    if (fetcher.data?.error) {
+      toast({
+        // @ts-expect-error
+        description: fetcher.data.error,
+        variant: "destructive",
+      });
+    }
+  }, [fetcher.data]);
+
   return (
     <form
       onSubmit={handleSubmit}

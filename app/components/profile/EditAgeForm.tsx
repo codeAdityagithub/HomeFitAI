@@ -1,11 +1,13 @@
+import { useToast } from "@/hooks/use-toast";
+import { ProfileAction } from "@/routes/dashboard+/profile+";
 import { constants } from "@/utils/detailsPage/zodConstants";
 import { useFetcher } from "@remix-run/react";
 import { Minus, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
 const EditAgeForm = ({ init }: { init: number }) => {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<ProfileAction>();
   const [value, setValue] = useState(init);
   const min = constants.MIN_AGE,
     max = constants.MAX_AGE;
@@ -26,6 +28,18 @@ const EditAgeForm = ({ init }: { init: number }) => {
       }
     );
   }
+  const { toast } = useToast();
+  useEffect(() => {
+    // @ts-expect-error
+    if (fetcher.data?.error) {
+      toast({
+        // @ts-expect-error
+        description: fetcher.data.error,
+        variant: "destructive",
+      });
+    }
+  }, [fetcher.data]);
+
   return (
     <form
       onSubmit={handleSubmit}

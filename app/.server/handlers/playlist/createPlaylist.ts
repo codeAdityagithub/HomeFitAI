@@ -1,6 +1,7 @@
 import { PLAYLIST_CONSTANTS } from "@/lib/constants";
 import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
+import { ratelimitId } from "@/utils/ratelimit/ratelimit.server";
 import { json, redirect } from "@remix-run/node";
 import { z } from "zod";
 
@@ -41,6 +42,14 @@ export const createPlaylist = async (props: z.infer<typeof playlistSchema>) => {
     return json({ error: error.flatten().fieldErrors }, { status: 403 });
 
   try {
+    const { tries_left } = await ratelimitId("PLcreate", data.userId, 60, 2);
+
+    if (tries_left === 0)
+      return json(
+        { error: "Too many attempts try again later." },
+        { status: 429 }
+      );
+
     const count = await db.playlist.count({ where: { userId: data.userId } });
     if (count >= PLAYLIST_CONSTANTS.max_playlists)
       return json(

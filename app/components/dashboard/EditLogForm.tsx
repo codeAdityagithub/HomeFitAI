@@ -96,6 +96,14 @@ const EditLogForm = ({
         variant: "success",
       });
     }
+    // @ts-expect-error
+    if (fetcher.data?.error) {
+      toast({
+        // @ts-expect-error
+        description: fetcher.data.error,
+        variant: "destructive",
+      });
+    }
   }, [fetcher.data, stats, log]);
 
   return (

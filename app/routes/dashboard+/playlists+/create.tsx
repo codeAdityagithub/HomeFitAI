@@ -141,12 +141,12 @@ const CreatePlaylist = () => {
   useEffect(() => {
     if (actionData?.error && typeof actionData.error === "string") {
       toast({
-        title: actionData.error,
+        description: actionData.error,
         variant: "destructive",
       });
     } else if (actionData?.error && typeof actionData.error === "object") {
       toast({
-        title: actionData.error.name
+        description: actionData.error.name
           ? actionData.error.name[0]
           : actionData.error.exercises
           ? actionData.error.exercises[0]

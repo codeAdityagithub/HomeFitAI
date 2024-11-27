@@ -3,6 +3,7 @@ import { commitSession, getSession } from "@/services/session.server";
 import db from "@/utils/db.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { caloriePerMin, stepsToCal } from "@/utils/general";
+import { ratelimitId } from "@/utils/ratelimit/ratelimit.server";
 import { AchievementType } from "@prisma/client";
 import { json } from "@remix-run/node";
 import { z } from "zod";
@@ -40,6 +41,14 @@ export async function addWorkout(input: z.infer<typeof schema>) {
   if (error) return json({ error: error.message }, { status: 403 });
 
   try {
+    const { tries_left } = await ratelimitId("workoutAdd", data.userId, 60, 5);
+
+    if (tries_left === 0)
+      return json(
+        { error: "Too many attempts try again later." },
+        { status: 429 }
+      );
+
     const eId = data.exerciseId;
 
     const exercise = exercises.find((e) => e.id === eId);

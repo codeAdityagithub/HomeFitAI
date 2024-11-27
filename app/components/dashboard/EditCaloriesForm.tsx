@@ -40,6 +40,11 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
       setMessage(fetcher.data.message);
       setTimeout(() => setMessage(""), 2000);
       resetFetcher(fetcher);
+    } else if (fetcher.data?.error) {
+      toast({
+        description: fetcher.data.error,
+        variant: "destructive",
+      });
     }
     if (
       fetcher.data &&
