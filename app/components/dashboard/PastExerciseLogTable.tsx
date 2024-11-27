@@ -76,9 +76,11 @@ function PastExerciseTable({ logs }: { logs: SerializeFrom<Log>[] }) {
           </Label>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-4 max-h-[150vh] overflow-auto ver_scroll">
         <Table>
-          <TableCaption>List of exercises you performed today</TableCaption>
+          <TableCaption>
+            List of exercises you performed in the past.
+          </TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="">Name</TableHead>

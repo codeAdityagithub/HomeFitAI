@@ -7,6 +7,7 @@ import WeightChart from "@/components/dashboard/charts/WeightChart";
 import ExerciseTable from "@/components/dashboard/ExerciseTable";
 import PastExerciseTable from "@/components/dashboard/PastExerciseLogTable";
 import TodaysLogs from "@/components/dashboard/TodaysLogs";
+import ToggleView from "@/components/dashboard/ToggleView";
 import {
   Card,
   CardContent,
@@ -28,33 +29,39 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
 
   const date = new Date();
-  // date.setDate(date.getDate() - 1);
+  const view = new URL(request.url).searchParams.get("view") || "week";
 
-  let logs = await db.log.findMany({
-    where: { date: { lt: date }, userId: user.id },
-    orderBy: { date: "desc" },
-    take: 7,
-  });
+  const take = view === "week" ? 7 : 30;
 
-  if (logs[0].date.getDate() !== new Date().getDate()) {
-    // sleep 1 sec
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // console.log("error");
-    logs = await db.log.findMany({
+  try {
+    let logs = await db.log.findMany({
       where: { date: { lt: date }, userId: user.id },
       orderBy: { date: "desc" },
-      take: 7,
+      take,
     });
-  }
 
-  return json(
-    { logs: logs.slice(1), user },
-    {
-      headers: {
-        "Cache-Control": "max-age=3600",
-      },
+    if (logs[0].date.getDate() !== new Date().getDate()) {
+      // sleep 1 sec
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // console.log("error");
+      logs = await db.log.findMany({
+        where: { date: { lt: date }, userId: user.id },
+        orderBy: { date: "desc" },
+        take,
+      });
     }
-  );
+
+    return json(
+      { logs: logs.slice(1), user },
+      {
+        headers: {
+          "Cache-Control": "max-age=3600",
+        },
+      }
+    );
+  } catch (error) {
+    throw json({ error: "Something went wrong" }, { status: 500 });
+  }
 };
 
 export type DashboardData = SerializeFrom<typeof loader>;
@@ -148,6 +155,7 @@ export default function Dashboard() {
           </CardContent>
         </Card> */}
       </div>
+      <ToggleView />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 mmd:grid-cols-2 2xl:grid-cols-3 gap-6">
         <WeightChart logs={logs} />
         <StepsChart logs={logs} />

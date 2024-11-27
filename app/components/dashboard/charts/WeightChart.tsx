@@ -21,18 +21,28 @@ import { SerializeFrom } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { SquareArrowOutUpRight } from "lucide-react";
 
-const getWeightGainMessage = (diff: number, time: number) => {
+const getWeightChangeMessage = (diff: number, time: number) => {
   const rate = Number((diff / time).toFixed(2));
+
   if (rate === 0) {
-    return "You're succesfully maintaining your weight. Keep focusing on balanced nutrition and exercise.";
-  } else if (rate < 0.25) {
-    return "You're gaining weight at a steady, healthy rate. Keep focusing on balanced nutrition and exercise.";
-  } else if (rate >= 0.25 && rate < 0.5) {
-    return "You're gaining weight at a steady, healthy rate. Keep focusing on balanced nutrition and exercise.";
-  } else if (rate >= 0.5 && rate < 1) {
-    return "You're gaining weight a bit quickly. Consider adjusting your diet and activity levels to maintain balance.";
-  } else if (rate >= 1) {
-    return "You're gaining weight too fast. It may be helpful to review your eating habits and increase physical activity.";
+    return "You're successfully maintaining your weight. Keep focusing on balanced nutrition and exercise.";
+  } else if (rate > 0) {
+    if (rate < 0.25) {
+      return "You're gaining weight at a steady, healthy rate. Keep focusing on balanced nutrition and exercise.";
+    } else if (rate < 0.5) {
+      return "You're gaining weight a bit quickly. Consider adjusting your diet and activity levels to maintain balance.";
+    } else {
+      return "You're gaining weight too fast. It may be helpful to review your eating habits and increase physical activity.";
+    }
+  } else {
+    const lossRate = Math.abs(rate);
+    if (lossRate < 0.25) {
+      return "You're losing weight at a steady, healthy rate. Keep focusing on balanced nutrition and exercise.";
+    } else if (lossRate < 0.5) {
+      return "You're losing weight a bit quickly. Ensure you're consuming enough nutrients and consider consulting a professional if unsure.";
+    } else {
+      return "You're losing weight too fast. This could be unhealthy. Please review your diet and activity levels, and seek professional advice if necessary.";
+    }
   }
 };
 function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
@@ -175,7 +185,7 @@ function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
           {stats.unit === "kgcm" ? "kg" : "lbs"}.
         </CardDescription>
         <CardDescription>
-          {getWeightGainMessage(diff, logs.length + 1)}
+          {getWeightChangeMessage(diff, logs.length + 1)}
         </CardDescription>
       </CardFooter>
     </Card>

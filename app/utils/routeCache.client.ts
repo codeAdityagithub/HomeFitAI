@@ -13,8 +13,10 @@ const clientLoader = async ({
   request,
   serverLoader,
 }: ClientLoaderFunctionArgs) => {
-  const key = new URL(request.url).pathname;
+  const url = new URL(request.url);
+  const key = url.pathname + url.search;
   if (cache.has(key)) return cache.get(key);
+  console.log(key);
   const data = await serverLoader();
   if (data) cache.set(key, data);
   return data;
