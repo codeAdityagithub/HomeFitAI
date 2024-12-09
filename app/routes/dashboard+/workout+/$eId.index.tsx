@@ -3,7 +3,7 @@ import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { caloriePerMin, capitalizeEachWord } from "@/utils/general";
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json, MetaFunction, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
@@ -28,6 +28,23 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     }modestbranding=1&showinfo=0&rel=0`,
   };
   return { exercise: exerciseWithVideo };
+};
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const exercise = data?.exercise; // Assuming you pass exercise data from your loader
+
+  return [
+    { title: `${exercise?.name} - Exercise Details | HomeFitAI` },
+    { property: "og:title", content: `${exercise?.name} - HomeFitAI` },
+    {
+      name: "description",
+      content: `Learn how to perform the ${exercise?.name} exercise with detailed instructions and best youtube tutorials on HomeFitAI.`,
+    },
+    {
+      property: "og:description",
+      content: `Discover the full guide to ${exercise?.name}, including step-by-step instructions and tips for best results.`,
+    },
+  ];
 };
 
 const ExercisePage = () => {

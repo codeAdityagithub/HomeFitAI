@@ -3,7 +3,11 @@ import ExerciseCard from "@/components/workout/ExerciseCard";
 import { getImageFromVideoId } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
-import { redirect, type LoaderFunctionArgs } from "@remix-run/node";
+import {
+  MetaFunction,
+  redirect,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -24,6 +28,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }));
 
   return { filtered, query };
+};
+
+export const meta: MetaFunction = ({ location }) => {
+  const searchQuery = new URLSearchParams(location.search).get("query")?.trim();
+  return [
+    {
+      title: `Search results for "${searchQuery}"`,
+    },
+  ];
 };
 
 const WorkoutSearchPage = () => {

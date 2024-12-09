@@ -4,9 +4,29 @@ import CreateGroupPage from "@/components/social/CreateGroupPage";
 import GroupRoute from "@/components/social/GroupRoute";
 import { requireUser } from "@/utils/auth/auth.server";
 import { deleteKey } from "@/utils/routeCache.client";
-import { ActionFunctionArgs, type LoaderFunctionArgs } from "@remix-run/node";
+import {
+  ActionFunctionArgs,
+  MetaFunction,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
 import { useLoaderData, useRevalidator } from "@remix-run/react";
 import { useEffect } from "react";
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [
+    {
+      title: `${
+        data?.group?.name ?? "Social Groups"
+      } - Connect & Share | HomeFitAI`,
+    },
+    { property: "og:title", content: "Join Fitness Social Groups" },
+    {
+      name: "description",
+      content:
+        "Join fitness social groups, share progress, and motivate others in the HomeFitAI community.",
+    },
+  ];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, { failureRedirect: "/login" });

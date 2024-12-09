@@ -4,8 +4,20 @@ import { Button } from "@/components/ui/button";
 import { requireUser } from "@/utils/auth/auth.server";
 import { type PlaylistId } from "@/utils/exercises/playlists.server";
 import { capitalizeFirstLetter } from "@/utils/general";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Workout Playlists - Beginner to Advanced | HomeFitAI" },
+    { property: "og:title", content: "Workout Playlists for All Levels" },
+    {
+      name: "description",
+      content:
+        "Browse curated playlists for all fitness levels: beginner, intermediate, and advanced. Start your journey with HomeFitAI.",
+    },
+  ];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {

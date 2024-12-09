@@ -4,9 +4,25 @@ import GroupInfoCard from "@/components/social/GroupInfoCard";
 import JoinGroupPage from "@/components/social/JoinGroupPage";
 import { useToast } from "@/hooks/use-toast";
 import { requireUser } from "@/utils/auth/auth.server";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Join a Fitness Group - Connect & Collaborate | HomeFitAI" },
+    { property: "og:title", content: "Join a Fitness Group - HomeFitAI" },
+    {
+      name: "description",
+      content:
+        "Find and join fitness groups that match your goals. Collaborate with like-minded individuals and stay motivated with HomeFitAI.",
+    },
+  ];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) =>
   await joinGroupLoader(request);

@@ -19,9 +19,25 @@ import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { cn } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
-import type { LoaderFunctionArgs, SerializeFrom } from "@remix-run/node";
+import type {
+  LoaderFunctionArgs,
+  MetaFunction,
+  SerializeFrom,
+} from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 import { IoMdFlame } from "react-icons/io";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Dashboard - Today's Logs & Progress | HomeFitAI" },
+    { property: "og:title", content: "Dashboard - Today's Progress" },
+    {
+      name: "description",
+      content:
+        "View your daily fitness logs, track progress with graphs, and analyze your workout history in tables on your HomeFitAI dashboard.",
+    },
+  ];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {

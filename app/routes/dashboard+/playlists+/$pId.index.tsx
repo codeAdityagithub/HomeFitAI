@@ -13,6 +13,7 @@ import { deleteKey } from "@/utils/routeCache.client";
 import {
   ActionFunctionArgs,
   json,
+  MetaFunction,
   type LoaderFunctionArgs,
 } from "@remix-run/node";
 import {
@@ -42,6 +43,27 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     return { ...(await getDefaultPlaylist(pId)), isDefault: true };
   }
 };
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const playlist = data; // Assuming the playlist data is passed through the loader
+
+  return [
+    { title: `${playlist?.playlistName} - Playlist Details | HomeFitAI` },
+    {
+      property: "og:title",
+      content: `${playlist?.playlistName} Playlist - HomeFitAI`,
+    },
+    {
+      name: "description",
+      content: `Explore the ${playlist?.playlistName} playlist, featuring a selection of exercises tailored to your fitness goals. Get detailed workout instructions and tips on HomeFitAI.`,
+    },
+    {
+      property: "og:description",
+      content: `Check out the ${playlist?.playlistName} playlist, with exercises designed for all fitness levels. Stay motivated and improve your workout with HomeFitAI.`,
+    },
+    { name: "og:image", content: playlist?.allExercises[0].imageUrl }, // Optional: if playlist has an image URL
+  ];
+};
+
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await requireUser(request, { failureRedirect: "/login" });
   const pId = params.pId;

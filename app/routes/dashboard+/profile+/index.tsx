@@ -13,7 +13,11 @@ import { authenticator } from "@/services/auth.server";
 import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
 import { cacheClientAction } from "@/utils/routeCache.client";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import {
   ClientActionFunctionArgs,
   json,
@@ -21,6 +25,18 @@ import {
 } from "@remix-run/react";
 import { DateTime } from "luxon";
 import { IoPersonOutline } from "react-icons/io5";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Profile & Settings - Manage Your Account | HomeFitAI" },
+    { property: "og:title", content: "Manage Your HomeFitAI Profile" },
+    {
+      name: "description",
+      content:
+        "Update your personal details, preferences, and fitness goals. Manage your HomeFitAI profile settings effortlessly.",
+    },
+  ];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request, {

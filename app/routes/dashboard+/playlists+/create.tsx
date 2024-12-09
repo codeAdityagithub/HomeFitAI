@@ -12,7 +12,11 @@ import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { groupBy } from "@/utils/general";
 import { deleteKey } from "@/utils/routeCache.client";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import {
   ClientActionFunctionArgs,
   useActionData,
@@ -37,6 +41,26 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     secondaryMuscles: e.secondaryMuscles,
   }));
   return { exercises: filtered };
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Create a Playlist - Customize Your Workout | HomeFitAI" },
+    {
+      property: "og:title",
+      content: "Create Your Workout Playlist - HomeFitAI",
+    },
+    {
+      name: "description",
+      content:
+        "Create your personalized workout playlist by selecting exercises that suit your fitness level and goals with HomeFitAI.",
+    },
+    {
+      property: "og:description",
+      content:
+        "Build and customize your workout playlist to stay motivated and reach your fitness goals with HomeFitAI.",
+    },
+  ];
 };
 
 export { clientLoader } from "@/utils/routeCache.client";

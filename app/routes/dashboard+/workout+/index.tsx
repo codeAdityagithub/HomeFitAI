@@ -8,7 +8,7 @@ import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
 import { capitalizeFirstLetter } from "@/utils/general";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   json,
   Link,
@@ -25,6 +25,19 @@ export type DashboardExercise = {
   equipment: string;
   secondaryMuscles: string[];
 };
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Workouts - HomeFitAI" },
+    { property: "og:title", content: "Explore Workouts & Playlists" },
+    {
+      name: "description",
+      content:
+        "Explore categorized workouts and featured playlists. Find exercises tailored to your fitness level and goals.",
+    },
+  ];
+};
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireUser(request, { failureRedirect: "/login" });
   const filtered: DashboardExercise[] = exercises.map((e) => ({

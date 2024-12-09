@@ -1,6 +1,6 @@
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises, { Exercise } from "@/utils/exercises/exercises.server";
-import type { ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   ClientLoaderFunctionArgs,
   isRouteErrorResponse,
@@ -91,6 +91,25 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       equipment: exercise.equipment,
     },
   };
+};
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const exercise = data?.exercise; // Assuming the exercise data is passed through the loader
+
+  return [
+    { title: `${exercise?.name} - Exercise Detection | HomeFitAI` },
+    {
+      property: "og:title",
+      content: `${exercise?.name} Detection - HomeFitAI`,
+    },
+    {
+      name: "description",
+      content: `Track and analyze your performance for the ${exercise?.name} with real-time detection and insights on HomeFitAI.`,
+    },
+    {
+      property: "og:description",
+      content: `Learn how HomeFitAI detects your ${exercise?.name} movements and provides performance metrics and feedback.`,
+    },
+  ];
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
