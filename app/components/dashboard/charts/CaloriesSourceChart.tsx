@@ -18,6 +18,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { cn } from "@/lib/utils";
 import { stepsToCal } from "@/utils/general";
 import { Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
@@ -84,7 +85,8 @@ export default function CaloriesSourceChart({
   const avgCalories = useMemo(
     () =>
       (
-        logs.reduce((acc, log) => acc + log.totalCalories, 0) / logs.length
+        logs.reduce((acc, log) => acc + log.totalCalories, 0) /
+        (logs.length || 1)
       ).toFixed(1),
     [logs]
   );
@@ -215,7 +217,7 @@ export default function CaloriesSourceChart({
             in past {logs.length} sessions
           </p>
         </div>
-        <p className="text-muted-foreground">
+        <p className={cn(logs.length < 2 ? "hidden" : "text-muted-foreground")}>
           {evaluateCaloriesBurned(
             Number(avgCalories),
             stats.dailyGoals.calories

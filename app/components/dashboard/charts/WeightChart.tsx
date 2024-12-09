@@ -15,7 +15,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
-import { convertToLbs } from "@/lib/utils";
+import { cn, convertToLbs } from "@/lib/utils";
 import { Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
 import { Link } from "@remix-run/react";
@@ -47,7 +47,8 @@ const getWeightChangeMessage = (diff: number, time: number) => {
 };
 function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const { stats } = useDashboardLayoutData();
-  const diff = stats.weight - logs[logs.length - 1].weight;
+  const diff =
+    logs.length === 0 ? 0 : stats.weight - logs[logs.length - 1].weight;
   return (
     <Card className="flex flex-col bg-secondary/50">
       <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2 relative [&>div]:flex-1">
@@ -184,7 +185,7 @@ function WeightChart({ logs }: { logs: SerializeFrom<Log>[] }) {
           </span>{" "}
           {stats.unit === "kgcm" ? "kg" : "lbs"}.
         </CardDescription>
-        <CardDescription>
+        <CardDescription className={cn(logs.length < 2 ? "hidden" : "")}>
           {getWeightChangeMessage(diff, logs.length + 1)}
         </CardDescription>
       </CardFooter>

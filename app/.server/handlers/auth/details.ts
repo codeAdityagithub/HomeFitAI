@@ -24,7 +24,13 @@ export async function createUserDetails(request: Request, user: AuthUser) {
   try {
     const [createdStats, updatedUser] = await db.$transaction([
       db.stats.create({
-        data: { ...stats, user: { connect: { id: user.id } }, dailyGoals: {} },
+        data: {
+          ...stats,
+          user: { connect: { id: user.id } },
+          dailyGoals: {},
+          currentStreak: 1,
+          bestStreak: 1,
+        },
       }),
       db.user.update({
         where: { id: user.id },

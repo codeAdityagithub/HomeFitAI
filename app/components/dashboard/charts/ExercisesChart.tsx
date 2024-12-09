@@ -14,6 +14,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
 import { Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
 import { useMemo } from "react";
@@ -47,7 +48,6 @@ export default function ExercisesChart({
         ),
       [] as { target: string; sets: number; duration?: number }[]
     );
-
     // aggregate sets by target
     const count = exercises.reduce((acc, e) => {
       if (!acc[e.target]) {
@@ -65,13 +65,14 @@ export default function ExercisesChart({
       return { target, sets: count };
     });
   }, [logs]);
+
   const mostSetsExercise = useMemo(
     () =>
       chartData.reduce(
         (a, b) =>
-          !a.sets || !b.sets
+          !a?.sets || !b.sets
             ? { target: "", sets: -1 }
-            : a.sets > b.sets
+            : a?.sets > b.sets
             ? a
             : b,
         chartData[0]
@@ -153,10 +154,16 @@ export default function ExercisesChart({
           </span>{" "}
           different body parts in the past {logs.length} sessions
         </p>
-        <div className="w-full flex gap-2 leading-4 text-muted-foreground">
+        <div
+          className={cn(
+            logs.length < 2
+              ? "hidden"
+              : "w-full flex gap-2 leading-4 text-muted-foreground"
+          )}
+        >
           Body part with the most sets :{" "}
           <span className="text-secondary-foreground font-medium capitalize">
-            {mostSetsExercise.target}
+            {mostSetsExercise?.target}
           </span>
         </div>
       </CardFooter>

@@ -12,6 +12,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { cn } from "@/lib/utils";
 import { Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
 import { Area, AreaChart, Label, ReferenceLine, XAxis, YAxis } from "recharts";
@@ -19,7 +20,9 @@ import { Area, AreaChart, Label, ReferenceLine, XAxis, YAxis } from "recharts";
 function SleepChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const { log, stats } = useDashboardLayoutData();
   const avgSleep = Number(
-    (logs.reduce((sum, log) => sum + log.sleep, 0) / logs.length).toFixed(1)
+    (
+      logs.reduce((sum, log) => sum + log.sleep, 0) / (logs.length || 1)
+    ).toFixed(1)
   );
   return (
     <Card
@@ -149,7 +152,7 @@ function SleepChart({ logs }: { logs: SerializeFrom<Log>[] }) {
           Over the past {logs.length} sessions, your average daily sleep was{" "}
           <span className="font-medium text-foreground">{avgSleep}</span> hours.
         </CardDescription>
-        <CardDescription>
+        <CardDescription className={cn(logs.length < 2 ? "hidden" : "")}>
           {avgSleep < 7 &&
             "You're not getting enough rest! Aim for at least 7 hours of sleep to recharge properly."}
           {avgSleep >= 7 &&

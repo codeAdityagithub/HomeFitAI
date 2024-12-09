@@ -22,6 +22,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Popover, PopoverContent } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { Log } from "@prisma/client";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { SerializeFrom } from "@remix-run/node";
@@ -72,12 +73,14 @@ export default function ExerciseDurationChart({
 
     return {
       chartData,
-      avgDuration: (totalDuration / totalSession).toFixed(1),
-      avgExercises: Math.round(totalExercises / totalSession),
+      avgDuration:
+        totalSession === 0 ? "0" : (totalDuration / totalSession).toFixed(1),
+      avgExercises:
+        totalSession === 0 ? 0 : Math.round(totalExercises / totalSession),
       totalSession,
     };
   }, [logs]);
-
+  // console.log(totalSession, avgDuration, avgExercises, chartData);
   return (
     <Card className="lg:max-w-md bg-secondary/50">
       <CardHeader className="space-y-0 pb-2">
@@ -145,7 +148,7 @@ export default function ExerciseDurationChart({
               }}
             />
             <ChartTooltip
-              // defaultIndex={1}
+              defaultIndex={0}
               content={
                 <ChartTooltipContent
                   hideIndicator
@@ -210,11 +213,11 @@ export default function ExerciseDurationChart({
           was <span className="font-medium text-foreground">{avgDuration}</span>{" "}
           minutes.
         </CardDescription>
-        <CardDescription>
+        <CardDescription className={cn(logs.length < 2 ? "hidden" : "")}>
           Average exercises per session was{" "}
           <span className="font-medium text-foreground">{avgExercises}</span>{" "}
         </CardDescription>
-        <CardDescription>
+        <CardDescription className={cn(logs.length < 2 ? "hidden" : "")}>
           {evaluateExerciseDuration(Number(avgDuration))}
         </CardDescription>
       </CardFooter>

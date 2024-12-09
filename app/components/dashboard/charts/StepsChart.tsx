@@ -21,15 +21,18 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { cn } from "@/lib/utils";
 import { Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
 
 function StepsChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   const { log } = useDashboardLayoutData();
   const avgSteps = Math.round(
-    logs.reduce((sum, log) => sum + log.steps, 0) / logs.length
+    logs.length === 0
+      ? 0
+      : logs.reduce((sum, log) => sum + log.steps, 0) / logs.length
   );
-  // console.log(log);
+  // console.log(log, logs, avgSteps);
   return (
     <Card className="lg:max-w-md bg-secondary/50">
       <CardHeader className="space-y-0 pb-2">
@@ -82,7 +85,7 @@ function StepsChart({ logs }: { logs: SerializeFrom<Log>[] }) {
               }}
             />
             <ChartTooltip
-              defaultIndex={1}
+              defaultIndex={0}
               content={
                 <ChartTooltipContent
                   hideIndicator
@@ -127,7 +130,7 @@ function StepsChart({ logs }: { logs: SerializeFrom<Log>[] }) {
           <span className="font-medium text-foreground">{avgSteps}</span> steps
           on average per day.
         </CardDescription>
-        <CardDescription>
+        <CardDescription className={cn(logs.length < 2 ? "hidden" : "")}>
           {avgSteps < 5000 &&
             "Your weekly average shows low activity. Try to increase your daily steps for better health."}
           {avgSteps >= 5000 &&
