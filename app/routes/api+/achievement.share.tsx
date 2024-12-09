@@ -12,7 +12,7 @@ export async function action({ request }: ActionFunctionArgs) {
     ?.toString();
 
   if (!achievementId) {
-    return json({ error: "Invalid Input." }, { status: 403 });
+    return json({ error: "Invalid Input. Try Again later." }, { status: 403 });
   }
 
   try {
@@ -86,7 +86,13 @@ export async function action({ request }: ActionFunctionArgs) {
     return redirect("/dashboard/social/group");
   } catch (error) {
     console.log(error);
-    return json({ error: "Internal Server Error." }, { status: 500 });
+    return json(
+      {
+        error:
+          "Could not share achievement. Check if you are in a group or not",
+      },
+      { status: 500 }
+    );
   }
 }
 
