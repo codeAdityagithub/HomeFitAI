@@ -1,4 +1,3 @@
-import Detection from "@/components/workout/Detection";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises, { Exercise } from "@/utils/exercises/exercises.server";
 import type { ActionFunctionArgs } from "@remix-run/node";
@@ -21,9 +20,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import DetectionHeader from "@/components/workout/DetectionHeader";
-import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
-import StaticDetection from "@/components/workout/StaticDetection";
+
+import { lazy } from "react";
+const StaticDetection = lazy(
+  () => import("@/components/workout/StaticDetection")
+);
+const Detection = lazy(() => import("@/components/workout/Detection"));
+const DetectionUnilateral = lazy(
+  () => import("@/components/workout/DetectionUnilateral")
+);
+
 import useDynamicExerciseFunction from "@/hooks/useDynamicExerciseFunction";
+import useIsClient from "@/hooks/useIsClient";
 import useServiceWorker from "@/hooks/useServiceWorker";
 import {
   ExerciseGoalSchema,
@@ -124,9 +132,12 @@ const DetectWorkoutPage = () => {
   const { exercise } = useLoaderData<typeof loader>();
   useServiceWorker();
   const { func, loading } = useDynamicExerciseFunction(exercise.id);
+
+  const isClient = useIsClient();
+
   return (
     <div className="max-w-4xl mx-auto md:p-4">
-      {loading ? (
+      {loading || !isClient ? (
         <div className="h-[calc(100vh-104px)] md:h-[calc(100vh-48px)] flex items-center justify-center">
           <LoaderIcon className="animate-spin" />
         </div>

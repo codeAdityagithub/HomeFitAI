@@ -9,10 +9,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Detection from "@/components/workout/Detection";
-import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
-import StaticDetection from "@/components/workout/StaticDetection";
+// import Detection from "@/components/workout/Detection";
+// import DetectionUnilateral from "@/components/workout/DetectionUnilateral";
+// import StaticDetection from "@/components/workout/StaticDetection";
+import { lazy } from "react";
+
+const StaticDetection = lazy(
+  () => import("@/components/workout/StaticDetection")
+);
+const Detection = lazy(() => import("@/components/workout/Detection"));
+const DetectionUnilateral = lazy(
+  () => import("@/components/workout/DetectionUnilateral")
+);
+
 import useDynamicExerciseFunction from "@/hooks/useDynamicExerciseFunction";
+import useIsClient from "@/hooks/useIsClient";
 import useServiceWorker from "@/hooks/useServiceWorker";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
@@ -144,10 +155,11 @@ const PlaylistPlayPage = () => {
     useLoaderData<typeof loader>();
   useServiceWorker();
   const { func, loading } = useDynamicExerciseFunction(exercise.id);
+  const isClient = useIsClient();
 
   return (
     <div className="w-full max-w-md mmd:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto md:p-4">
-      {loading ? (
+      {loading || !isClient ? (
         <div className="h-[calc(100vh-104px)] md:h-[calc(100vh-48px)] flex items-center justify-center">
           <LoaderIcon className="animate-spin" />
         </div>

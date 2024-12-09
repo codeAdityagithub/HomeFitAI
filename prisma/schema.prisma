@@ -46,11 +46,6 @@ model Log {
   @@index([date])
 }
 
-// could use this syntax for fetching data
-// date_userId: {
-//       date: new Date('2024-08-15'),
-//       userId: 'userId123',
-//     },
 
 type ExerciseLog {
   name     String

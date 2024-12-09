@@ -6,8 +6,11 @@ tf.ready();
 // Register one of the TF.js backends.
 import useStopwatch from "@/hooks/useStopwatch";
 import { ExerciseGoals } from "@/utils/exercises/types";
-import { drawKeypoints, drawSkeleton } from "@/utils/tensorflow/drawingutils";
-import { PositionFunction } from "@/utils/tensorflow/functions";
+import {
+  drawKeypoints,
+  drawSkeleton,
+} from "@/utils/tensorflow/drawingutils.client";
+import { PositionFunction } from "@/utils/tensorflow/functions.client";
 import { useSearchParams } from "@remix-run/react";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
 import DetectionForm from "./DetectionForm";

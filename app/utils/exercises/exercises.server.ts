@@ -1,15 +1,10 @@
-import fs from "fs";
-import path from "path";
 import { singleton } from "../singleton.server";
+import exerciesJson from "./newexercises2.json" assert { type: "json" };
 import { ExerciseId } from "./types";
 
 const exercises = singleton("exercises", () => {
   try {
-    const content = fs.readFileSync(
-      path.resolve(import.meta.dirname, "newexercises2.json"),
-      "utf-8"
-    );
-    return JSON.parse(content);
+    return exerciesJson as Exercise[];
   } catch (error) {
     console.log("Error reading exercises", error);
     return [];

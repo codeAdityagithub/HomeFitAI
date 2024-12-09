@@ -1,5 +1,5 @@
 import { type ExerciseId } from "@/utils/exercises/types";
-import { importFunction } from "@/utils/tensorflow/imports";
+import { importFunction } from "@/utils/tensorflow/imports.client";
 import { useEffect, useState } from "react";
 
 const useDynamicExerciseFunction = (id: ExerciseId) => {
