@@ -28,7 +28,7 @@ import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
 import { constants, resolver, schema } from "@/utils/detailsPage/zodConstants";
 import { Gender, Unit } from "@prisma/client";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { ActionFunctionArgs, redirect } from "@remix-run/node"; // or cloudflare/deno
 import {
   Form,
@@ -50,6 +50,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const stats = await db.stats.findUnique({ where: { userId: user.id } });
   if (stats) return redirect("/dashboard");
   return null;
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Create Your Account - HomeFitAI Dashboard Setup" },
+    { property: "og:title", content: "Set Up Your HomeFitAI Account" },
+    {
+      name: "description",
+      content:
+        "Enter your details to create your account and get started with personalized fitness tracking and progress monitoring on HomeFitAI.",
+    },
+    {
+      property: "og:description",
+      content:
+        "Fill in your details to set up your HomeFitAI account. Once complete, you’ll have access to the dashboard for tracking your fitness journey.",
+    },
+  ];
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {

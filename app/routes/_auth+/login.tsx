@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { redirectIfAuth } from "@/utils/auth/auth.server";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import { FaGoogle } from "react-icons/fa";
 
@@ -11,6 +11,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   });
 
   return null;
+};
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Login - Access Your HomeFitAI Account" },
+    { property: "og:title", content: "Login to HomeFitAI" },
+    {
+      name: "description",
+      content:
+        "Sign in to your HomeFitAI account to access personalized fitness plans, track progress, and stay motivated.",
+    },
+    {
+      property: "og:description",
+      content:
+        "Log in to HomeFitAI to manage your workouts, view your fitness logs, and join our community.",
+    },
+  ];
 };
 
 export default function LoginForm() {
