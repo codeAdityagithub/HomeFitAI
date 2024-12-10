@@ -98,7 +98,14 @@ const GroupMessageCard = ({
           </span>
         </div>
       </div>
-      <div className="flex-1 bg-secondary p-2 rounded shadow shadow-foreground/10 relative">
+      <div
+        className={cn(
+          message.content.type === "ACHIEVEMENT"
+            ? "gradient-box"
+            : "bg-secondary",
+          "flex-1 p-2 shadow shadow-foreground/10 relative"
+        )}
+      >
         <AddMessageReaction
           isMyMessage={isMyMessage}
           messageId={message.id}

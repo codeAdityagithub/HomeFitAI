@@ -113,7 +113,24 @@
     animation: animatedgradient 3s ease alternate infinite;
     background-size: 300% 300%;
   }
-
+  .gradient-box {
+    background: linear-gradient(hsl(var(--secondary)), hsl(var(--secondary)))
+        padding-box,
+      linear-gradient(
+          60deg,
+          #f79533,
+          #f37055,
+          #ef4e7b,
+          #a166ab,
+          #5073b8,
+          #1098ad,
+          #07b39b,
+          #6fba82
+        )
+        border-box;
+    border-radius: 5px;
+    border: 2px solid transparent;
+  }
   @keyframes animatedgradient {
     0% {
       background-position: 0% 50%;

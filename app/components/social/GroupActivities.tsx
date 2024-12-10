@@ -103,7 +103,7 @@ const GroupActivities = ({
       <div className="w-full max-h-[60vh] overflow-y-auto overflow-x-hidden ver_scroll">
         <div className="p-3 rounded-lg bg-background grid grid-cols-1 ssm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 items-stretch gap-2 w-full">
           <h2 className="text-base font-semibold col-span-full">
-            Individual Goals
+            Individual Daily Goals
           </h2>
           {Object.keys(membersGoalsCategorized).map((goal) => {
             const { icon, text, unit } = goalUtil[goal as keyof DailyGoals];
@@ -120,7 +120,7 @@ const GroupActivities = ({
                 title={`${text} Daily Goal Progress`}
                 description={`Showing ${text} Daily Goal Progress for all group members.`}
               >
-                <div className="px-4 md:px-0 space-y-2">
+                <div className="px-4 md:px-0 space-y-2 max-h-[70vh] overflow-auto ver_scroll">
                   {members.map((m) => {
                     return (
                       <div

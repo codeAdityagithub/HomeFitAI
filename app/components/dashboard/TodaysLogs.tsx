@@ -5,6 +5,14 @@ import { DailyGoals, Log } from "@prisma/client";
 import { SerializeFrom } from "@remix-run/node";
 import { Droplet, Footprints, MoonStar, SquareActivity } from "lucide-react";
 import ResponsiveDialog from "../custom/ResponsiveDialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import EditCaloriesForm from "./EditCaloriesForm";
 import EditLogForm from "./EditLogForm";
 
@@ -76,42 +84,69 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
 
   return (
     <div className="w-full grid grid-cols-1 ssm:grid-cols-2 xl:grid-cols-4 items-stretch gap-4">
-      {elems.map((e) => (
-        <ResponsiveDialog
-          key={e.type + "dialog"}
-          title={`Edit ${e.text}`}
-          description={
-            e.type === "totalCalories"
-              ? "Its recommended to track exercises for much better accuracy."
-              : `Update your ${e.text} to keep progress consistent.`
-          }
-          trigger={
-            <div className="rounded-lg p-2 sm:p-4 border border-accent/20 hover:border-accent/50 transition-colors bg-gradient-to-tr from-secondary/50 to-accent/20 hover:cursor-pointer flex items-center gap-4">
-              <span>{e.icon}</span>
-              <div className="flex flex-col items-start">
-                <h2 className="text-xl xs:text-2xl font-bold">
-                  {e.type === "totalCalories"
-                    ? log[e.type] +
+      {elems.map((e) =>
+        e.type === "totalCalories" ? (
+          <Dialog key={"cal-dialog"}>
+            <DialogTrigger asChild>
+              <div className="rounded-lg p-2 sm:p-4 border border-accent/20 hover:border-accent/50 transition-colors bg-gradient-to-tr from-secondary/50 to-accent/20 hover:cursor-pointer flex items-center gap-4">
+                <span>{e.icon}</span>
+                <div className="flex flex-col items-start">
+                  <h2 className="text-xl xs:text-2xl font-bold">
+                    {log[e.type] +
                       Math.floor(
                         stepsToCal(stats.height, stats.weight, log.steps)
-                      )
-                    : // @ts-expect-error
-                      log[e.type]}
-                  <span className="text-foreground/60 text-sm">
-                    {" "}
-                    / {stats.dailyGoals[goalType[e.type]]}
-                  </span>
-                  <small className="ml-1 text-xs font-normal text-secondary-foreground/80">
-                    {e.unit}
-                  </small>
-                </h2>
+                      )}
+                    <span className="text-foreground/60 text-sm">
+                      {" "}
+                      / {stats.dailyGoals.calories}
+                    </span>
+                    <small className="ml-1 text-xs font-normal text-secondary-foreground/80">
+                      {e.unit}
+                    </small>
+                  </h2>
 
-                <small className="text-muted-foreground">{e.text}</small>
+                  <small className="text-muted-foreground">{e.text}</small>
+                </div>
               </div>
-            </div>
-          }
-        >
-          {e.type !== "totalCalories" ? (
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Exercise Manually</DialogTitle>
+                <DialogDescription>
+                  Its recommended to track exercises for much better accuracy.
+                </DialogDescription>
+              </DialogHeader>
+              <EditCaloriesForm logId={log.id} />
+            </DialogContent>
+          </Dialog>
+        ) : (
+          <ResponsiveDialog
+            key={e.type + "dialog"}
+            title={`Edit ${e.text}`}
+            description={`Update your ${e.text} to keep progress consistent.`}
+            trigger={
+              <div className="rounded-lg p-2 sm:p-4 border border-accent/20 hover:border-accent/50 transition-colors bg-gradient-to-tr from-secondary/50 to-accent/20 hover:cursor-pointer flex items-center gap-4">
+                <span>{e.icon}</span>
+                <div className="flex flex-col items-start">
+                  <h2 className="text-xl xs:text-2xl font-bold">
+                    {
+                      // @ts-expect-error
+                      log[e.type]
+                    }
+                    <span className="text-foreground/60 text-sm">
+                      {" "}
+                      / {stats.dailyGoals[goalType[e.type]]}
+                    </span>
+                    <small className="ml-1 text-xs font-normal text-secondary-foreground/80">
+                      {e.unit}
+                    </small>
+                  </h2>
+
+                  <small className="text-muted-foreground">{e.text}</small>
+                </div>
+              </div>
+            }
+          >
             <EditLogForm
               logId={log.id}
               init={
@@ -125,11 +160,9 @@ const TodaysLogs = ({ log }: { log: SerializeFrom<Log> }) => {
               step={e.step!}
               unit={e.unit}
             />
-          ) : (
-            <EditCaloriesForm logId={log.id} />
-          )}
-        </ResponsiveDialog>
-      ))}
+          </ResponsiveDialog>
+        )
+      )}
     </div>
   );
 };

@@ -41,7 +41,7 @@ const GroupMemberCard = ({
       title={member.name + " Profile"}
       description=""
     >
-      <div className="px-4 md:px-0">
+      <div className="px-4 md:px-0 max-h-[70vh] overflow-auto ver_scroll">
         <GroupMemberInfoCard member={member} />
       </div>
     </ResponsiveDialog>
