@@ -1,0 +1,13 @@
+{
+  "short_name": "HomeFitAI",
+  "name": "HomeFitAI - Get Fit From Home",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone"
+}

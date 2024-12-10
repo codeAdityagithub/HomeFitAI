@@ -28,6 +28,7 @@ import { themeCookie } from "./utils/themeCookie.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
+  { rel: "manifest", href: "/manifest.json" },
 ];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
