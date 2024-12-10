@@ -82,7 +82,7 @@ export default function ExerciseDurationChart({
   }, [logs]);
   // console.log(totalSession, avgDuration, avgExercises, chartData);
   return (
-    <Card className="lg:max-w-md bg-secondary/50">
+    <Card className="bg-secondary/50">
       <CardHeader className="space-y-0 pb-2">
         <CardTitle className="w-full flex justify-between">
           Exercise Duration

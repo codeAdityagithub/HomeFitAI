@@ -94,33 +94,37 @@ const EditCaloriesForm = ({ logId }: { logId: string }) => {
           {filtered.length !== 0 && (
             <p className="px-1 mt-1">Select One Exercise:</p>
           )}
-          <div className="max-h-[300px] max-w-md mx-auto space-y-2 overflow-auto ver_scroll p-1 mt-2">
+          <div className="max-h-[350px] max-w-md mx-auto space-y-2 overflow-auto ver_scroll p-1 mt-2">
             {filtered.map((e) => (
               <div
                 key={e.id}
-                onClick={() => setSelected(e)}
                 className="flex border rounded-md bg-secondary/50 h-16 overflow-hidden cursor-pointer hover:bg-secondary transition-colors"
               >
-                <img
-                  src={e.imageUrl}
-                  alt={e.name}
-                  width={100}
-                  height={60}
-                  className="object-cover flex-1"
-                />
-                <p className="p-2 text-sm flex-[2]">{e.name}</p>
                 <Link
-                  className="my-auto mr-2"
+                  className="flex w-full"
                   to={`/dashboard/workout/${e.id}`}
+                >
+                  <img
+                    src={e.imageUrl}
+                    alt={e.name}
+                    width={100}
+                    height={60}
+                    className="object-cover flex-1"
+                  />
+                  <p className="p-2 text-sm flex-[2]">{e.name}</p>
+                </Link>
+                <div
+                  className="my-auto mr-2"
+                  onClick={() => setSelected(e)}
                 >
                   <Button
                     size="sm"
                     variant="outline"
                     className="text-xs"
                   >
-                    View
+                    Select
                   </Button>
-                </Link>
+                </div>
               </div>
             ))}
             {filtered.length === 0 && input.trim().length !== 0 && (

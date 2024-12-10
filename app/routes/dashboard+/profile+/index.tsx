@@ -3,16 +3,19 @@ import { editStats } from "@/.server/handlers/profile/editStats";
 import LogoutButton from "@/components/dashboard/Logout";
 import ThemeToggle from "@/components/dashboard/themeButton";
 import Achievements from "@/components/profile/Achievements";
+import AchievementsLocked from "@/components/profile/AchievementsLocked";
 import EditUserGoals from "@/components/profile/EditUserGoals";
 import EditUserStats from "@/components/profile/EditUserStats";
 import OtherStats from "@/components/profile/OtherStats";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
+import { MILESTONE_ACHIEVEMENTS, STREAK_ACHIEVEMENTS } from "@/lib/constants";
 import { authenticator } from "@/services/auth.server";
 import { requireUser } from "@/utils/auth/auth.server";
 import db from "@/utils/db.server";
 import { cacheClientAction } from "@/utils/routeCache.client";
+import { AchievementType } from "@prisma/client";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -50,11 +53,34 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const creationTime = DateTime.fromJSDate(dbuser.createdAt)
     .setZone(dbuser.timezone!)
     .toLocaleString();
+  const streakAchievements = Object.entries(STREAK_ACHIEVEMENTS).map(
+    ([k, v]) => ({
+      ...v,
+      value: Number(k),
+      type: "streak",
+      achievementType: AchievementType.STREAK as AchievementType,
+    })
+  );
+
+  const mileStoneAchievements = Object.entries(MILESTONE_ACHIEVEMENTS)
+    .map(([k, v]) =>
+      v.map((a) => ({
+        ...a,
+        type: k,
+        achievementType: AchievementType.MILESTONE_REACHED,
+      }))
+    )
+    .flat();
+
+  const achievementsLocked = streakAchievements
+    .concat(mileStoneAchievements)
+    .filter((v) => !dbuser.achievements.some((a) => a.title === v.title));
 
   return {
     user: { ...dbuser },
     creationTime:
       creationTime || new Date(dbuser.createdAt).toLocaleDateString(),
+    achievementsLocked,
   };
 };
 
@@ -90,9 +116,10 @@ export const clientAction = ({
   cacheClientAction(["dashboardLayout"], serverAction);
 
 const DashboardProfile = () => {
-  const { user, creationTime } = useLoaderData<typeof loader>();
+  const { user, creationTime, achievementsLocked } =
+    useLoaderData<typeof loader>();
   const { stats } = useDashboardLayoutData();
-  // console.log(user._count.logs);
+
   return (
     <div className="h-full space-y-6 p-4">
       {/* Profile info */}
@@ -202,10 +229,11 @@ const DashboardProfile = () => {
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <Achievements achievements={user.achievements} />
+          <AchievementsLocked achievements={achievementsLocked} />
         </CardContent>
       </Card>
       {/* Exercise stats */}
-      <Card className="flex flex-col gap-2 bg-secondary/50">
+      {/* <Card className="flex flex-col gap-2 bg-secondary/50">
         <CardHeader className="flex flex-col relative items-center">
           <CardTitle className="border-l-4 border-accent text-left w-full pl-4">
             Exercise Stats
@@ -214,7 +242,7 @@ const DashboardProfile = () => {
         <CardContent className="flex flex-col gap-4">
           All exercises PB's displayed here.
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   );
 };

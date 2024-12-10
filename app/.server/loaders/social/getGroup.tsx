@@ -99,6 +99,6 @@ const getGroupMembers = stable_cache(
   },
   {
     tags: (args) => [args[2], "info"],
-    revalidateAfter: 600,
+    revalidateAfter: 150,
   }
 );

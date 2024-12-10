@@ -34,7 +34,7 @@ function StepsChart({ logs }: { logs: SerializeFrom<Log>[] }) {
   );
   // console.log(log, logs, avgSteps);
   return (
-    <Card className="lg:max-w-md bg-secondary/50">
+    <Card className="bg-secondary/50">
       <CardHeader className="space-y-0 pb-2">
         <CardDescription>Steps</CardDescription>
         <CardTitle className="text-4xl tabular-nums">

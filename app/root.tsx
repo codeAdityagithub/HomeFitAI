@@ -23,7 +23,7 @@ import {
   CardTitle,
 } from "./components/ui/card";
 import { cn } from "./lib/utils";
-import { getAuthUser } from "./utils/auth/auth.server";
+import { getAuthUser, refreshSession } from "./utils/auth/auth.server";
 import { themeCookie } from "./utils/themeCookie.server";
 
 export const links: LinksFunction = () => [
@@ -43,8 +43,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       }
     );
   }
+  const headers = await refreshSession(request, user);
 
-  return { user, theme };
+  return json({ user, theme }, { headers });
 };
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({ formAction }) => {

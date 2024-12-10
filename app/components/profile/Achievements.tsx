@@ -40,8 +40,14 @@ const Achievements = ({
               </div>
             </div>
           }
-          description="Share your achievements on social section"
-          title="Share your achievement"
+          description={
+            a.shared
+              ? "You have shared your achievements on social section."
+              : "Share your achievements on social section"
+          }
+          title={
+            a.shared ? "Viewing Achievement Unlocked" : "Share your achievement"
+          }
         >
           <div className="bg-background p-4 rounded-lg gradient-border mx-4 md:mx-0">
             <div className="py-4 flex items-center justify-center flex-col gap-2">
@@ -49,7 +55,9 @@ const Achievements = ({
                 {a.type && AchievementIcons[a.type]}
                 {a.title}
               </h2>
-              <p className="text-muted-foreground">{a.description}</p>
+              <p className="text-muted-foreground text-center">
+                {a.description}
+              </p>
               {!a.shared && (
                 <fetcher.Form
                   action="/api/achievement/share"
@@ -70,9 +78,6 @@ const Achievements = ({
           </div>
         </ResponsiveDialog>
       ))}
-      {achievements.length === 0 && (
-        <p className="text-muted-foreground">No achievements yet</p>
-      )}
     </div>
   );
 };

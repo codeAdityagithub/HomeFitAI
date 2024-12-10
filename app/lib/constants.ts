@@ -148,3 +148,19 @@ export const MILESTONE_ACHIEVEMENTS: Record<
     },
   ],
 };
+
+export const getAchievementAwardedForValue = (
+  type: "totalCalories" | "totalSteps" | "totalWorkoutDays" | "streak",
+  value: number
+) => {
+  switch (type) {
+    case "streak":
+      return `Earn this achievement after logging in for ${value} days in a row.`;
+    case "totalCalories":
+      return `Earn this achievement after burning ${value} total calories.`;
+    case "totalSteps":
+      return `Earn this achievement after walking ${value} total steps.`;
+    case "totalWorkoutDays":
+      return `Earn this achievement after completing ${value} total workouts.`;
+  }
+};
