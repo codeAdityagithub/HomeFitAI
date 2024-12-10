@@ -56,7 +56,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       take,
     });
 
-    if (logs[0].date.getDate() !== new Date().getDate()) {
+    if (logs.length > 0 && logs[0].date.getDate() !== new Date().getDate()) {
       // sleep 1 sec
       await new Promise((resolve) => setTimeout(resolve, 1500));
       // console.log("error");
@@ -71,7 +71,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       { logs: logs.slice(1), user },
       {
         headers: {
-          "Cache-Control": "max-age=3600",
+          "Cache-Control": "max-age=300",
         },
       }
     );
