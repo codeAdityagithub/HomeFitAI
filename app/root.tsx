@@ -44,9 +44,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       }
     );
   }
-  const headers = await refreshSession(request, user);
 
-  return json({ user, theme }, { headers });
+  return { user, theme };
 };
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({ formAction }) => {

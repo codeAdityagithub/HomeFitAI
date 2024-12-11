@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 import { commitSession, getSession } from "@/services/session.server";
-import { requireUser } from "@/utils/auth/auth.server";
+import { refreshSession, requireUser } from "@/utils/auth/auth.server";
 import {
   cacheClientAction,
   cacheClientLoader,
@@ -42,10 +42,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const dailyGoal: { title: string; description: string } =
     session.get("goalAchieved") || null;
 
+  const updatedSession = await refreshSession(session, user);
+
   return json(
     { stats, log, dailyGoal, newAchievements },
     {
-      headers: { "Set-Cookie": await commitSession(session) },
+      headers: { "Set-Cookie": await commitSession(updatedSession) },
     }
   );
 };

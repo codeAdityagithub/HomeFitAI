@@ -260,6 +260,9 @@ function StaticDetection({ name, pos_function }: Props) {
 
       if (explicit && trigger_ref.current) {
         trigger_ref.current.click();
+        const audio = new Audio("/complete.mp3");
+        audio.volume = 0.5;
+        audio.play();
       }
     },
     [setSuggestion]

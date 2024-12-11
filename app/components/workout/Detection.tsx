@@ -364,6 +364,11 @@ function Detection({ name, pos_function, start_pos }: Props) {
         _setTotalTime(totalTime.current);
         trigger_ref.current.click();
       }
+      if (explicit) {
+        const audio = new Audio("/complete.mp3");
+        audio.volume = 0.6;
+        audio.play();
+      }
     },
     [setSuggestion]
   );
@@ -380,7 +385,13 @@ function Detection({ name, pos_function, start_pos }: Props) {
   const resetTime = useCallback(() => {
     setReps(0);
   }, [setReps]);
-
+  useEffect(() => {
+    if (reps > 0) {
+      const audio = new Audio("/rep.mp3");
+      audio.volume = 0.6;
+      audio.play();
+    }
+  }, [reps]);
   return (
     <>
       <DetectionUI

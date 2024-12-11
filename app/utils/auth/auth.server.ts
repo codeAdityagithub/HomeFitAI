@@ -1,7 +1,7 @@
 import { getDayDiffAbs } from "@/.server/utils";
 import { authenticator, AuthUser } from "@/services/auth.server";
 import { commitSession, getSession } from "@/services/session.server";
-import { redirect, Session } from "@remix-run/node";
+import { redirect, Session, SessionData } from "@remix-run/node";
 import { createJWT, verifyJWT } from "../jwt/jwt.server";
 
 export async function requireUser(
@@ -26,35 +26,31 @@ export async function getAuthUser(request: Request | Session) {
   return user;
 }
 export async function refreshSession(
-  request: Request,
+  session: Session<SessionData, SessionData>,
   user: AuthUser | null
-): Promise<Headers> {
-  let headers = new Headers();
+) {
   // @ts-expect-error
-
   if (user && user.exp) {
     // @ts-expect-error
     const expDate = new Date(user.exp * 1000);
     const now = new Date();
     const diff = getDayDiffAbs(expDate, now);
-    const token = createJWT(
-      {
-        id: user.id,
-        username: user.username,
-        timezone: user.timezone,
-        image: user.image,
-      },
-      "2d"
-    );
-    const cookie = request.headers.get("Cookie");
-    const session = await getSession(cookie);
-    session.set("user", { token });
+    // console.log(diff);
     if (diff < 1) {
-      headers.set("Set-Cookie", await commitSession(session));
+      const token = createJWT(
+        {
+          id: user.id,
+          username: user.username,
+          timezone: user.timezone,
+          image: user.image,
+        },
+        "2d"
+      );
+      session.set("user", { token });
       console.log("Refreshing user session");
     }
   }
-  return headers;
+  return session;
 }
 export async function isJWTValid(request: Request | Session) {
   const token = await authenticator.isAuthenticated(request);

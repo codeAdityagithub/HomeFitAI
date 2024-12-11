@@ -469,9 +469,21 @@ export default function DetectionUnilateral({
         _setTotalTime(totalTime.current);
         trigger_ref.current.click();
       }
+      if (explicit) {
+        const audio = new Audio("/complete.mp3");
+        audio.volume = 0.6;
+        audio.play();
+      }
     },
     [setSuggestion]
   );
+  useEffect(() => {
+    if (reps_left > 0 && reps_right > 0) {
+      const audio = new Audio("/rep.mp3");
+      audio.volume = 0.6;
+      audio.play();
+    }
+  }, [reps_right, reps_left]);
 
   const startDetection = useCallback(() => {
     isdrawing.current = true;

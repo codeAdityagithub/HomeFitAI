@@ -1,6 +1,5 @@
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import useLongPress from "@/hooks/useLongPress";
-import { LOG_CONSTANTS } from "@/lib/constants";
 import { getImageFromVideoId } from "@/lib/utils";
 import { ExerciseDetectionLoader } from "@/routes/dashboard+/workout+/$eId.detect";
 import { capitalizeEachWord } from "@/utils/general";
@@ -18,8 +17,8 @@ const StaticForm = ({ totalTime }: Props) => {
   const { log } = useDashboardLayoutData();
   const fetcher = useFetcher<any>();
   const [value, setValue] = useState(totalTime);
-  const min = 0,
-    max = LOG_CONSTANTS.exercise.max_duration;
+  const min = totalTime,
+    max = totalTime * 2;
   const handleSubmit = (e: any) => {
     e.preventDefault();
     // Handle form submission

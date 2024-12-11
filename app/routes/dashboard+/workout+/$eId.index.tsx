@@ -1,4 +1,3 @@
-import GoBack from "@/components/GoBack";
 import useDashboardLayoutData from "@/hooks/useDashboardLayout";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
@@ -7,6 +6,7 @@ import { json, MetaFunction, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
+import GoPrevPath from "@/components/GoPrevPath";
 import { Badge } from "@/components/ui/badge";
 import DetectionGoalSelector from "@/components/workout/DetectionGoalSelector";
 import StaticGoalSelector from "@/components/workout/StaticGoalSelector";
@@ -55,7 +55,7 @@ const ExercisePage = () => {
   return (
     <div className="max-w-4xl mx-auto md:p-4">
       <div className="sm:flex sm:gap-2">
-        <GoBack />
+        <GoPrevPath />
         <h1 className="text-3xl font-bold mb-4">
           {capitalizeEachWord(exercise.name)}
         </h1>

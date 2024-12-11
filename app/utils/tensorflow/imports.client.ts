@@ -67,6 +67,10 @@ const exerciseToFile: Partial<
     module: () =>
       import("../../.client/functions/plank").then((m) => m.default),
   },
+  burpee: {
+    module: () =>
+      import("../../.client/functions/burpee").then((m) => m.default),
+  },
   side_plank: {
     module: () =>
       import("../../.client/functions/plank").then((m) => m.default),
