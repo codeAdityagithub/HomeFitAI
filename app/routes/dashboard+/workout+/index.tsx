@@ -10,82 +10,82 @@ import { PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
 import { capitalizeFirstLetter } from "@/utils/general";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
-  json,
-  Link,
-  ShouldRevalidateFunction,
-  useLoaderData,
+    json,
+    Link,
+    ShouldRevalidateFunction,
+    useLoaderData,
 } from "@remix-run/react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 export type DashboardExercise = {
-  name: string;
-  id: string;
-  imageUrl: string;
-  target: string;
-  equipment: string;
-  secondaryMuscles: string[];
+    name: string;
+    id: string;
+    imageUrl: string;
+    target: string;
+    equipment: string;
+    secondaryMuscles: string[];
 };
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "Workouts - HomeFitAI" },
-    { property: "og:title", content: "Explore Workouts & Playlists" },
-    {
-      name: "description",
-      content:
-        "Explore categorized workouts and featured playlists. Find exercises tailored to your fitness level and goals.",
-    },
-  ];
+    return [
+        { title: "Workouts - HomeFitAI" },
+        { property: "og:title", content: "Explore Workouts & Playlists" },
+        {
+            name: "description",
+            content:
+                "Explore categorized workouts and featured playlists. Find exercises tailored to your fitness level and goals.",
+        },
+    ];
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await requireUser(request, { failureRedirect: "/login" });
-  const filtered: DashboardExercise[] = exercises.map((e) => ({
-    name: e.name,
-    id: e.id,
-    imageUrl: getImageFromVideoId(e.videoId),
-    target: e.target,
-    equipment: e.equipment,
-    secondaryMuscles: e.secondaryMuscles,
-  }));
+    await requireUser(request, { failureRedirect: "/login" });
+    const filtered: DashboardExercise[] = exercises.map((e) => ({
+        name: e.name,
+        id: e.id,
+        imageUrl: getImageFromVideoId(e.videoId),
+        target: e.target,
+        equipment: e.equipment,
+        secondaryMuscles: e.secondaryMuscles,
+    }));
 
-  const playlists = {
-    BEGINNER_FULL_BODY: [
-      {
-        name: "Beginner Full Body",
-        totalExercises: PLAYLISTS.BEGINNER_FULL_BODY.length,
-      },
-    ],
-    INTERMEDIATE_LOWER_BODY: [
-      {
-        name: "Intermediate Lower Body",
-        totalExercises: PLAYLISTS.INTERMEDIATE_LOWER_BODY.length,
-      },
-    ],
-    ADVANCED_UPPER_BODY: [
-      {
-        name: "Advanced Upper Body",
-        totalExercises: PLAYLISTS.ADVANCED_UPPER_BODY.length,
-      },
-    ],
-  };
+    const playlists = {
+        BEGINNER_FULL_BODY: [
+            {
+                name: "Beginner Full Body",
+                totalExercises: PLAYLISTS.BEGINNER_FULL_BODY.length,
+            },
+        ],
+        INTERMEDIATE_LOWER_BODY: [
+            {
+                name: "Intermediate Lower Body",
+                totalExercises: PLAYLISTS.INTERMEDIATE_LOWER_BODY.length,
+            },
+        ],
+        ADVANCED_UPPER_BODY: [
+            {
+                name: "Advanced Upper Body",
+                totalExercises: PLAYLISTS.ADVANCED_UPPER_BODY.length,
+            },
+        ],
+    };
 
-  const images = Object.keys(playlists)
-    .map((p) => ({
-      [p]: getImageFromVideoId(
-        // @ts-expect-error
-        exercises.find((e) => e.id === PLAYLISTS[p][0].id).videoId
-      ),
-    }))
-    .reduce((acc, obj) => ({ ...acc, ...obj }), {}) as Record<
-    PlaylistId,
-    string
-  >;
+    const images = Object.keys(playlists)
+        .map((p) => ({
+            [p]: getImageFromVideoId(
+                // @ts-expect-error
+                exercises.find((e) => e.id === PLAYLISTS[p][0].id).videoId
+            ),
+        }))
+        .reduce((acc, obj) => ({ ...acc, ...obj }), {}) as Record<
+        PlaylistId,
+        string
+    >;
 
-  return json(
-    { exercises: filtered, popularPlaylists: playlists, images },
-    { headers: { "Cache-Control": "public, max-age=600" } }
-  );
+    return json(
+        { exercises: filtered, popularPlaylists: playlists, images },
+        { headers: { "Cache-Control": "public, max-age=600" } }
+    );
 };
 
 export const shouldRevalidate: ShouldRevalidateFunction = () => false;
@@ -93,165 +93,215 @@ export const shouldRevalidate: ShouldRevalidateFunction = () => false;
 export { clientLoader } from "@/utils/routeCache.client";
 
 const WorkoutPage = () => {
-  const { exercises, popularPlaylists, images } =
-    useLoaderData<typeof loader>();
-  const {
-    exercisesByTarget,
-    bandGrouped,
-    dumbbellGrouped,
-    bandRows,
-    toggleBands,
-    dumbRows,
-    toggleDumbbell,
-  } = useExercises(exercises);
+    const { exercises, popularPlaylists, images } =
+        useLoaderData<typeof loader>();
+    const {
+        exercisesByTarget,
+        bandGrouped,
+        dumbbellGrouped,
+        bandRows,
+        toggleBands,
+        dumbRows,
+        toggleDumbbell,
+        favouriteList,
+        favRows,
+        toggleFavourite,
+    } = useExercises(exercises);
 
-  return (
-    <div className="space-y-10 p-4 ">
-      <WorkoutSearch exercises={exercises} />
-      <div>
-        <div className="flex items-end gap-4 mb-4">
-          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background text-primary underline underline-offset-4 z-20">
-            Popular Playlists
-          </h1>
-          <Link to="/dashboard/playlists">
-            <Button
-              size="sm"
-              variant="outline"
-              className="hover:bg-primary"
-            >
-              View More
-            </Button>
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
-          {Object.keys(popularPlaylists).map((key) => (
-            <PlaylistCard
-              key={key}
-              label={
-                popularPlaylists[key as keyof typeof popularPlaylists][0].name
-              }
-              imageUrl={images[key as PlaylistId]}
-              exercises={
-                popularPlaylists[key as keyof typeof popularPlaylists][0]
-                  .totalExercises
-              }
-              id={key}
-            />
-          ))}
-        </div>
-      </div>
-      <div>
-        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
-          <span className="text-[22px] sm:text-[28px] text-accent underline underline-offset-4">
-            Resistance Band
-          </span>{" "}
-          Exercises
-        </h1>
-        {Object.keys(bandGrouped)
-          .splice(0, bandRows)
-          .map((key) => (
-            <div
-              className="sm:px-4 mt-4"
-              key={"band" + key}
-            >
-              <h1 className="text-xl my-2 font-bold leading-8">
-                Exercises for{" "}
-                <span className="text-xl text-primary">
-                  {key.split(" ").map((w) => capitalizeFirstLetter(w) + " ")}
-                </span>
-              </h1>
-              <ul className="transition-opacity duration-300 grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
-                {bandGrouped[key].map((e) => (
-                  <ExerciseCard
-                    key={e.name + "band"}
-                    e={e}
-                  />
-                ))}
-              </ul>
-            </div>
-          ))}
-        <div className="w-full flex justify-center my-6">
-          <Button
-            size="sm"
-            variant="link"
-            onClick={toggleBands}
-          >
-            {bandRows === 2 ? "View More" : "Collapse"}
-            {bandRows === 2 ? (
-              <ChevronDown className="h-4 w-4 translate-y-0.5" />
-            ) : (
-              <ChevronUp className="h-4 w-4 translate-y-0.5" />
-            )}
-          </Button>
-        </div>
-      </div>
-      <div>
-        <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
-          <span className="text-[22px] sm:text-[28px] text-accent underline underline-offset-4">
-            Dumbbell
-          </span>{" "}
-          Exercises
-        </h1>
-        {Object.keys(dumbbellGrouped)
-          .splice(0, dumbRows)
-          .map((key) => (
-            <div
-              className="sm:px-4 mt-4"
-              key={"dumb" + key}
-            >
-              <h1 className="text-xl my-2 font-bold leading-8">
-                Exercises for{" "}
-                <span className="text-xl text-primary">
-                  {key.split(" ").map((w) => capitalizeFirstLetter(w) + " ")}
-                </span>
-              </h1>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
-                {dumbbellGrouped[key].map((e) => (
-                  <ExerciseCard
-                    key={e.name + "dumb"}
-                    e={e}
-                  />
-                ))}
-              </ul>
-            </div>
-          ))}
-        <div className="w-full flex justify-center items-center my-6">
-          <Button
-            size="sm"
-            variant="link"
-            onClick={toggleDumbbell}
-          >
-            {dumbRows === 2 ? "View More" : "Collapse"}
-            {dumbRows === 2 ? (
-              <ChevronDown className="h-4 w-4 translate-y-0.5" />
-            ) : (
-              <ChevronUp className="h-4 w-4 translate-y-0.5" />
-            )}
-          </Button>
-        </div>
-      </div>
+    return (
+        <div className="space-y-10 p-4 ">
+            <WorkoutSearch exercises={exercises} />
+            {favouriteList && (
+                <div>
+                    <h1 className="w-full text-2xl sm:text-3xl py-1 mb-4 font-bold leading-8 sticky top-0 bg-background text-primary underline underline-offset-4 z-20">
+                        Your Favourite Exercises
+                    </h1>
 
-      {/* Exercises by target */}
-      {Object.keys(exercisesByTarget).map((key) => (
-        <div key={key}>
-          <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
-            Exercises for{" "}
-            <span className="text-[22px] sm:text-[28px] text-accent underline underline-offset-4">
-              {key.split(" ").map((w) => capitalizeFirstLetter(w) + " ")}
-            </span>
-          </h1>
-          <ul className="grid p-2 sm:p-4 grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
-            {exercisesByTarget[key].map((e) => (
-              <ExerciseCard
-                key={e.name}
-                e={e}
-              />
+                    <div className="grid grid-cols-1 ssm:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 mmd:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 items-stretch justify-items-center">
+                        {favouriteList.map((e, ind) => (
+                            <ExerciseCard
+                                nameOnly
+                                visible={ind < favRows}
+                                key={e.id + "fav"}
+                                e={e}
+                            />
+                        ))}
+                    </div>
+                    <div className="w-full flex justify-center my-6 sm:hidden">
+                        <Button
+                            size="sm"
+                            variant="link"
+                            onClick={toggleFavourite}
+                        >
+                            {favRows === 3 ? "View More" : "Collapse"}
+                            {favRows === 3 ? (
+                                <ChevronDown className="h-4 w-4 translate-y-0.5" />
+                            ) : (
+                                <ChevronUp className="h-4 w-4 translate-y-0.5" />
+                            )}
+                        </Button>
+                    </div>
+                </div>
+            )}
+            <div>
+                <div className="flex items-end gap-4 mb-4">
+                    <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background text-primary underline underline-offset-4 z-20">
+                        Popular Playlists
+                    </h1>
+                    <Link to="/dashboard/playlists">
+                        <Button
+                            size="sm"
+                            variant="outline"
+                            className="hover:bg-primary"
+                        >
+                            View More
+                        </Button>
+                    </Link>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
+                    {Object.keys(popularPlaylists).map((key) => (
+                        <PlaylistCard
+                            key={key}
+                            label={
+                                popularPlaylists[
+                                    key as keyof typeof popularPlaylists
+                                ][0].name
+                            }
+                            imageUrl={images[key as PlaylistId]}
+                            exercises={
+                                popularPlaylists[
+                                    key as keyof typeof popularPlaylists
+                                ][0].totalExercises
+                            }
+                            id={key}
+                        />
+                    ))}
+                </div>
+            </div>
+            <div>
+                <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
+                    <span className="text-[22px] sm:text-[28px] text-accent underline underline-offset-4">
+                        Resistance Band
+                    </span>{" "}
+                    Exercises
+                </h1>
+                {Object.keys(bandGrouped)
+                    .splice(0, bandRows)
+                    .map((key) => (
+                        <div
+                            className="sm:px-4 mt-4"
+                            key={"band" + key}
+                        >
+                            <h1 className="text-xl my-2 font-bold leading-8">
+                                Exercises for{" "}
+                                <span className="text-xl text-primary">
+                                    {key
+                                        .split(" ")
+                                        .map(
+                                            (w) =>
+                                                capitalizeFirstLetter(w) + " "
+                                        )}
+                                </span>
+                            </h1>
+                            <ul className="transition-opacity duration-300 grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
+                                {bandGrouped[key].map((e) => (
+                                    <ExerciseCard
+                                        key={e.name + "band"}
+                                        e={e}
+                                    />
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                <div className="w-full flex justify-center my-6">
+                    <Button
+                        size="sm"
+                        variant="link"
+                        onClick={toggleBands}
+                    >
+                        {bandRows === 2 ? "View More" : "Collapse"}
+                        {bandRows === 2 ? (
+                            <ChevronDown className="h-4 w-4 translate-y-0.5" />
+                        ) : (
+                            <ChevronUp className="h-4 w-4 translate-y-0.5" />
+                        )}
+                    </Button>
+                </div>
+            </div>
+            <div>
+                <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
+                    <span className="text-[22px] sm:text-[28px] text-accent underline underline-offset-4">
+                        Dumbbell
+                    </span>{" "}
+                    Exercises
+                </h1>
+                {Object.keys(dumbbellGrouped)
+                    .splice(0, dumbRows)
+                    .map((key) => (
+                        <div
+                            className="sm:px-4 mt-4"
+                            key={"dumb" + key}
+                        >
+                            <h1 className="text-xl my-2 font-bold leading-8">
+                                Exercises for{" "}
+                                <span className="text-xl text-primary">
+                                    {key
+                                        .split(" ")
+                                        .map(
+                                            (w) =>
+                                                capitalizeFirstLetter(w) + " "
+                                        )}
+                                </span>
+                            </h1>
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
+                                {dumbbellGrouped[key].map((e) => (
+                                    <ExerciseCard
+                                        key={e.name + "dumb"}
+                                        e={e}
+                                    />
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                <div className="w-full flex justify-center items-center my-6">
+                    <Button
+                        size="sm"
+                        variant="link"
+                        onClick={toggleDumbbell}
+                    >
+                        {dumbRows === 2 ? "View More" : "Collapse"}
+                        {dumbRows === 2 ? (
+                            <ChevronDown className="h-4 w-4 translate-y-0.5" />
+                        ) : (
+                            <ChevronUp className="h-4 w-4 translate-y-0.5" />
+                        )}
+                    </Button>
+                </div>
+            </div>
+
+            {/* Exercises by target */}
+            {Object.keys(exercisesByTarget).map((key) => (
+                <div key={key}>
+                    <h1 className="text-2xl sm:text-3xl py-1 font-bold leading-8 sticky top-0 bg-background z-20">
+                        Exercises for{" "}
+                        <span className="text-[22px] sm:text-[28px] text-accent underline underline-offset-4">
+                            {key
+                                .split(" ")
+                                .map((w) => capitalizeFirstLetter(w) + " ")}
+                        </span>
+                    </h1>
+                    <ul className="grid p-2 sm:p-4 grid-cols-1 sm:grid-cols-2 llg:grid-cols-3 2xl:grid-cols-4 gap-6 items-stretch justify-items-center">
+                        {exercisesByTarget[key].map((e) => (
+                            <ExerciseCard
+                                key={e.name}
+                                e={e}
+                            />
+                        ))}
+                    </ul>
+                </div>
             ))}
-          </ul>
         </div>
-      ))}
-    </div>
-  );
+    );
 };
 
 export default WorkoutPage;
