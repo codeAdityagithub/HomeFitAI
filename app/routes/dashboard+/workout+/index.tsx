@@ -3,7 +3,7 @@ import PlaylistCard from "@/components/playlists/PlaylistCard";
 import { Button } from "@/components/ui/button";
 import ExerciseCard from "@/components/workout/ExerciseCard";
 import useExercises from "@/hooks/useExercises";
-import { getImageFromVideoId } from "@/lib/utils";
+import { cn, getImageFromVideoId } from "@/lib/utils";
 import { requireUser } from "@/utils/auth/auth.server";
 import exercises from "@/utils/exercises/exercises.server";
 import { PlaylistId, PLAYLISTS } from "@/utils/exercises/playlists.server";
@@ -117,7 +117,7 @@ const WorkoutPage = () => {
                         Your Favourite Exercises
                     </h1>
 
-                    <div className="grid grid-cols-1 ssm:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 mmd:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 items-stretch justify-items-center">
+                    <ul className="grid grid-cols-1 ssm:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 mmd:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 items-stretch justify-items-center">
                         {favouriteList.map((e, ind) => (
                             <ExerciseCard
                                 nameOnly
@@ -126,8 +126,13 @@ const WorkoutPage = () => {
                                 e={e}
                             />
                         ))}
-                    </div>
-                    <div className="w-full flex justify-center my-6 sm:hidden">
+                    </ul>
+                    <div
+                        className={cn(
+                            favouriteList.length <= 3 ? "hidden" : "flex",
+                            "w-full justify-center my-6 sm:hidden"
+                        )}
+                    >
                         <Button
                             size="sm"
                             variant="link"
